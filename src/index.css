@@ -234,8 +234,7 @@ a {
   color: var(--text-secondary);
   margin-bottom: 1.5rem;
   line-height: 1.5;
-  border-left: 2px solid var(--accent-color);
-  padding-left: 0.75rem;
+  white-space: nowrap;
 }
 
 .tagline {
@@ -900,6 +899,10 @@ footer {
   
   .about-content h1 {
     font-size: 2.5rem;
+  }
+  
+  .about-subtitle {
+    white-space: normal;
   }
   
   .academic-badge {

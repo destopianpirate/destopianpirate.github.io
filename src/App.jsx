@@ -62,6 +62,25 @@ const projects = [
     )
   },
   {
+    title: "IoT Dashboard",
+    stack: ["React", "Vite", "Tailwind CSS", "WebSockets/MQTT", "Chart.js"],
+    desc: "A professional real-time telemetry dashboard designed for large-scale sensor network configuration and graphical event log visualization.",
+    features: [
+      "Real-time sensor telemetry streaming over WebSockets & MQTT", 
+      "Highly interactive widgets (dials, live line graphs, grid status controls)", 
+      "Automated system alerts and threshold breach logs", 
+      "Comprehensive device connection logs & diagnostic telemetry"
+    ],
+    logo: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <line x1="9" y1="21" x2="9" y2="9"/>
+        <line x1="3" y1="9" x2="21" y2="9"/>
+        <path d="M14 13h3m-3 3h4"/>
+      </svg>
+    )
+  },
+  {
     title: "ZeroGPTi",
     stack: ["React", "Vite", "NLP APIs", "Vanilla CSS"],
     desc: "An advanced content analysis system built to inspect, identify, and report machine-generated or paraphrased text.",
