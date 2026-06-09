@@ -240,6 +240,28 @@ const bioPillars = [
   }
 ];
 
+const techLogos = {
+  "React": "https://cdn.simpleicons.org/react/61DAFB",
+  "Vite": "https://cdn.simpleicons.org/vite/646CFF",
+  "Framer Motion": "https://cdn.simpleicons.org/framer/0055FF",
+  "Custom CSS": "https://cdn.simpleicons.org/css3/1572B6",
+  "Vanilla CSS": "https://cdn.simpleicons.org/css3/1572B6",
+  "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
+  "HTML/CSS": "https://cdn.simpleicons.org/html5/E34F26",
+  "Gemini AI": "https://cdn.simpleicons.org/google/4285F4",
+  "Python": "https://cdn.simpleicons.org/python/3776AB",
+  "WebSockets/MQTT": "https://cdn.simpleicons.org/mqtt/3C5280",
+  "Chart.js": "https://cdn.simpleicons.org/chartdotjs/FF6384",
+  "NLP APIs": "https://cdn.simpleicons.org/openai/412991",
+  "YOLOv8": "https://cdn.simpleicons.org/pytorch/EE4C2C",
+  "Google Maps API": "https://cdn.simpleicons.org/googlemaps/4285F4",
+  "GPS": "https://cdn.simpleicons.org/googleearth/1A73E8",
+  "Flask": "https://cdn.simpleicons.org/flask/000000",
+  "Pillow": "https://cdn.simpleicons.org/python/3776AB",
+  "Jupyter Notebooks": "https://cdn.simpleicons.org/jupyter/F37626",
+  "PyTorch": "https://cdn.simpleicons.org/pytorch/EE4C2C",
+};
+
 function App() {
   const [activeTab, setActiveTab] = useState('about');
   const [theme, setTheme] = useState('dark');
@@ -312,7 +334,7 @@ function App() {
                   </div>
 
                   <p className="about-bio">
-                    I design and engineer intelligent applications at the intersection of Artificial Intelligence and Full-Stack Web Development, focusing on translating complex neural networks into beautiful, responsive, and production-ready digital interfaces. By bridging the gap between advanced machine learning models and modern user interfaces, I aim to create software that is both highly intelligent and exceptionally user-friendly. My goal is to build scalable architectures that leverage deep learning to solve real-world problems.
+                    I design and engineer intelligent applications at the intersection of Artificial Intelligence and Full-Stack Web Development. I focus on translating complex neural networks into beautiful, responsive, and production-ready interfaces, bridging the gap between machine learning models and user-friendly software architectures.
                   </p>
                   <p className="about-bio-highlight">
                     Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and modern frontend aesthetics.
@@ -408,7 +430,17 @@ function App() {
                     
                     <div className="project-stack">
                       {project.stack.map((tech) => (
-                        <span className="tech-pill" key={tech}>{tech}</span>
+                        <span className="tech-pill" key={tech} title={tech}>
+                          {techLogos[tech] ? (
+                            <img 
+                              src={techLogos[tech]} 
+                              alt={tech} 
+                              style={{ width: 18, height: 18, filter: theme === 'dark' && techLogos[tech].includes('000000') ? 'invert(1)' : 'none' }} 
+                            />
+                          ) : (
+                            tech
+                          )}
+                        </span>
                       ))}
                     </div>
 
