@@ -7,20 +7,56 @@
   --card-hover-bg: rgba(30, 30, 35, 0.8);
   --border-color: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.2);
+  --header-bg: rgba(3, 3, 3, 0.7);
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 [data-theme='light'] {
-  --bg-color: #f5f5f7;
-  --text-color: #111111;
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
   --text-secondary: #555555;
   --accent-color: #000000;
-  --card-bg: rgba(255, 255, 255, 0.8);
-  --card-hover-bg: rgba(240, 240, 245, 0.9);
+  --card-bg: rgba(245, 245, 247, 0.6);
+  --card-hover-bg: rgba(235, 235, 240, 0.8);
   --border-color: rgba(0, 0, 0, 0.1);
   --border-hover: rgba(0, 0, 0, 0.25);
+  --header-bg: rgba(255, 255, 255, 0.85);
   --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='light'] body {
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(0, 0, 0, 0.02) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(0, 0, 0, 0.03) 0%, transparent 50%);
+}
+
+[data-theme='light'] .nav-tabs {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='light'] .theme-toggle-btn {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='light'] .footer-social-link {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme='light'] .project-logo-container {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme='light'] .project-link-btn {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme='light'] .tech-pill {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme='light'] .skill-icon-placeholder {
+  background: rgba(0, 0, 0, 0.03);
 }
 
 * {
@@ -55,13 +91,15 @@ a {
 
 /* Header & Navigation */
 .header-wrapper {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-color);
-  background: rgba(3, 3, 3, 0.7);
+  background: var(--header-bg);
 }
 
 .header {
@@ -150,7 +188,7 @@ a {
 }
 
 .tab-button.active {
-  color: #030303;
+  color: var(--bg-color);
   background: var(--accent-color);
   font-weight: 600;
 }
@@ -160,7 +198,7 @@ a {
   display: grid;
   grid-template-columns: 1fr;
   gap: 3.5rem;
-  padding: 5rem 0 3rem;
+  padding: 8rem 0 3rem; /* Increased top padding to account for fixed header */
   align-items: center;
 }
 
@@ -182,6 +220,12 @@ a {
   background: linear-gradient(180deg, #ffffff 30%, #a0a0a0 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+[data-theme='light'] .about-content h1 span {
+  background: none;
+  -webkit-text-fill-color: #000000;
+  color: #000000;
 }
 
 .tagline {
@@ -246,7 +290,7 @@ a {
 
 /* Tab Sections */
 .tab-section {
-  padding: 4rem 0;
+  padding: 7rem 0 4rem; /* Increased top padding to account for fixed header */
 }
 
 .section-title {

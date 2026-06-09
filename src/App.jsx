@@ -286,7 +286,7 @@ function App() {
               <div className="about-content">
                 <h1>Hi there, I'm <br /><span>Ayush Singh!</span> 👋</h1>
                 <p className="about-bio">
-                  I design and engineer intelligent applications at the intersection of Artificial Intelligence, Edge Computing, and Full-Stack Web Development. With a foundation from IIT Gandhinagar (entered in 2025), my work focuses on translating complex neural networks and sensor telemetry into beautiful, responsive, and production-ready digital interfaces.
+                  I design and engineer intelligent applications at the intersection of Artificial Intelligence, Edge Computing, and Full-Stack Web Development. I am currently pursuing my B.Tech from IIT Gandhinagar (entered in 2025), focusing on translating complex neural networks and sensor telemetry into beautiful, responsive, and production-ready digital interfaces.
                 </p>
                 <p className="about-bio-highlight">
                   Let's build something intelligent. Exploring ways to merge deep learning software with low-latency physical systems and glassmorphic frontend aesthetics.
@@ -488,7 +488,7 @@ function App() {
       <footer>
         <div className="container">
           <p className="footer-credits">
-            &copy; {new Date().getFullYear()} Ayush Singh. Crafted using React, Vite, and Framer Motion.
+            &copy; {new Date().getFullYear()} Ayush Singh.
           </p>
         </div>
       </footer>
