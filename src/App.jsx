@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Github, 
@@ -14,7 +14,9 @@ import {
   Trophy, 
   Terminal,
   Layers,
-  GraduationCap
+  GraduationCap,
+  Sun,
+  Moon
 } from 'lucide-react'
 import profilePic from './assets/profile.png'
 
@@ -161,65 +163,74 @@ const skillsData = [
     category: "Programming Languages",
     icon: <Terminal />,
     items: [
-      { name: "Python (AI/ML & Flask)", level: "95%" },
-      { name: "JavaScript / ES6+", level: "90%" },
-      { name: "TypeScript", level: "85%" },
-      { name: "C++ (Edge AI Systems)", level: "80%" }
+      { name: "Python (AI/ML & Flask)", level: "95%", logoUrl: "https://cdn.simpleicons.org/python/3776AB" },
+      { name: "JavaScript / ES6+", level: "90%", logoUrl: "https://cdn.simpleicons.org/javascript/F7DF1E" },
+      { name: "TypeScript", level: "85%", logoUrl: "https://cdn.simpleicons.org/typescript/3178C6" },
+      { name: "C++ (Edge AI Systems)", level: "80%", logoUrl: "https://cdn.simpleicons.org/cplusplus/00599C" }
     ]
   },
   {
     category: "Frontend Development",
     icon: <Code />,
     items: [
-      { name: "React (Hooks & Context)", level: "92%" },
-      { name: "Next.js (App Router)", level: "85%" },
-      { name: "HTML5 / CSS3 (Aesthetics)", level: "95%" },
-      { name: "Framer Motion (Animations)", level: "88%" }
+      { name: "React (Hooks & Context)", level: "92%", logoUrl: "https://cdn.simpleicons.org/react/61DAFB" },
+      { name: "Next.js (App Router)", level: "85%", logoUrl: "https://cdn.simpleicons.org/nextdotjs/000000" },
+      { name: "HTML5 / CSS3 (Aesthetics)", level: "95%", logoUrl: "https://cdn.simpleicons.org/html5/E34F26" },
+      { name: "Framer Motion", level: "88%", logoUrl: "https://cdn.simpleicons.org/framer/0055FF" }
     ]
   },
   {
     category: "Backend & Systems",
     icon: <Server />,
     items: [
-      { name: "Node.js (Express)", level: "88%" },
-      { name: "Django (Robust APIs)", level: "82%" },
-      { name: "Flask (Microservices)", level: "85%" },
-      { name: "WebSockets & MQTT Protocols", level: "80%" }
+      { name: "Node.js (Express)", level: "88%", logoUrl: "https://cdn.simpleicons.org/nodedotjs/339933" },
+      { name: "Django (Robust APIs)", level: "82%", logoUrl: "https://cdn.simpleicons.org/django/092E20" },
+      { name: "Flask (Microservices)", level: "85%", logoUrl: "https://cdn.simpleicons.org/flask/000000" },
+      { name: "WebSockets & MQTT", level: "80%", logoUrl: "https://cdn.simpleicons.org/mqtt/660066" }
     ]
   },
   {
     category: "Databases & Storage",
     icon: <Database />,
     items: [
-      { name: "MongoDB (NoSQL Document)", level: "86%" },
-      { name: "SQLite (Relational Core)", level: "90%" },
-      { name: "PostgreSQL (Enterprise)", level: "80%" }
+      { name: "MongoDB (NoSQL Document)", level: "86%", logoUrl: "https://cdn.simpleicons.org/mongodb/47A248" },
+      { name: "SQLite (Relational Core)", level: "90%", logoUrl: "https://cdn.simpleicons.org/sqlite/003B57" },
+      { name: "PostgreSQL (Enterprise)", level: "80%", logoUrl: "https://cdn.simpleicons.org/postgresql/4169E1" }
     ]
   },
   {
     category: "DevOps & Cloud Integration",
     icon: <Globe />,
     items: [
-      { name: "Docker Containerization", level: "82%" },
-      { name: "Google Cloud Platform (GCP)", level: "78%" },
-      { name: "Git & Version Control Pipelines", level: "92%" },
-      { name: "Vercel / Netlify CD Hostings", level: "90%" }
+      { name: "Docker Containerization", level: "82%", logoUrl: "https://cdn.simpleicons.org/docker/2496ED" },
+      { name: "Google Cloud Platform", level: "78%", logoUrl: "https://cdn.simpleicons.org/googlecloud/4285F4" },
+      { name: "Git & GitHub Pipelines", level: "92%", logoUrl: "https://cdn.simpleicons.org/git/F05032" },
+      { name: "Vercel Hostings", level: "90%", logoUrl: "https://cdn.simpleicons.org/vercel/000000" }
     ]
   },
   {
     category: "Hardware & Edge ML",
     icon: <Cpu />,
     items: [
-      { name: "Raspberry Pi Integration", level: "85%" },
-      { name: "YOLOv8 Edge Implementations", level: "88%" },
-      { name: "Custom PCB Design Layouts", level: "70%" },
-      { name: "Serial Device Telemetry Logs", level: "80%" }
+      { name: "Raspberry Pi Integration", level: "85%", logoUrl: "https://cdn.simpleicons.org/raspberrypi/A22846" },
+      { name: "YOLOv8 Edge Implementations", level: "88%", logoUrl: null },
+      { name: "Custom PCB Design", level: "70%", logoUrl: null },
+      { name: "Serial Device Logs", level: "80%", logoUrl: null }
     ]
   }
 ];
 
 function App() {
   const [activeTab, setActiveTab] = useState('about');
+  const [theme, setTheme] = useState('dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
+  };
 
   const tabContentVariants = {
     hidden: { opacity: 0, y: 15 },
@@ -239,20 +250,25 @@ function App() {
             </div>
           </div>
           
-          <nav className="nav-tabs">
-            {['about', 'projects', 'skills', 'stats'].map((tab) => (
-              <button
-                key={tab}
-                className={`tab-button ${activeTab === tab ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab === 'about' && 'About'}
-                {tab === 'projects' && 'Projects'}
-                {tab === 'skills' && 'Skills & Tech'}
-                {tab === 'stats' && 'GitHub Insights'}
-              </button>
-            ))}
-          </nav>
+          <div className="header-right">
+            <nav className="nav-tabs">
+              {['about', 'projects', 'skills', 'stats'].map((tab) => (
+                <button
+                  key={tab}
+                  className={`tab-button ${activeTab === tab ? 'active' : ''}`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab === 'about' && 'About'}
+                  {tab === 'projects' && 'Projects'}
+                  {tab === 'skills' && 'Skills & Tech'}
+                  {tab === 'stats' && 'GitHub Insights'}
+                </button>
+              ))}
+            </nav>
+            <button className="theme-toggle-btn" onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+          </div>
         </header>
       </div>
 
@@ -268,20 +284,22 @@ function App() {
               className="about-grid"
             >
               <div className="about-content">
-                <div className="tagline">🎓 B.Tech @ IIT Gandhinagar | Artificial Intelligence & Full-Stack</div>
                 <h1>Hi there, I'm <br /><span>Ayush Singh!</span> 👋</h1>
                 <p className="about-bio">
-                  I design and engineer intelligent applications at the intersection of Artificial Intelligence, Edge Computing, and Full-Stack Web Development. With a foundation from IIT Gandhinagar, my work focuses on translating complex neural networks and sensor telemetry into beautiful, responsive, and production-ready digital interfaces.
+                  I design and engineer intelligent applications at the intersection of Artificial Intelligence, Edge Computing, and Full-Stack Web Development. With a foundation from IIT Gandhinagar (entered in 2025), my work focuses on translating complex neural networks and sensor telemetry into beautiful, responsive, and production-ready digital interfaces.
                 </p>
                 <p className="about-bio-highlight">
                   Let's build something intelligent. Exploring ways to merge deep learning software with low-latency physical systems and glassmorphic frontend aesthetics.
                 </p>
-                <div style={{ display: 'flex', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                   <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link">
                     <Mail size={16} /> Email Me
                   </a>
                   <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="footer-social-link">
                     <Github size={16} /> GitHub
+                  </a>
+                  <a href="https://linkedin.com/in/ayushxphoenix" target="_blank" rel="noreferrer" className="footer-social-link">
+                    <Linkedin size={16} /> LinkedIn
                   </a>
                 </div>
               </div>
@@ -388,7 +406,14 @@ function App() {
                     <div className="skills-list-wrapper">
                       {category.items.map((item, idx) => (
                         <div className="skill-row" key={idx}>
-                          <span className="skill-name">{item.name}</span>
+                          <div className="skill-info">
+                            {item.logoUrl ? (
+                              <img src={item.logoUrl} alt={item.name} style={{ width: 24, height: 24, filter: theme === 'dark' && !item.logoUrl.includes('000000') ? 'none' : theme === 'dark' ? 'invert(1)' : 'none' }} />
+                            ) : (
+                              <div style={{ width: 24, height: 24, background: 'rgba(255,255,255,0.04)', borderRadius: '4px' }}></div>
+                            )}
+                            <span className="skill-name">{item.name}</span>
+                          </div>
                           <div className="skill-bar-bg" title={`${item.name} proficiency level: ${item.level}`}>
                             <div className="skill-bar-fill" style={{ width: item.level }}></div>
                           </div>
@@ -422,7 +447,7 @@ function App() {
                   </div>
                   <div className="stat-image-container">
                     <img 
-                      src="https://github-profile-trophy.vercel.app/?username=destopianpirate&theme=transparent&title_color=ffffff&text_color=cccccc&v=2" 
+                      src={`https://github-profile-trophy.vercel.app/?username=destopianpirate&theme=${theme === 'dark' ? 'transparent' : 'light'}&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&v=2`} 
                       alt="GitHub Profile Trophies" 
                     />
                   </div>
@@ -435,7 +460,7 @@ function App() {
                     </div>
                     <div className="stat-image-container">
                       <img 
-                        src="https://github-readme-streak-stats.herokuapp.com/?user=destopianpirate&theme=transparent&hide_border=true&title_color=ffffff&text_color=cccccc&sideNums=ffffff&sideLabels=aaaaaa&ring=ffffff&fire=ffffff&currStreakNum=ffffff&v=2" 
+                        src={`https://github-readme-streak-stats.herokuapp.com/?user=destopianpirate&theme=${theme === 'dark' ? 'transparent' : 'light'}&hide_border=true&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&sideNums=${theme === 'dark' ? 'ffffff' : '111111'}&sideLabels=${theme === 'dark' ? 'aaaaaa' : '555555'}&ring=${theme === 'dark' ? 'ffffff' : '111111'}&fire=${theme === 'dark' ? 'ffffff' : '111111'}&currStreakNum=${theme === 'dark' ? 'ffffff' : '111111'}&v=2`} 
                         alt="GitHub Streaks Metrics" 
                       />
                     </div>
@@ -447,7 +472,7 @@ function App() {
                     </div>
                     <div className="stat-image-container">
                       <img 
-                        src="https://github-readme-activity-graph.vercel.app/graph?username=destopianpirate&theme=transparent&color=ffffff&line=ffffff&point=ffffff&hide_border=true&v=2" 
+                        src={`https://github-readme-activity-graph.vercel.app/graph?username=destopianpirate&theme=${theme === 'dark' ? 'transparent' : 'light'}&color=${theme === 'dark' ? 'ffffff' : '111111'}&line=${theme === 'dark' ? 'ffffff' : '111111'}&point=${theme === 'dark' ? 'ffffff' : '111111'}&hide_border=true&v=2`} 
                         alt="Commit Activity Graph" 
                       />
                     </div>
@@ -462,17 +487,6 @@ function App() {
       {/* Global Footer */}
       <footer>
         <div className="container">
-          <div className="footer-socials">
-            <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link">
-              <Mail size={16} /> Email
-            </a>
-            <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="footer-social-link">
-              <Github size={16} /> GitHub
-            </a>
-            <a href="https://linkedin.com/in/ayushxphoenix" target="_blank" rel="noreferrer" className="footer-social-link">
-              <Linkedin size={16} /> LinkedIn
-            </a>
-          </div>
           <p className="footer-credits">
             &copy; {new Date().getFullYear()} Ayush Singh. Crafted using React, Vite, and Framer Motion.
           </p>
