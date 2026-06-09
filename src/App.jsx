@@ -62,25 +62,6 @@ const projects = [
     )
   },
   {
-    title: "IoT Dashboard",
-    stack: ["React", "Vite", "Tailwind CSS", "WebSockets/MQTT", "Chart.js"],
-    desc: "A professional real-time telemetry dashboard designed for large-scale sensor network configuration and graphical event log visualization.",
-    features: [
-      "Real-time sensor telemetry streaming over WebSockets & MQTT", 
-      "Highly interactive widgets (dials, live line graphs, grid status controls)", 
-      "Automated system alerts and threshold breach logs", 
-      "Comprehensive device connection logs & diagnostic telemetry"
-    ],
-    logo: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-        <line x1="9" y1="21" x2="9" y2="9"/>
-        <line x1="3" y1="9" x2="21" y2="9"/>
-        <path d="M14 13h3m-3 3h4"/>
-      </svg>
-    )
-  },
-  {
     title: "ZeroGPTi",
     stack: ["React", "Vite", "NLP APIs", "Vanilla CSS"],
     desc: "An advanced content analysis system built to inspect, identify, and report machine-generated or paraphrased text.",
@@ -101,14 +82,14 @@ const projects = [
     )
   },
   {
-    title: "RoadGuard",
-    stack: ["YOLOv8", "Raspberry Pi 4", "Python", "Google Maps API", "GPS"],
-    desc: "An Edge AI traffic safety appliance deploying real-time object detection models to locate and report infrastructure defects.",
+    title: "RoadGuard AI",
+    stack: ["YOLOv8", "Python", "Google Maps API", "GPS"],
+    desc: "An Edge AI traffic safety application deploying real-time computer vision models to detect and report road infrastructure defects.",
     features: [
-      "Hardware-optimized YOLOv8 pothole detection running locally on Edge", 
-      "Precise GPS coordinate mapping for road anomalies", 
-      "Automatic backend logging to mark locations on Google Maps API", 
-      "Physical driver hazard alarm buzzer integration"
+      "YOLOv8 object detection model integration for anomalies", 
+      "Precise GPS coordinate mapping for road defects", 
+      "Automated system to sync coordinates with Google Maps API", 
+      "Real-time processing dashboard for infrastructure logs"
     ],
     logo: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -186,7 +167,7 @@ const skillsData = [
       { name: "Node.js (Express)", level: "88%", logoUrl: "https://cdn.simpleicons.org/nodedotjs/339933" },
       { name: "Django (Robust APIs)", level: "82%", logoUrl: "https://cdn.simpleicons.org/django/092E20" },
       { name: "Flask (Microservices)", level: "85%", logoUrl: "https://cdn.simpleicons.org/flask/000000" },
-      { name: "WebSockets & MQTT", level: "80%", logoUrl: "https://cdn.simpleicons.org/mqtt/660066" }
+      { name: "High-Performance Systems", level: "80%", logoUrl: null }
     ]
   },
   {
@@ -209,13 +190,12 @@ const skillsData = [
     ]
   },
   {
-    category: "Hardware & Edge ML",
+    category: "Edge AI & Computer Vision",
     icon: <Cpu />,
     items: [
-      { name: "Raspberry Pi Integration", level: "85%", logoUrl: "https://cdn.simpleicons.org/raspberrypi/A22846" },
       { name: "YOLOv8 Edge Implementations", level: "88%", logoUrl: null },
-      { name: "Custom PCB Design", level: "70%", logoUrl: null },
-      { name: "Serial Device Logs", level: "80%", logoUrl: null }
+      { name: "Computer Vision Pipelines (OpenCV)", level: "82%", logoUrl: null },
+      { name: "Model Quantization & Inference", level: "80%", logoUrl: null }
     ]
   }
 ];
@@ -228,10 +208,10 @@ const bioPillars = [
     tag: "AI / ML"
   },
   {
-    title: "Edge Computing",
-    desc: "Integrating sensor telemetry and YOLOv8 models onto Raspberry Pi platforms.",
-    icon: <Activity size={24} />,
-    tag: "Hardware"
+    title: "Systems Engineering",
+    desc: "Deploying high-performance containerized software pipelines and automated DevOps workflows.",
+    icon: <Globe size={24} />,
+    tag: "Systems"
   },
   {
     title: "Full-Stack Web",
@@ -308,22 +288,15 @@ function App() {
                 <div className="about-content">
                   <h1>Hi there, I'm <br /><span>Ayush Singh!</span></h1>
                   
-                  <div className="academic-badge">
-                    <div className="academic-badge-logo">
-                      <GraduationCap size={22} />
-                    </div>
-                    <div className="academic-badge-info">
-                      <span className="academic-badge-uni">IIT Gandhinagar</span>
-                      <span className="academic-badge-course">B.Tech in Artificial Intelligence</span>
-                      <span className="academic-badge-meta">Class of 2029 • Entered 2025</span>
-                    </div>
+                  <div className="about-subtitle">
+                    Pursuing B.Tech in Artificial Intelligence at IIT Gandhinagar (Entered 2025)
                   </div>
 
                   <p className="about-bio">
-                    I design and engineer intelligent applications at the intersection of Artificial Intelligence, Edge Computing, and Full-Stack Web Development, focusing on translating complex neural networks and sensor telemetry into beautiful, responsive, and production-ready digital interfaces.
+                    I design and engineer intelligent applications at the intersection of Artificial Intelligence and Full-Stack Web Development, focusing on translating complex neural networks into beautiful, responsive, and production-ready digital interfaces.
                   </p>
                   <p className="about-bio-highlight">
-                    Let's build something intelligent. Exploring ways to merge deep learning software with low-latency physical systems and glassmorphic frontend aesthetics.
+                    Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and glassmorphic frontend aesthetics.
                   </p>
                   <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
                     <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link">
@@ -377,18 +350,12 @@ function App() {
 
               <div className="projects-grid">
                 {projects.map((project, i) => (
-                  <div className={`project-card ${project.title.includes('AcadX') || project.title.includes('Image Compressor') ? 'featured-col-2' : ''}`} key={i}>
+                  <div className="project-card" key={i}>
                     <div className="project-header">
                       <div className="project-logo-container">
                         {project.logo}
                       </div>
                       <div className="project-badges-wrapper">
-                        {project.liveUrl && (
-                          <span className="project-status-badge">
-                            <span className="live-pulse"></span>
-                            Live App
-                          </span>
-                        )}
                         {(project.title.includes('AcadX') || project.title.includes('Image Compressor')) && (
                           <span className="featured-badge">Featured</span>
                         )}
