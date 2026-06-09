@@ -220,6 +220,27 @@ const skillsData = [
   }
 ];
 
+const bioPillars = [
+  {
+    title: "Artificial Intelligence",
+    desc: "Designing neural networks, vision OCR systems, and generative study intelligence.",
+    icon: <Cpu size={24} />,
+    tag: "AI / ML"
+  },
+  {
+    title: "Edge Computing",
+    desc: "Integrating sensor telemetry and YOLOv8 models onto Raspberry Pi platforms.",
+    icon: <Activity size={24} />,
+    tag: "Hardware"
+  },
+  {
+    title: "Full-Stack Web",
+    desc: "Engineering premium, glassmorphic interfaces and scalable backend services.",
+    icon: <Layers size={24} />,
+    tag: "Web App"
+  }
+];
+
 function App() {
   const [activeTab, setActiveTab] = useState('about');
   const [theme, setTheme] = useState('dark');
@@ -281,33 +302,49 @@ function App() {
               animate="visible"
               exit="exit"
               variants={tabContentVariants}
-              className="about-grid"
+              className="about-tab-container"
             >
-              <div className="about-content">
-                <h1>Hi there, I'm <br /><span>Ayush Singh!</span> 👋</h1>
-                <p className="about-bio">
-                  I design and engineer intelligent applications at the intersection of Artificial Intelligence, Edge Computing, and Full-Stack Web Development. I am currently pursuing my B.Tech from IIT Gandhinagar (entered in 2025), focusing on translating complex neural networks and sensor telemetry into beautiful, responsive, and production-ready digital interfaces.
-                </p>
-                <p className="about-bio-highlight">
-                  Let's build something intelligent. Exploring ways to merge deep learning software with low-latency physical systems and glassmorphic frontend aesthetics.
-                </p>
-                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                  <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link">
-                    <Mail size={16} /> Email Me
-                  </a>
-                  <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="footer-social-link">
-                    <Github size={16} /> GitHub
-                  </a>
-                  <a href="https://linkedin.com/in/ayushxphoenix" target="_blank" rel="noreferrer" className="footer-social-link">
-                    <Linkedin size={16} /> LinkedIn
-                  </a>
+              <div className="about-grid">
+                <div className="about-content">
+                  <h1>Hi there, I'm <br /><span>Ayush Singh!</span> 👋</h1>
+                  <p className="about-bio">
+                    I design and engineer intelligent applications at the intersection of Artificial Intelligence, Edge Computing, and Full-Stack Web Development. I am currently pursuing my B.Tech from IIT Gandhinagar (entered in 2025), focusing on translating complex neural networks and sensor telemetry into beautiful, responsive, and production-ready digital interfaces.
+                  </p>
+                  <p className="about-bio-highlight">
+                    Let's build something intelligent. Exploring ways to merge deep learning software with low-latency physical systems and glassmorphic frontend aesthetics.
+                  </p>
+                  <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+                    <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link">
+                      <Mail size={16} /> Email Me
+                    </a>
+                    <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="footer-social-link">
+                      <Github size={16} /> GitHub
+                    </a>
+                    <a href="https://linkedin.com/in/ayushxphoenix" target="_blank" rel="noreferrer" className="footer-social-link">
+                      <Linkedin size={16} /> LinkedIn
+                    </a>
+                  </div>
+                </div>
+
+                <div className="profile-card-container">
+                  <div className="profile-image-frame">
+                    <img src={profilePic} alt="Ayush Singh Profile" className="profile-large-image" />
+                  </div>
                 </div>
               </div>
 
-              <div className="profile-card-container">
-                <div className="profile-image-frame">
-                  <img src={profilePic} alt="Ayush Singh Profile" className="profile-large-image" />
-                </div>
+              {/* Dynamic Interactive Pillars Grid */}
+              <div className="about-pillars-grid">
+                {bioPillars.map((pillar, idx) => (
+                  <div className="pillar-card" key={idx}>
+                    <div className="pillar-card-header">
+                      <span className="pillar-icon-wrapper">{pillar.icon}</span>
+                      <span className="pillar-tag">{pillar.tag}</span>
+                    </div>
+                    <h3 className="pillar-title">{pillar.title}</h3>
+                    <p className="pillar-desc">{pillar.desc}</p>
+                  </div>
+                ))}
               </div>
             </motion.div>
           )}
@@ -328,7 +365,7 @@ function App() {
 
               <div className="projects-grid">
                 {projects.map((project, i) => (
-                  <div className="project-card" key={i}>
+                  <div className={`project-card ${project.title.includes('AcadX') || project.title.includes('Image Compressor') ? 'featured-col-2' : ''}`} key={i}>
                     <div className="project-header">
                       <div className="project-logo-container">
                         {project.logo}
