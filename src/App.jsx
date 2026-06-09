@@ -370,27 +370,38 @@ function App() {
                       <div className="project-logo-container">
                         {project.logo}
                       </div>
-                      <div className="project-links">
-                        <a 
-                          href="https://github.com/destopianpirate" 
-                          target="_blank" 
-                          rel="noreferrer" 
-                          className="project-link-btn"
-                          title="View Repository"
-                        >
-                          <Github size={16} />
-                        </a>
+                      <div className="project-badges-wrapper">
                         {project.liveUrl && (
+                          <span className="project-status-badge">
+                            <span className="live-pulse"></span>
+                            Live App
+                          </span>
+                        )}
+                        {(project.title.includes('AcadX') || project.title.includes('Image Compressor')) && (
+                          <span className="featured-badge">Featured</span>
+                        )}
+                        <div className="project-links">
                           <a 
-                            href={project.liveUrl} 
+                            href="https://github.com/destopianpirate" 
                             target="_blank" 
                             rel="noreferrer" 
                             className="project-link-btn"
-                            title="Visit Live App"
+                            title="View Repository"
                           >
-                            <ExternalLink size={16} />
+                            <Github size={16} />
                           </a>
-                        )}
+                          {project.liveUrl && (
+                            <a 
+                              href={project.liveUrl} 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="project-link-btn"
+                              title="Visit Live App"
+                            >
+                              <ExternalLink size={16} />
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
 
