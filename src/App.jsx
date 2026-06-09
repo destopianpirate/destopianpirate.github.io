@@ -312,7 +312,10 @@ function App() {
                   </div>
 
                   <p className="about-bio">
-                    I design and engineer intelligent applications at the intersection of Artificial Intelligence and Full-Stack Web Development, focusing on translating complex neural networks into beautiful, responsive, and production-ready digital interfaces. Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and frontend aesthetics.
+                    I design and engineer intelligent applications at the intersection of Artificial Intelligence and Full-Stack Web Development, focusing on translating complex neural networks into beautiful, responsive, and production-ready digital interfaces. By bridging the gap between advanced machine learning models and modern user interfaces, I aim to create software that is both highly intelligent and exceptionally user-friendly. My goal is to build scalable architectures that leverage deep learning to solve real-world problems.
+                  </p>
+                  <p className="about-bio-highlight">
+                    Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and modern frontend aesthetics.
                   </p>
                   <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
                     <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link">
