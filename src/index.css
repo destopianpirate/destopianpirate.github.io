@@ -821,3 +821,125 @@ footer {
   line-height: 1.6;
 }
 
+/* Academic Spotlight Badge */
+.academic-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.8rem 1.25rem;
+  border-radius: 14px;
+  margin-bottom: 2rem;
+  box-shadow: var(--glass-glow);
+  max-width: 100%;
+}
+
+.academic-badge-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+[data-theme='light'] .academic-badge-logo {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.academic-badge-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-align: left;
+}
+
+.academic-badge-uni {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.academic-badge-course {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.academic-badge-meta {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-family: monospace;
+}
+
+/* Mobile Responsive Optimization Styles */
+@media (max-width: 767px) {
+  .header-wrapper {
+    position: relative;
+  }
+  
+  .header {
+    flex-direction: column;
+    height: auto;
+    padding: 1.25rem 0;
+    gap: 1rem;
+  }
+  
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .nav-tabs {
+    flex-grow: 1;
+    justify-content: space-around;
+    padding: 2px;
+  }
+  
+  .tab-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .about-grid {
+    padding: 2.5rem 0 2rem !important;
+    gap: 2.5rem;
+  }
+  
+  .tab-section {
+    padding: 2.5rem 0 3rem !important;
+  }
+  
+  .about-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .academic-badge {
+    padding: 0.75rem 1rem;
+    width: 100%;
+  }
+  
+  .academic-badge-course {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-image-frame {
+    width: 270px;
+    height: 270px;
+  }
+  
+  .container {
+    padding: 0 1.25rem;
+  }
+}
+

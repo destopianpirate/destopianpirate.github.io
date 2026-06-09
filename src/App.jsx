@@ -281,8 +281,8 @@ function App() {
                 >
                   {tab === 'about' && 'About'}
                   {tab === 'projects' && 'Projects'}
-                  {tab === 'skills' && 'Skills & Tech'}
-                  {tab === 'stats' && 'GitHub Insights'}
+                  {tab === 'skills' && 'Skills'}
+                  {tab === 'stats' && 'GitHub'}
                 </button>
               ))}
             </nav>
@@ -306,9 +306,21 @@ function App() {
             >
               <div className="about-grid">
                 <div className="about-content">
-                  <h1>Hi there, I'm <br /><span>Ayush Singh!</span> 👋</h1>
+                  <h1>Hi there, I'm <br /><span>Ayush Singh!</span></h1>
+                  
+                  <div className="academic-badge">
+                    <div className="academic-badge-logo">
+                      <GraduationCap size={22} />
+                    </div>
+                    <div className="academic-badge-info">
+                      <span className="academic-badge-uni">IIT Gandhinagar</span>
+                      <span className="academic-badge-course">B.Tech in Artificial Intelligence</span>
+                      <span className="academic-badge-meta">Class of 2029 • Entered 2025</span>
+                    </div>
+                  </div>
+
                   <p className="about-bio">
-                    I design and engineer intelligent applications at the intersection of Artificial Intelligence, Edge Computing, and Full-Stack Web Development. I am currently pursuing my B.Tech from IIT Gandhinagar (entered in 2025), focusing on translating complex neural networks and sensor telemetry into beautiful, responsive, and production-ready digital interfaces.
+                    I design and engineer intelligent applications at the intersection of Artificial Intelligence, Edge Computing, and Full-Stack Web Development, focusing on translating complex neural networks and sensor telemetry into beautiful, responsive, and production-ready digital interfaces.
                   </p>
                   <p className="about-bio-highlight">
                     Let's build something intelligent. Exploring ways to merge deep learning software with low-latency physical systems and glassmorphic frontend aesthetics.
