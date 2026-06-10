@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Github, 
@@ -11,12 +11,12 @@ import {
   Globe, 
   ExternalLink, 
   Activity, 
-  Trophy, 
   Terminal,
   Layers,
-  GraduationCap,
   Sun,
-  Moon
+  Moon,
+  BarChart2,
+  PieChart
 } from 'lucide-react'
 import profilePic from './assets/profile.png'
 
@@ -194,6 +194,7 @@ const skillsData = [
     icon: <Database />,
     items: [
       { name: "MongoDB (NoSQL Document)", level: "86%", logoUrl: "https://cdn.simpleicons.org/mongodb/47A248" },
+      { name: "Firebase (Realtime DB & Auth)", level: "85%", logoUrl: "https://cdn.simpleicons.org/firebase/FFCA28" },
       { name: "SQLite (Relational Core)", level: "90%", logoUrl: "https://cdn.simpleicons.org/sqlite/003B57" },
       { name: "PostgreSQL (Enterprise)", level: "80%", logoUrl: "https://cdn.simpleicons.org/postgresql/4169E1" }
     ]
@@ -204,7 +205,7 @@ const skillsData = [
     items: [
       { name: "Docker Containerization", level: "82%", logoUrl: "https://cdn.simpleicons.org/docker/2496ED" },
       { name: "Google Cloud Platform", level: "78%", logoUrl: "https://cdn.simpleicons.org/googlecloud/4285F4" },
-      { name: "Git & GitHub Pipelines", level: "92%", logoUrl: "https://cdn.simpleicons.org/git/F05032" },
+      { name: "GitHub Version Control", level: "92%", logoUrl: "https://cdn.simpleicons.org/github/000000" },
       { name: "Vercel Hostings", level: "90%", logoUrl: "https://cdn.simpleicons.org/vercel/000000" }
     ]
   },
@@ -213,7 +214,8 @@ const skillsData = [
     icon: <Cpu />,
     items: [
       { name: "YOLOv8 Edge Implementations", level: "88%", logoUrl: null },
-      { name: "Computer Vision Pipelines (OpenCV)", level: "82%", logoUrl: null },
+      { name: "Hugging Face (Model Hub)", level: "85%", logoUrl: "https://cdn.simpleicons.org/huggingface/FFD21E" },
+      { name: "Computer Vision (OpenCV)", level: "82%", logoUrl: null },
       { name: "Model Quantization & Inference", level: "80%", logoUrl: null }
     ]
   }
@@ -339,7 +341,7 @@ function App() {
                   <p className="about-bio-highlight">
                     Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and modern frontend aesthetics.
                   </p>
-                  <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+                  <div className="about-socials">
                     <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link">
                       <Mail size={16} /> Email Me
                     </a>
@@ -515,19 +517,33 @@ function App() {
             >
               <h2 className="section-title">GitHub Insights</h2>
               <p className="section-subtitle">
-                Real-time contribution statistics, system streaks, activity metrics, and gamified achievement trophies tracking my work.
+                Real-time contribution statistics, system streaks, and activity metrics tracking my work.
               </p>
 
               <div className="stats-dashboard">
-                <div className="stat-widget">
-                  <div className="widget-title">
-                    <Trophy size={18} /> Profile Trophies
+                <div className="stats-subgrid">
+                  <div className="stat-widget">
+                    <div className="widget-title">
+                      <BarChart2 size={18} /> Repository Statistics
+                    </div>
+                    <div className="stat-image-container">
+                      <img 
+                        src={`https://github-readme-stats.vercel.app/api?username=destopianpirate&show_icons=true&theme=transparent&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&icon_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&v=2`} 
+                        alt="GitHub Profile Statistics" 
+                      />
+                    </div>
                   </div>
-                  <div className="stat-image-container">
-                    <img 
-                      src={`https://github-profile-trophy.vercel.app/?username=destopianpirate&theme=${theme === 'dark' ? 'transparent' : 'light'}&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&v=2`} 
-                      alt="GitHub Profile Trophies" 
-                    />
+
+                  <div className="stat-widget">
+                    <div className="widget-title">
+                      <PieChart size={18} /> Language Distribution
+                    </div>
+                    <div className="stat-image-container">
+                      <img 
+                        src={`https://github-readme-stats.vercel.app/api/top-langs/?username=destopianpirate&layout=compact&theme=transparent&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&v=2`} 
+                        alt="Top Languages" 
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -555,6 +571,36 @@ function App() {
                       />
                     </div>
                   </div>
+                </div>
+
+                <div className="stats-highlights-grid">
+                  <div className="highlight-card">
+                    <h4>Open Source Work</h4>
+                    <p>Actively contributing to AI research repos, educational web portals, and edge computing automation scripts.</p>
+                  </div>
+                  <div className="highlight-card">
+                    <h4>Tech Stack Preference</h4>
+                    <p>Daily focus on Python (PyTorch/YOLOv8), React/Next.js ecosystem, and DevOps containerized integrations (Docker/Vercel).</p>
+                  </div>
+                  <div className="highlight-card">
+                    <h4>Development Ethos</h4>
+                    <p>Combining high-performance machine learning backend models with premium glassmorphic frontend user experiences.</p>
+                  </div>
+                </div>
+
+                <div className="github-profile-banner">
+                  <div className="banner-content">
+                    <h3>Looking for more details?</h3>
+                    <p>Explore my repositories, follow my open-source journey, and check out my full project archives directly on GitHub.</p>
+                  </div>
+                  <a 
+                    href="https://github.com/destopianpirate" 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    className="banner-btn"
+                  >
+                    <Github size={18} /> View GitHub Profile
+                  </a>
                 </div>
               </div>
             </motion.div>
