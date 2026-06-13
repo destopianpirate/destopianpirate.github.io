@@ -1597,8 +1597,10 @@ function App() {
       <div className="header-wrapper">
         <header className="header container">
           <div className="header-brand" onClick={() => { setActiveTab('about'); playClick(soundEnabled); }} style={{ cursor: 'pointer' }}>
-            <span className="brand-dot"></span>
-            destopianpirate
+            <img src={profilePic} alt="Ayush Singh" className="header-avatar" />
+            <div className="header-title">
+              Ayush Singh <span>at IITGN</span>
+            </div>
           </div>
           <div className="header-right">
             <nav className="nav-tabs">
