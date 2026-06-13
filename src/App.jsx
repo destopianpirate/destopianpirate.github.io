@@ -21,12 +21,9 @@ import {
   RotateCcw,
   AlertTriangle,
   GraduationCap,
-  Award,
-  Volume2,
-  VolumeX
+  Award
 } from 'lucide-react'
 import profilePic from './assets/profile.png'
-import { playClick, playHover, playSweep, playAlert } from './cyberAudio'
 
 const projects = [
   {
@@ -97,6 +94,7 @@ const projects = [
       "Deep natural language pattern analysis logs",
       "Interactive highlighter showing AI vs human written paragraphs"
     ],
+    liveUrl: "https://zerogpti.vercel.app",
     logo: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
@@ -130,7 +128,7 @@ const projects = [
     )
   },
   {
-    title: "Image Compressor",
+    title: "ImagePress - Image Compressor",
     stack: ["Python", "Flask", "Pillow", "HTML/CSS"],
     desc: "A lightning-fast web service that handles media optimization, file size compression, and instant conversion between next-gen image formats.",
     features: [
@@ -304,7 +302,7 @@ const projectRadarFocus = {
   "IoT Dashboard": { "AI / ML": 30, "Frontend": 80, "Backend": 90, "Databases": 70, "DevOps": 60, "Systems": 85 },
   "ZeroGPTi": { "AI / ML": 90, "Frontend": 70, "Backend": 60, "Databases": 30, "DevOps": 40, "Systems": 65 },
   "RoadGuard AI": { "AI / ML": 95, "Frontend": 40, "Backend": 75, "Databases": 50, "DevOps": 60, "Systems": 90 },
-  "Image Compressor": { "AI / ML": 20, "Frontend": 70, "Backend": 90, "Databases": 40, "DevOps": 70, "Systems": 80 },
+  "ImagePress - Image Compressor": { "AI / ML": 20, "Frontend": 70, "Backend": 90, "Databases": 40, "DevOps": 70, "Systems": 80 },
   "IITGN.AI": { "AI / ML": 95, "Frontend": 20, "Backend": 50, "Databases": 30, "DevOps": 40, "Systems": 85 }
 };
 
@@ -540,7 +538,7 @@ const aiMockAnswers = [
 
 const defaultAiResponse = "Inference complete. Synthesizing neural connections... The B.Tech AI program at IIT Gandhinagar bridges mathematical foundations, deep learning frameworks, and systems engineering. Combining PyTorch neural engines with responsive client interfaces creates high-fidelity tools that operate efficiently in resource-constrained environments.";
 
-function AISandbox({ soundEnabled }) {
+function AISandbox() {
   const [model, setModel] = useState('Gemini 2.5 Flash');
   const [temperature, setTemperature] = useState(0.7);
   const [maxTokens, setMaxTokens] = useState(256);
@@ -560,7 +558,6 @@ function AISandbox({ soundEnabled }) {
     setOutputText('');
     setLatency(0);
     setTokensPerSec(0);
-    playSweep(soundEnabled, 150, 450, 0.25);
 
     const query = prompt.toLowerCase();
     let responseText = defaultAiResponse;
@@ -597,8 +594,6 @@ function AISandbox({ soundEnabled }) {
             setAttentionGrid(Array(64).fill(0).map(() => Math.random() * 0.8 + 0.2));
             setVram(prev => Math.min(16.0, Math.max(1.0, +(prev + (Math.random() * 0.4 - 0.2)).toFixed(2))));
             
-            playClick(soundEnabled);
-
             tokenIdx++;
             setTimeout(streamTokens, typingDelay);
           } else {
@@ -620,7 +615,6 @@ function AISandbox({ soundEnabled }) {
     setTokensPerSec(0);
     setAttentionGrid(Array(64).fill(0.1));
     setVram(2.8);
-    playClick(soundEnabled);
   };
 
   return (
@@ -633,7 +627,7 @@ function AISandbox({ soundEnabled }) {
           <label className="control-label">Target Model</label>
           <select 
             value={model} 
-            onChange={(e) => { setModel(e.target.value); playClick(soundEnabled); }}
+            onChange={(e) => setModel(e.target.value)}
             className="sandbox-select"
             disabled={isGenerating}
           >
@@ -652,7 +646,7 @@ function AISandbox({ soundEnabled }) {
             max="1.5" 
             step="0.1"
             value={temperature} 
-            onChange={(e) => { setTemperature(parseFloat(e.target.value)); playHover(soundEnabled); }}
+            onChange={(e) => setTemperature(parseFloat(e.target.value))}
             className="sandbox-slider"
             disabled={isGenerating}
           />
@@ -666,7 +660,7 @@ function AISandbox({ soundEnabled }) {
             max="1024" 
             step="64"
             value={maxTokens} 
-            onChange={(e) => { setMaxTokens(parseInt(e.target.value)); playHover(soundEnabled); }}
+            onChange={(e) => setMaxTokens(parseInt(e.target.value))}
             className="sandbox-slider"
             disabled={isGenerating}
           />
@@ -680,7 +674,7 @@ function AISandbox({ soundEnabled }) {
             max="120" 
             step="5"
             value={speed} 
-            onChange={(e) => { setSpeed(parseInt(e.target.value)); playHover(soundEnabled); }}
+            onChange={(e) => setSpeed(parseInt(e.target.value))}
             className="sandbox-slider"
             disabled={isGenerating}
           />
@@ -773,7 +767,7 @@ function AISandbox({ soundEnabled }) {
   );
 }
 
-function IoTSimulator({ soundEnabled }) {
+function IoTSimulator() {
   const [nodes, setNodes] = useState({
     "Node_01_Edge_YOLO": true,
     "Node_02_Gateway": true,
@@ -815,7 +809,6 @@ function IoTSimulator({ soundEnabled }) {
         let newLog = '';
         if (nextVal > 80) {
           newLog = `[${timestamp}] [ALERT] [${randomNode}] High threshold breached: ${nextVal}%!`;
-          playAlert(soundEnabled);
         } else {
           newLog = `[${timestamp}] [MQTT] [${randomNode}] PUB: {"value": ${nextVal}, "load": ${load}, "status": "OK"}`;
         }
@@ -829,11 +822,10 @@ function IoTSimulator({ soundEnabled }) {
     }, 450);
 
     return () => clearInterval(interval);
-  }, [nodes, load, soundEnabled]);
+  }, [nodes, load]);
 
   const toggleNode = (nodeKey) => {
     setNodes(prev => ({ ...prev, [nodeKey]: !prev[nodeKey] }));
-    playClick(soundEnabled);
   };
 
   const svgWidth = 500;
@@ -935,7 +927,7 @@ function IoTSimulator({ soundEnabled }) {
             min="10" 
             max="100"
             value={load} 
-            onChange={(e) => { setLoad(parseInt(e.target.value)); playHover(soundEnabled); }}
+            onChange={(e) => setLoad(parseInt(e.target.value))}
             className="sandbox-slider"
           />
         </div>
@@ -1005,7 +997,7 @@ function IoTSimulator({ soundEnabled }) {
   );
 }
 
-function TerminalCLI({ isOpen, onClose, theme, toggleTheme, soundEnabled }) {
+function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
   const [inputVal, setInputVal] = useState('');
   const [history, setHistory] = useState([
     { type: 'welcome', text: "destopianpirate console [Version 1.0.0]\n(c) 2026 Ayush Singh. Type 'help' for commands, Press ` (backtick) or click Close to dismiss." }
@@ -1110,7 +1102,6 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme, soundEnabled }) {
 
         // Eat food
         if (newHead.x === food.x && newHead.y === food.y) {
-          playClick(soundEnabled);
           setScore(s => {
             const nextScore = s + 1;
             if (nextScore > highScore) setHighScore(nextScore);
@@ -1135,11 +1126,10 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme, soundEnabled }) {
 
     const interval = setInterval(gameTick, 180);
     return () => clearInterval(interval);
-  }, [gameState, food, soundEnabled]);
+  }, [gameState, food]);
 
   const endGame = () => {
     setGameState('cli');
-    playAlert(soundEnabled);
     setHistory(prev => [
       ...prev,
       { type: 'output', text: `GAME OVER! Final Score: ${scoreRef.current}` }
@@ -1182,7 +1172,6 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme, soundEnabled }) {
     if (gameState === 'game') {
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'q', 'Q', 'Escape'].includes(e.key)) {
         e.preventDefault();
-        playHover(soundEnabled);
         
         if (e.key === 'ArrowUp' && directionRef.current.y !== 1) {
           setDirection({ x: 0, y: -1 });
@@ -1194,7 +1183,6 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme, soundEnabled }) {
           setDirection({ x: 1, y: 0 });
         } else if (e.key.toLowerCase() === 'q' || e.key === 'Escape') {
           setGameState('cli');
-          playSweep(soundEnabled, 300, 150, 0.2);
           setHistory(prev => [...prev, { type: 'output', text: 'Game quit. Returning to shell.' }]);
         }
       }
@@ -1209,7 +1197,6 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme, soundEnabled }) {
       const commands = ['help', 'about', 'projects', 'skills', 'clear', 'theme', 'neofetch', 'matrix', 'snake', 'play'];
       const matches = commands.filter(c => c.startsWith(val));
       if (matches.length > 0) {
-        playClick(soundEnabled);
         setInputVal(matches[0]);
       }
       return;
@@ -1221,7 +1208,6 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme, soundEnabled }) {
       const nextIdx = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
       setHistoryIndex(nextIdx);
       setInputVal(commandHistory[nextIdx]);
-      playHover(soundEnabled);
       return;
     }
 
@@ -1236,7 +1222,6 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme, soundEnabled }) {
         setHistoryIndex(nextIdx);
         setInputVal(commandHistory[nextIdx]);
       }
-      playHover(soundEnabled);
       return;
     }
 
@@ -1299,7 +1284,7 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
   3. IoT Dashboard - WebSockets/MQTT, sensor telemetry, active alerts
   4. RoadGuard AI - YOLOv8, GPS coordinate mapper, Google Maps API
   5. ZeroGPTi - NLP sentence grading scales, AI content highlighter
-  6. Image Compressor - Flask media optimization pipeline`
+  6. ImagePress - Image Compressor - Flask media optimization pipeline`
           });
           break;
 
@@ -1345,7 +1330,6 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
           setDirection({ x: 1, y: 0 });
           setScore(0);
           setGameState('game');
-          playSweep(soundEnabled, 150, 450, 0.25);
           newHistory.push({ type: 'output', text: 'Initiating Snake Game Engine v1.0.0...' });
           break;
 
@@ -1447,7 +1431,7 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
   );
 }
 
-function GithubExplorer({ soundEnabled }) {
+function GithubExplorer() {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -1508,12 +1492,11 @@ function GithubExplorer({ soundEnabled }) {
           className="explorer-search-input"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={() => playHover(soundEnabled)}
         />
         <select 
           className="explorer-lang-select"
           value={selectedLanguage}
-          onChange={(e) => { setSelectedLanguage(e.target.value); playClick(soundEnabled); }}
+          onChange={(e) => setSelectedLanguage(e.target.value)}
         >
           {languages.map(lang => (
             <option key={lang} value={lang}>{lang}</option>
@@ -1532,8 +1515,6 @@ function GithubExplorer({ soundEnabled }) {
               rel="noreferrer" 
               className="repo-card" 
               key={repo.name}
-              onClick={() => playClick(soundEnabled)}
-              onMouseEnter={() => playHover(soundEnabled)}
             >
               <div className="repo-card-header">
                 <h4 className="repo-card-name">{repo.name}</h4>
@@ -1561,7 +1542,6 @@ function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [sandboxTab, setSandboxTab] = useState('ai');
   const [terminalOpen, setTerminalOpen] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -1580,7 +1560,6 @@ function App() {
   const toggleTheme = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(nextTheme);
-    playSweep(soundEnabled, 300, 700, 0.2);
   };
 
   const tabContentVariants = {
@@ -1596,7 +1575,7 @@ function App() {
 
       <div className="header-wrapper">
         <header className="header container">
-          <div className="header-brand" onClick={() => { setActiveTab('about'); playClick(soundEnabled); }} style={{ cursor: 'pointer' }}>
+          <div className="header-brand" onClick={() => setActiveTab('about')} style={{ cursor: 'pointer' }}>
             <img src={profilePic} alt="Ayush Singh" className="header-avatar" />
             <div className="header-title">
               Ayush Singh <span>at IITGN</span>
@@ -1608,8 +1587,7 @@ function App() {
                 <button
                   key={tab}
                   className={`tab-button ${activeTab === tab ? 'active' : ''}`}
-                  onClick={() => { setActiveTab(tab); playClick(soundEnabled); }}
-                  onMouseEnter={() => playHover(soundEnabled)}
+                  onClick={() => setActiveTab(tab)}
                 >
                   {tab === 'about' && 'About'}
                   {tab === 'projects' && 'Projects'}
@@ -1621,9 +1599,6 @@ function App() {
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <button className="theme-toggle-btn" onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-              </button>
-              <button className="sound-toggle-btn" onClick={() => setSoundEnabled(prev => !prev)} title={`Switch Sound ${soundEnabled ? 'Off' : 'On'}`} style={{ marginLeft: '0.5rem', background: soundEnabled ? 'rgba(16, 185, 129, 0.1)' : 'transparent', borderColor: soundEnabled ? '#10b981' : 'var(--border-color)', color: soundEnabled ? '#10b981' : 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-color)', padding: '0.4rem', borderRadius: '50%', cursor: 'pointer', transition: 'all 0.3s ease' }}>
-                {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
               </button>
             </div>
           </div>
@@ -1661,13 +1636,13 @@ function App() {
                     Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and modern frontend aesthetics.
                   </p>
                   <div className="about-socials">
-                    <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link" onMouseEnter={() => playHover(soundEnabled)} onClick={() => playClick(soundEnabled)}>
+                    <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link">
                       <Mail size={16} /> Email Me
                     </a>
-                    <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="footer-social-link" onMouseEnter={() => playHover(soundEnabled)} onClick={() => playClick(soundEnabled)}>
+                    <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="footer-social-link">
                       <Github size={16} /> GitHub
                     </a>
-                    <a href="https://linkedin.com/in/ayushxphoenix" target="_blank" rel="noreferrer" className="footer-social-link" onMouseEnter={() => playHover(soundEnabled)} onClick={() => playClick(soundEnabled)}>
+                    <a href="https://linkedin.com/in/ayushxphoenix" target="_blank" rel="noreferrer" className="footer-social-link">
                       <Linkedin size={16} /> LinkedIn
                     </a>
                   </div>
@@ -1684,7 +1659,7 @@ function App() {
                 <h2 className="timeline-section-title">Academic Journey</h2>
                 <div className="timeline-container">
                   {timelineData.map((item, idx) => (
-                    <div className="timeline-item" key={idx} onMouseEnter={() => playHover(soundEnabled)}>
+                    <div className="timeline-item" key={idx}>
                       <div className="timeline-marker">
                         <div className="timeline-dot-wrapper">
                           <span className="timeline-icon-inner">{item.icon}</span>
@@ -1714,7 +1689,7 @@ function App() {
 
               <div className="about-pillars-grid">
                 {bioPillars.map((pillar, idx) => (
-                  <div className="pillar-card" key={idx} onMouseEnter={() => playHover(soundEnabled)}>
+                  <div className="pillar-card" key={idx}>
                     <div className="pillar-card-header">
                       <span className="pillar-icon-wrapper">{pillar.icon}</span>
                       <span className="pillar-tag">{pillar.tag}</span>
@@ -1743,13 +1718,13 @@ function App() {
 
               <div className="projects-grid">
                 {projects.map((project, i) => (
-                  <div className="project-card" key={i} onMouseEnter={() => playHover(soundEnabled)}>
+                  <div className="project-card" key={i}>
                     <div className="project-header">
                       <div className="project-logo-container">
                         {project.logo}
                       </div>
                       <div className="project-badges-wrapper">
-                        {(project.title.includes('AcadX') || project.title.includes('Image Compressor')) && (
+                        {(project.title.includes('AcadX') || project.title.includes('Image Compressor') || project.title.includes('ImagePress')) && (
                           <span className="featured-badge">Featured</span>
                         )}
                         <div className="project-links">
@@ -1759,7 +1734,6 @@ function App() {
                             rel="noreferrer" 
                             className="project-link-btn"
                             title="View Repository"
-                            onClick={() => playClick(soundEnabled)}
                           >
                             <Github size={16} />
                           </a>
@@ -1770,7 +1744,6 @@ function App() {
                               rel="noreferrer" 
                               className="project-link-btn"
                               title="Visit Live App"
-                              onClick={() => playClick(soundEnabled)}
                             >
                               <ExternalLink size={16} />
                             </a>
@@ -1808,6 +1781,19 @@ function App() {
                         </ul>
                       </div>
                     )}
+
+                    {project.liveUrl && (
+                      <div className="project-visit-btn-wrapper" style={{ marginTop: 'auto', paddingTop: '1.25rem' }}>
+                        <a 
+                          href={project.liveUrl} 
+                          target="_blank" 
+                          rel="noreferrer" 
+                          className="project-visit-btn"
+                        >
+                          Visit Site <ExternalLink size={14} />
+                        </a>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -1829,15 +1815,15 @@ function App() {
               </p>
 
               <div className="skills-radar-container" style={{ marginBottom: '3.5rem' }}>
-                <RadarChart activeProject={selectedProject} soundEnabled={soundEnabled} />
-                <TechStackConfigurator activeProject={selectedProject} setActiveProject={setSelectedProject} soundEnabled={soundEnabled} />
+                <RadarChart activeProject={selectedProject} />
+                <TechStackConfigurator activeProject={selectedProject} setActiveProject={setSelectedProject} />
               </div>
 
 
 
               <div className="skills-tab-layout" style={{ marginTop: '3.5rem' }}>
                 {skillsData.map((category, i) => (
-                  <div className="skills-card" key={i} onMouseEnter={() => playHover(soundEnabled)}>
+                  <div className="skills-card" key={i}>
                     <h3 className="skills-category-title">
                       <span className="skill-icon-placeholder">{category.icon}</span>
                       {category.category}
@@ -1882,19 +1868,19 @@ function App() {
               <div className="sandbox-subtabs">
                 <button 
                   className={`sandbox-subtab-btn ${sandboxTab === 'ai' ? 'active' : ''}`}
-                  onClick={() => { setSandboxTab('ai'); playClick(soundEnabled); }}
+                  onClick={() => setSandboxTab('ai')}
                 >
                   <Cpu size={16} /> AI Prompt Sandbox
                 </button>
                 <button 
                   className={`sandbox-subtab-btn ${sandboxTab === 'iot' ? 'active' : ''}`}
-                  onClick={() => { setSandboxTab('iot'); playClick(soundEnabled); }}
+                  onClick={() => setSandboxTab('iot')}
                 >
                   <Activity size={16} /> IoT Telemetry Dashboard
                 </button>
               </div>
 
-              {sandboxTab === 'ai' ? <AISandbox soundEnabled={soundEnabled} /> : <IoTSimulator soundEnabled={soundEnabled} />}
+              {sandboxTab === 'ai' ? <AISandbox /> : <IoTSimulator />}
             </motion.div>
           )}
 
@@ -1966,23 +1952,23 @@ function App() {
                 </div>
 
                 <div className="stats-highlights-grid">
-                  <div className="highlight-card" onMouseEnter={() => playHover(soundEnabled)}>
+                  <div className="highlight-card">
                     <h4>Open Source Work</h4>
                     <p>Actively contributing to AI research repos, educational web portals, and edge computing automation scripts.</p>
                   </div>
-                  <div className="highlight-card" onMouseEnter={() => playHover(soundEnabled)}>
+                  <div className="highlight-card">
                     <h4>Tech Stack Preference</h4>
                     <p>Daily focus on Python (PyTorch/YOLOv8), React/Next.js ecosystem, and DevOps containerized integrations (Docker/Vercel).</p>
                   </div>
-                  <div className="highlight-card" onMouseEnter={() => playHover(soundEnabled)}>
+                  <div className="highlight-card">
                     <h4>Development Ethos</h4>
                     <p>Combining high-performance machine learning backend models with premium glassmorphic frontend user experiences.</p>
                   </div>
                 </div>
 
-                <GithubExplorer soundEnabled={soundEnabled} />
+                <GithubExplorer />
 
-                <div className="github-profile-banner" onMouseEnter={() => playHover(soundEnabled)}>
+                <div className="github-profile-banner">
                   <div className="banner-content">
                     <h3>Looking for more details?</h3>
                     <p>Explore my repositories, follow my open-source journey, and check out my full project archives directly on GitHub.</p>
@@ -1992,7 +1978,6 @@ function App() {
                     target="_blank" 
                     rel="noreferrer" 
                     className="banner-btn"
-                    onClick={() => playClick(soundEnabled)}
                   >
                     <Github size={18} /> View GitHub Profile
                   </a>
@@ -2013,7 +1998,7 @@ function App() {
 
       <button 
         className="cli-floating-btn" 
-        onClick={() => { setTerminalOpen(prev => !prev); playClick(soundEnabled); }}
+        onClick={() => setTerminalOpen(prev => !prev)}
         title="Toggle CLI Console (HotKey: `)"
       >
         <Terminal size={22} />
@@ -2024,7 +2009,6 @@ function App() {
         onClose={() => setTerminalOpen(false)} 
         theme={theme}
         toggleTheme={toggleTheme}
-        soundEnabled={soundEnabled}
       />
     </div>
   )
