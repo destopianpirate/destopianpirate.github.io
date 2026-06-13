@@ -900,7 +900,7 @@ footer {
   }
 
   .about-grid {
-    padding: 2.5rem 0 2rem !important;
+    padding: 4.5rem 0 2rem !important; /* Increased top padding to add space below the Relative Navbar */
     gap: 2.5rem;
   }
 
@@ -910,6 +910,11 @@ footer {
 
   .about-content h1 {
     font-size: 2.5rem;
+    font-weight: 900; /* Extra bold */
+  }
+
+  .about-content h1 span {
+    font-weight: 900; /* Extra bold */
   }
 
   .about-subtitle {
@@ -990,6 +995,44 @@ footer {
   .timeline-description {
     font-size: 0.8rem;
     line-height: 1.4;
+  }
+
+  /* CLI Terminal mobile optimizations */
+  .cli-terminal-drawer {
+    width: 100% !important;
+    left: 0 !important;
+    transform: none !important;
+    border-radius: 12px 12px 0 0 !important;
+    height: 340px !important;
+    bottom: -360px !important;
+  }
+
+  .cli-terminal-drawer.open {
+    bottom: 0 !important;
+  }
+
+  .cli-floating-btn {
+    bottom: 1.25rem !important;
+    right: 1.25rem !important;
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .cli-game-board {
+    font-size: 3.4vw !important;
+    line-height: 1.2 !important;
+    padding: 0.5rem !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  .cli-neofetch-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+
+  .cli-ascii {
+    font-size: 0.65rem !important;
   }
 }
 
@@ -2054,6 +2097,8 @@ input:checked+.switch-slider:before {
   align-items: center;
   width: 100%;
   margin-bottom: 0.1rem;
+  position: relative;
+  z-index: 2;
 }
 
 .timeline-badge {
@@ -2100,6 +2145,8 @@ input:checked+.switch-slider:before {
   color: var(--accent-color);
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  position: relative;
+  z-index: 2;
 }
 
 .timeline-title {
@@ -2107,12 +2154,16 @@ input:checked+.switch-slider:before {
   font-weight: 800;
   color: var(--text-color);
   line-height: 1.3;
+  position: relative;
+  z-index: 2;
 }
 
 .timeline-institution {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-secondary);
+  position: relative;
+  z-index: 2;
 }
 
 .timeline-description {
@@ -2144,100 +2195,7 @@ input:checked+.switch-slider:before {
   opacity: 0.08;
 }
 
-/* Interactive System Design Flowchart */
-.flowchart-section {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 2rem;
-  box-shadow: var(--glass-glow);
-  width: 100%;
-}
 
-.flowchart-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  color: var(--text-color);
-}
-
-.flowchart-desc {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  margin-bottom: 1.5rem;
-}
-
-.flowchart-canvas-wrapper {
-  position: relative;
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 1rem 0;
-}
-
-.flowchart-svg {
-  width: 100%;
-  min-width: 800px;
-  height: auto;
-  overflow: visible;
-}
-
-.flow-node-group circle {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.flow-node-group:hover circle {
-  stroke: var(--accent-color);
-  fill: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme='light'] .flow-node-group:hover circle {
-  fill: rgba(0, 0, 0, 0.02);
-}
-
-.flow-node-group text {
-  transition: fill 0.3s ease;
-}
-
-/* Dash offset animation for request flows */
-@keyframes flowMovement {
-  to {
-    stroke-dashoffset: -20;
-  }
-}
-
-.flow-line-active {
-  animation: flowMovement 0.6s linear infinite;
-  stroke-dasharray: 6 6;
-}
-
-.flowchart-details-card {
-  background: rgba(255, 255, 255, 0.01);
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
-  padding: 1.25rem 1.5rem;
-  margin-top: 1rem;
-  min-height: 95px;
-  transition: all 0.3s ease;
-}
-
-[data-theme='light'] .flowchart-details-card {
-  background: rgba(0, 0, 0, 0.01);
-}
-
-.flowchart-tech-pill {
-  font-size: 0.75rem;
-  font-family: monospace;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-}
-
-[data-theme='light'] .flowchart-tech-pill {
-  background: rgba(0, 0, 0, 0.03);
-}
 
 /* GitHub Repo Explorer */
 .github-explorer-section {
