@@ -1230,7 +1230,7 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
 
 function App() {
   const [activeTab, setActiveTab] = useState('about');
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
   const [selectedProject, setSelectedProject] = useState(null);
   const [sandboxTab, setSandboxTab] = useState('ai');
   const [terminalOpen, setTerminalOpen] = useState(false);
