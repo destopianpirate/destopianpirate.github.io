@@ -21,9 +21,12 @@ import {
   RotateCcw,
   AlertTriangle,
   GraduationCap,
-  Award
+  Award,
+  Volume2,
+  VolumeX
 } from 'lucide-react'
 import profilePic from './assets/profile.png'
+import { playClick, playHover, playSweep, playAlert } from './cyberAudio'
 
 const projects = [
   {
@@ -537,7 +540,7 @@ const aiMockAnswers = [
 
 const defaultAiResponse = "Inference complete. Synthesizing neural connections... The B.Tech AI program at IIT Gandhinagar bridges mathematical foundations, deep learning frameworks, and systems engineering. Combining PyTorch neural engines with responsive client interfaces creates high-fidelity tools that operate efficiently in resource-constrained environments.";
 
-function AISandbox() {
+function AISandbox({ soundEnabled }) {
   const [model, setModel] = useState('Gemini 2.5 Flash');
   const [temperature, setTemperature] = useState(0.7);
   const [maxTokens, setMaxTokens] = useState(256);
@@ -557,6 +560,7 @@ function AISandbox() {
     setOutputText('');
     setLatency(0);
     setTokensPerSec(0);
+    playSweep(soundEnabled, 150, 450, 0.25);
 
     const query = prompt.toLowerCase();
     let responseText = defaultAiResponse;
@@ -592,6 +596,8 @@ function AISandbox() {
             setOutputText(prev => prev + (tokenIdx === 0 ? '' : ' ') + tokens[tokenIdx]);
             setAttentionGrid(Array(64).fill(0).map(() => Math.random() * 0.8 + 0.2));
             setVram(prev => Math.min(16.0, Math.max(1.0, +(prev + (Math.random() * 0.4 - 0.2)).toFixed(2))));
+            
+            playClick(soundEnabled);
 
             tokenIdx++;
             setTimeout(streamTokens, typingDelay);
@@ -601,41 +607,40 @@ function AISandbox() {
           }
         };
 
-        streamTokens();
+        setTimeout(streamTokens, typingDelay);
       }
     }, 20);
   };
 
   const handleReset = () => {
     setPrompt('');
-    setOutputText('System reset. Enter prompt and click Generate.');
+    setOutputText('System ready. Enter prompt and click Generate to start simulation.');
     setIsGenerating(false);
-    setVram(model.includes('Pro') ? 8.4 : 3.8);
     setLatency(0);
     setTokensPerSec(0);
     setAttentionGrid(Array(64).fill(0.1));
+    setVram(2.8);
+    playClick(soundEnabled);
   };
 
   return (
-    <div className="ai-sandbox-grid">
-      <div className="ai-control-panel">
-        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>Model Configuration</h3>
+    <div className="sandbox-panel-grid">
+      <div className="sandbox-controls-card">
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>Engine Parameters</h3>
+        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>Adjust hyperparameters and trigger simulated deep learning queries.</p>
         
         <div className="control-group">
-          <label className="control-label">Target Model Engine</label>
+          <label className="control-label">Target Model</label>
           <select 
-            className="sandbox-select" 
             value={model} 
-            onChange={(e) => {
-              setModel(e.target.value);
-              setVram(e.target.value.includes('Pro') ? 8.4 : 3.8);
-            }}
+            onChange={(e) => { setModel(e.target.value); playClick(soundEnabled); }}
+            className="sandbox-select"
             disabled={isGenerating}
           >
-            <option>Gemini 2.5 Flash (Edge Optimization)</option>
-            <option>Gemini 2.5 Pro (High-Capacity)</option>
-            <option>YOLOv8-Edge-Inference (CV)</option>
-            <option>Custom study_portal CNN (Mock)</option>
+            <option>Gemini 2.5 Flash</option>
+            <option>Gemini 2.5 Pro</option>
+            <option>Claude 3.5 Sonnet</option>
+            <option>GPT-4o mini</option>
           </select>
         </div>
 
@@ -643,11 +648,11 @@ function AISandbox() {
           <label className="control-label">Temperature: <span>{temperature}</span></label>
           <input 
             type="range" 
-            min="0.1" 
+            min="0" 
             max="1.5" 
             step="0.1"
             value={temperature} 
-            onChange={(e) => setTemperature(parseFloat(e.target.value))}
+            onChange={(e) => { setTemperature(parseFloat(e.target.value)); playHover(soundEnabled); }}
             className="sandbox-slider"
             disabled={isGenerating}
           />
@@ -661,7 +666,7 @@ function AISandbox() {
             max="1024" 
             step="64"
             value={maxTokens} 
-            onChange={(e) => setMaxTokens(parseInt(e.target.value))}
+            onChange={(e) => { setMaxTokens(parseInt(e.target.value)); playHover(soundEnabled); }}
             className="sandbox-slider"
             disabled={isGenerating}
           />
@@ -675,7 +680,7 @@ function AISandbox() {
             max="120" 
             step="5"
             value={speed} 
-            onChange={(e) => setSpeed(parseInt(e.target.value))}
+            onChange={(e) => { setSpeed(parseInt(e.target.value)); playHover(soundEnabled); }}
             className="sandbox-slider"
             disabled={isGenerating}
           />
@@ -768,7 +773,7 @@ function AISandbox() {
   );
 }
 
-function IoTSimulator() {
+function IoTSimulator({ soundEnabled }) {
   const [nodes, setNodes] = useState({
     "Node_01_Edge_YOLO": true,
     "Node_02_Gateway": true,
@@ -810,6 +815,7 @@ function IoTSimulator() {
         let newLog = '';
         if (nextVal > 80) {
           newLog = `[${timestamp}] [ALERT] [${randomNode}] High threshold breached: ${nextVal}%!`;
+          playAlert(soundEnabled);
         } else {
           newLog = `[${timestamp}] [MQTT] [${randomNode}] PUB: {"value": ${nextVal}, "load": ${load}, "status": "OK"}`;
         }
@@ -823,10 +829,11 @@ function IoTSimulator() {
     }, 450);
 
     return () => clearInterval(interval);
-  }, [nodes, load]);
+  }, [nodes, load, soundEnabled]);
 
   const toggleNode = (nodeKey) => {
     setNodes(prev => ({ ...prev, [nodeKey]: !prev[nodeKey] }));
+    playClick(soundEnabled);
   };
 
   const svgWidth = 500;
@@ -860,31 +867,34 @@ function IoTSimulator() {
               return (
                 <line 
                   key={lvl} 
-                  x1={0} 
+                  x1="0" 
                   y1={y} 
                   x2={svgWidth} 
                   y2={y} 
-                  className="telemetry-grid-line"
+                  stroke="var(--border-color)"
+                  strokeWidth="0.5"
+                  strokeDasharray="4 4"
                 />
               );
             })}
             
             <line 
-              x1={0} 
+              x1="0" 
               y1={thresholdY} 
               x2={svgWidth} 
               y2={thresholdY} 
-              className="telemetry-threshold-line"
+              stroke="#ef4444" 
+              strokeWidth="1.5"
+              strokeDasharray="2 2"
+              opacity="0.8"
             />
-            <text x={10} y={thresholdY - 5} fill="#ef4444" fontSize="8px" fontFamily="monospace">WARN LIMIT (80%)</text>
-
+            
             <polyline
               fill="none"
               stroke={isHighAlert ? '#ef4444' : 'var(--accent-color)'}
               strokeWidth="2.5"
               points={pointsStr}
-              className="telemetry-line"
-              style={{ filter: isHighAlert ? 'drop-shadow(0 0 5px rgba(239, 68, 68, 0.5))' : '' }}
+              style={{ transition: 'stroke 0.3s ease' }}
             />
           </svg>
         </div>
@@ -895,7 +905,7 @@ function IoTSimulator() {
           </div>
         )}
 
-        <div className="stats-grid-mini">
+        <div className="stats-grid-mini" style={{ marginTop: '0.5rem' }}>
           <div className="stat-box-mini">
             <div className="stat-box-mini-label">Active Nodes</div>
             <div className="stat-box-mini-val">{Object.values(nodes).filter(Boolean).length} / 3</div>
@@ -925,7 +935,7 @@ function IoTSimulator() {
             min="10" 
             max="100"
             value={load} 
-            onChange={(e) => setLoad(parseInt(e.target.value))}
+            onChange={(e) => { setLoad(parseInt(e.target.value)); playHover(soundEnabled); }}
             className="sandbox-slider"
           />
         </div>
@@ -951,7 +961,7 @@ function IoTSimulator() {
             <div className="node-toggle-row">
               <div className="node-name-wrapper">
                 <span className={`status-dot-pulse ${nodes.Node_02_Gateway ? '' : 'inactive'}`}></span>
-                <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Node-02 (RF Gateway)</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Node-02 (Gateway Core)</span>
               </div>
               <label className="switch">
                 <input 
@@ -995,21 +1005,42 @@ function IoTSimulator() {
   );
 }
 
-function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
+function TerminalCLI({ isOpen, onClose, theme, toggleTheme, soundEnabled }) {
   const [inputVal, setInputVal] = useState('');
   const [history, setHistory] = useState([
     { type: 'welcome', text: "destopianpirate console [Version 1.0.0]\n(c) 2026 Ayush Singh. Type 'help' for commands, Press ` (backtick) or click Close to dismiss." }
   ]);
   const [matrixActive, setMatrixActive] = useState(false);
+  const [commandHistory, setCommandHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+
+  // Snake Game State
+  const [gameState, setGameState] = useState('cli'); // 'cli' or 'game'
+  const [snake, setSnake] = useState([{ x: 10, y: 5 }]);
+  const [food, setFood] = useState({ x: 5, y: 3 });
+  const [direction, setDirection] = useState({ x: 1, y: 0 });
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+
   const canvasRef = useRef(null);
   const bodyRef = useRef(null);
   const inputRef = useRef(null);
+
+  const directionRef = useRef(direction);
+  useEffect(() => {
+    directionRef.current = direction;
+  }, [direction]);
+
+  const scoreRef = useRef(score);
+  useEffect(() => {
+    scoreRef.current = score;
+  }, [score]);
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isOpen]);
+  }, [isOpen, gameState]);
 
   useEffect(() => {
     if (!matrixActive || !canvasRef.current || !isOpen) return;
@@ -1054,24 +1085,184 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
     if (bodyRef.current) {
       bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
     }
-  }, [history]);
+  }, [history, gameState]);
 
-  const handleCommand = (e) => {
-    if (e.key !== 'Enter') return;
-    const cmdText = inputVal.trim();
-    setInputVal('');
-    if (!cmdText) return;
+  // Snake Game Loop
+  useEffect(() => {
+    if (gameState !== 'game') return;
 
-    const args = cmdText.split(' ');
-    const command = args[0].toLowerCase();
+    const gameTick = () => {
+      setSnake(prevSnake => {
+        const head = prevSnake[0];
+        const newHead = { x: head.x + directionRef.current.x, y: head.y + directionRef.current.y };
 
-    const newHistory = [...history, { type: 'input', text: `destopianpirate@iitgn:~$ ${cmdText}` }];
+        // Wall collision
+        if (newHead.x < 0 || newHead.x >= 20 || newHead.y < 0 || newHead.y >= 10) {
+          endGame();
+          return prevSnake;
+        }
 
-    switch (command) {
-      case 'help':
-        newHistory.push({
-          type: 'output',
-          text: `Available commands:
+        // Self collision
+        if (prevSnake.some(seg => seg.x === newHead.x && seg.y === newHead.y)) {
+          endGame();
+          return prevSnake;
+        }
+
+        // Eat food
+        if (newHead.x === food.x && newHead.y === food.y) {
+          playClick(soundEnabled);
+          setScore(s => {
+            const nextScore = s + 1;
+            if (nextScore > highScore) setHighScore(nextScore);
+            return nextScore;
+          });
+          
+          let newFood;
+          do {
+            newFood = {
+              x: Math.floor(Math.random() * 20),
+              y: Math.floor(Math.random() * 10)
+            };
+          } while (prevSnake.some(seg => seg.x === newFood.x && seg.y === newFood.y));
+          setFood(newFood);
+
+          return [newHead, ...prevSnake];
+        } else {
+          return [newHead, ...prevSnake.slice(0, -1)];
+        }
+      });
+    };
+
+    const interval = setInterval(gameTick, 180);
+    return () => clearInterval(interval);
+  }, [gameState, food, soundEnabled]);
+
+  const endGame = () => {
+    setGameState('cli');
+    playAlert(soundEnabled);
+    setHistory(prev => [
+      ...prev,
+      { type: 'output', text: `GAME OVER! Final Score: ${scoreRef.current}` }
+    ]);
+  };
+
+  const renderBoard = () => {
+    const width = 20;
+    const height = 10;
+    let boardStr = '╔════════════════════╗\n';
+    
+    for (let y = 0; y < height; y++) {
+      let row = '║';
+      for (let x = 0; x < width; x++) {
+        const isHead = snake[0] && snake[0].x === x && snake[0].y === y;
+        const isBody = snake.slice(1).some(seg => seg.x === x && seg.y === y);
+        const isFood = food.x === x && food.y === y;
+        
+        if (isHead) {
+          row += 'O';
+        } else if (isBody) {
+          row += 'o';
+        } else if (isFood) {
+          row += '★';
+        } else {
+          row += ' ';
+        }
+      }
+      row += '║\n';
+      boardStr += row;
+    }
+    
+    boardStr += '╚════════════════════╝\n';
+    boardStr += `Score: ${score}   High Score: ${highScore}\n`;
+    boardStr += `[Arrows] Steer  |  [Q] Exit Game`;
+    return boardStr;
+  };
+
+  const handleKeyDown = (e) => {
+    if (gameState === 'game') {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'q', 'Q', 'Escape'].includes(e.key)) {
+        e.preventDefault();
+        playHover(soundEnabled);
+        
+        if (e.key === 'ArrowUp' && directionRef.current.y !== 1) {
+          setDirection({ x: 0, y: -1 });
+        } else if (e.key === 'ArrowDown' && directionRef.current.y !== -1) {
+          setDirection({ x: 0, y: 1 });
+        } else if (e.key === 'ArrowLeft' && directionRef.current.x !== 1) {
+          setDirection({ x: -1, y: 0 });
+        } else if (e.key === 'ArrowRight' && directionRef.current.x !== -1) {
+          setDirection({ x: 1, y: 0 });
+        } else if (e.key.toLowerCase() === 'q' || e.key === 'Escape') {
+          setGameState('cli');
+          playSweep(soundEnabled, 300, 150, 0.2);
+          setHistory(prev => [...prev, { type: 'output', text: 'Game quit. Returning to shell.' }]);
+        }
+      }
+      return;
+    }
+
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const val = inputVal.trim().toLowerCase();
+      if (!val) return;
+      
+      const commands = ['help', 'about', 'projects', 'skills', 'clear', 'theme', 'neofetch', 'matrix', 'snake', 'play'];
+      const matches = commands.filter(c => c.startsWith(val));
+      if (matches.length > 0) {
+        playClick(soundEnabled);
+        setInputVal(matches[0]);
+      }
+      return;
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (commandHistory.length === 0) return;
+      const nextIdx = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
+      setHistoryIndex(nextIdx);
+      setInputVal(commandHistory[nextIdx]);
+      playHover(soundEnabled);
+      return;
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex === -1) return;
+      const nextIdx = historyIndex + 1;
+      if (nextIdx >= commandHistory.length) {
+        setHistoryIndex(-1);
+        setInputVal('');
+      } else {
+        setHistoryIndex(nextIdx);
+        setInputVal(commandHistory[nextIdx]);
+      }
+      playHover(soundEnabled);
+      return;
+    }
+
+    if (e.key === 'Enter') {
+      const cmdText = inputVal.trim();
+      setInputVal('');
+      if (!cmdText) return;
+
+      setCommandHistory(prev => {
+        if (prev[prev.length - 1] === cmdText) return prev;
+        return [...prev, cmdText];
+      });
+      setHistoryIndex(-1);
+
+      playClick(soundEnabled);
+      
+      const args = cmdText.split(' ');
+      const command = args[0].toLowerCase();
+
+      const newHistory = [...history, { type: 'input', text: `destopianpirate@iitgn:~$ ${cmdText}` }];
+
+      switch (command) {
+        case 'help':
+          newHistory.push({
+            type: 'output',
+            text: `Available commands:
   help      - Show this documentation
   about     - Display personal biography summary
   projects  - List featured engineering repositories
@@ -1079,80 +1270,94 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
   theme     - Switch UI theme (e.g. 'theme light', 'theme dark')
   matrix    - Toggle falling code Matrix digital rain overlay
   neofetch  - Display system specifications and ASCII logo
+  snake     - Play the classic preformatted ASCII snake game
+  play      - Shortcut to start the snake game
   clear     - Reset the terminal output logs`
-        });
-        break;
-      
-      case 'clear':
-        setHistory([]);
-        return;
+          });
+          break;
+        
+        case 'clear':
+          setHistory([]);
+          return;
 
-      case 'about':
-        newHistory.push({
-          type: 'output',
-          text: `Biography:
+        case 'about':
+          newHistory.push({
+            type: 'output',
+            text: `Biography:
 Ayush Singh enters academic study at IIT Gandhinagar (Class of 2025) pursuing B.Tech in Artificial Intelligence.
-Engaged in bridging low-latency deep learning models (YOLOv8, Custom CNNs) with highly responsive, responsive web applications.
+Engaged in bridging low-latency deep learning models (YOLOv8, Custom CNNs) with highly responsive web applications.
 Currently looking for research initiatives in CV edge pipelines and scalable AI portals.`
-        });
-        break;
+          });
+          break;
 
-      case 'projects':
-        newHistory.push({
-          type: 'output',
-          text: `Featured Repositories:
+        case 'projects':
+          newHistory.push({
+            type: 'output',
+            text: `Featured Repositories:
   1. AcadX (student_portal) - React, Vite, Framer Motion, AI Study Companion
   2. AssignmentAI - OCR Vision solver, Client PDF export, AI tutor chat
   3. IoT Dashboard - WebSockets/MQTT, sensor telemetry, active alerts
   4. RoadGuard AI - YOLOv8, GPS coordinate mapper, Google Maps API
   5. ZeroGPTi - NLP sentence grading scales, AI content highlighter
   6. Image Compressor - Flask media optimization pipeline`
-        });
-        break;
+          });
+          break;
 
-      case 'skills':
-        newHistory.push({
-          type: 'output',
-          text: `Core Skill Sets:
+        case 'skills':
+          newHistory.push({
+            type: 'output',
+            text: `Core Skill Sets:
   • Programming Languages    - Python, JavaScript, TypeScript, C++
   • Frontend Development     - React, Next.js, HTML5/CSS3, Framer Motion
   • Backend & Systems        - Node.js, Django, Flask, Express
   • Databases & Cloud        - MongoDB, PostgreSQL, SQLite, Firebase, Docker, GCP`
-        });
-        break;
+          });
+          break;
 
-      case 'theme':
-        const targetTheme = args[1] ? args[1].toLowerCase() : null;
-        if (targetTheme === 'light' || targetTheme === 'dark') {
-          if (targetTheme !== theme) {
-            toggleTheme();
+        case 'theme':
+          const targetTheme = args[1] ? args[1].toLowerCase() : null;
+          if (targetTheme === 'light' || targetTheme === 'dark') {
+            if (targetTheme !== theme) {
+              toggleTheme();
+            }
+            newHistory.push({ type: 'output', text: `System theme adjusted to: ${targetTheme} mode` });
+          } else {
+            newHistory.push({ type: 'output', text: `Usage: theme [light | dark]. Current theme is: ${theme}` });
           }
-          newHistory.push({ type: 'output', text: `System theme adjusted to: ${targetTheme} mode` });
-        } else {
-          newHistory.push({ type: 'output', text: `Usage: theme [light | dark]. Current theme is: ${theme}` });
-        }
-        break;
+          break;
 
-      case 'matrix':
-        setMatrixActive(prev => !prev);
-        newHistory.push({ type: 'output', text: `Matrix code rain overlay: ${!matrixActive ? 'ENABLED' : 'DISABLED'}` });
-        break;
+        case 'matrix':
+          setMatrixActive(prev => !prev);
+          newHistory.push({ type: 'output', text: `Matrix code rain overlay: ${!matrixActive ? 'ENABLED' : 'DISABLED'}` });
+          break;
 
-      case 'neofetch':
-        newHistory.push({
-          type: 'neofetch',
-          text: ''
-        });
-        break;
+        case 'neofetch':
+          newHistory.push({
+            type: 'neofetch',
+            text: ''
+          });
+          break;
 
-      default:
-        newHistory.push({
-          type: 'output',
-          text: `bash: command not found: ${command}. Type 'help' for valid command lists.`
-        });
+        case 'snake':
+        case 'play':
+          setSnake([{ x: 10, y: 5 }]);
+          setFood({ x: 5, y: 3 });
+          setDirection({ x: 1, y: 0 });
+          setScore(0);
+          setGameState('game');
+          playSweep(soundEnabled, 150, 450, 0.25);
+          newHistory.push({ type: 'output', text: 'Initiating Snake Game Engine v1.0.0...' });
+          break;
+
+        default:
+          newHistory.push({
+            type: 'output',
+            text: `bash: command not found: ${command}. Type 'help' for valid command lists.`
+          });
+      }
+
+      setHistory(newHistory);
     }
-
-    setHistory(newHistory);
   };
 
   if (!isOpen) return null;
@@ -1210,19 +1415,346 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
             return <div key={idx} className="cli-line cli-output-text">{line.text}</div>;
           })}
 
-          <div className="cli-prompt-line">
-            <span>destopianpirate@iitgn:~$</span>
-            <input
-              ref={inputRef}
-              type="text"
-              className="cli-input"
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              onKeyDown={handleCommand}
-              autoFocus
-            />
-          </div>
+          {gameState === 'game' ? (
+            <div className="cli-game-container" style={{ position: 'relative' }}>
+              <pre className="cli-game-board">{renderBoard()}</pre>
+              <input
+                ref={inputRef}
+                type="text"
+                className="cli-hidden-input"
+                onKeyDown={handleKeyDown}
+                style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }}
+                autoFocus
+              />
+            </div>
+          ) : (
+            <div className="cli-prompt-line">
+              <span>destopianpirate@iitgn:~$</span>
+              <input
+                ref={inputRef}
+                type="text"
+                className="cli-input"
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+                onKeyDown={handleKeyDown}
+                autoFocus
+              />
+            </div>
+          )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function GithubExplorer({ soundEnabled }) {
+  const [repos, setRepos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState('All');
+
+  useEffect(() => {
+    let active = true;
+    fetch('https://api.github.com/users/destopianpirate/repos?sort=updated&per_page=100')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch');
+        return res.json();
+      })
+      .then(data => {
+        if (active) {
+          const sorted = data
+            .filter(r => !r.fork)
+            .sort((a, b) => b.stargazers_count - a.stargazers_count);
+          setRepos(sorted);
+          setLoading(false);
+        }
+      })
+      .catch(err => {
+        console.warn('GitHub API failed, loading local fallback repos', err);
+        if (active) {
+          setLoading(false);
+          setRepos([
+            { name: 'AcadX', description: 'Academic planner and student workspace featuring calendar schedules and Gemini AI companion.', html_url: 'https://github.com/destopianpirate', language: 'JavaScript', stargazers_count: 5, forks_count: 1 },
+            { name: 'AssignmentAI', description: 'Deep learning homework helper utilizing document vision OCR models and PDF compiler.', html_url: 'https://github.com/destopianpirate', language: 'JavaScript', stargazers_count: 4, forks_count: 0 },
+            { name: 'IoT-Dashboard', description: 'Low-latency edge sensor network dashboard mapping telemetry curves via MQTT broker.', html_url: 'https://github.com/destopianpirate', language: 'JavaScript', stargazers_count: 3, forks_count: 1 },
+            { name: 'RoadGuard-AI', description: 'Real-time road cracking detect system utilizing YOLOv8 and Google Maps GPS coordinates.', html_url: 'https://github.com/destopianpirate', language: 'Python', stargazers_count: 6, forks_count: 2 },
+            { name: 'ZeroGPTi', description: 'NLP linguistic checker assessing sentence grammar structures and machine probability rates.', html_url: 'https://github.com/destopianpirate', language: 'Python', stargazers_count: 2, forks_count: 0 }
+          ]);
+        }
+      });
+    return () => { active = false; };
+  }, []);
+
+  const languages = ['All', ...new Set(repos.map(r => r.language).filter(Boolean))];
+
+  const filteredRepos = repos.filter(repo => {
+    const matchesSearch = repo.name.toLowerCase().includes(search.toLowerCase()) || 
+      (repo.description && repo.description.toLowerCase().includes(search.toLowerCase()));
+    const matchesLanguage = selectedLanguage === 'All' || repo.language === selectedLanguage;
+    return matchesSearch && matchesLanguage;
+  });
+
+  return (
+    <div className="github-explorer-section">
+      <div className="explorer-header">
+        <h3 className="explorer-title">Public Repository Explorer</h3>
+        <p className="explorer-desc">Search, filter, and review live repository telemetry from my GitHub account.</p>
+      </div>
+
+      <div className="explorer-controls">
+        <input 
+          type="text" 
+          placeholder="Search repositories..." 
+          className="explorer-search-input"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={() => playHover(soundEnabled)}
+        />
+        <select 
+          className="explorer-lang-select"
+          value={selectedLanguage}
+          onChange={(e) => { setSelectedLanguage(e.target.value); playClick(soundEnabled); }}
+        >
+          {languages.map(lang => (
+            <option key={lang} value={lang}>{lang}</option>
+          ))}
+        </select>
+      </div>
+
+      {loading ? (
+        <div className="explorer-loader">Synchronizing telemetry from api.github.com...</div>
+      ) : (
+        <div className="github-explorer-grid">
+          {filteredRepos.map(repo => (
+            <a 
+              href={repo.html_url} 
+              target="_blank" 
+              rel="noreferrer" 
+              className="repo-card" 
+              key={repo.name}
+              onClick={() => playClick(soundEnabled)}
+              onMouseEnter={() => playHover(soundEnabled)}
+            >
+              <div className="repo-card-header">
+                <h4 className="repo-card-name">{repo.name}</h4>
+                {repo.language && <span className="repo-lang-badge">{repo.language}</span>}
+              </div>
+              <p className="repo-card-desc">{repo.description || "No description provided."}</p>
+              <div className="repo-card-stats">
+                <span className="repo-stat-item">★ {repo.stargazers_count}</span>
+                <span className="repo-stat-item">⌥ {repo.forks_count}</span>
+              </div>
+            </a>
+          ))}
+          {filteredRepos.length === 0 && (
+            <div className="explorer-no-results">No public repositories match your search filters.</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ArchitectureFlowchart({ soundEnabled }) {
+  const [activeNode, setActiveNode] = useState(null);
+
+  const nodes = [
+    {
+      id: 'client',
+      title: 'User Client (Browser)',
+      desc: 'Renders dynamic templates, processes Framer Motion transitions, manages CLI states, and controls Web Audio oscillators.',
+      x: 12,
+      y: 50,
+      techs: ['HTML5', 'CSS Grid', 'ES6 JS', 'Web Audio']
+    },
+    {
+      id: 'frontend',
+      title: 'Frontend (Vite / React)',
+      desc: 'Coordinates state hooks, updates custom SVG Radar Polygons, and streams real-time AI prompts and IoT simulator frames.',
+      x: 37,
+      y: 50,
+      techs: ['React 19', 'Vite', 'Framer Motion']
+    },
+    {
+      id: 'backend',
+      title: 'Backend API (Django / Flask)',
+      desc: 'Manages authentication handlers, serves OCR pipelines, computes YOLOv8 edge inferences, and publishes live MQTT updates.',
+      x: 63,
+      y: 50,
+      techs: ['Django', 'Flask', 'Python', 'YOLOv8']
+    },
+    {
+      id: 'databases',
+      title: 'Storage & Operations',
+      desc: 'Executes document queries on MongoDB, stores structured SQL entries on PostgreSQL, and runs isolated containers in Docker.',
+      x: 88,
+      y: 50,
+      techs: ['PostgreSQL', 'MongoDB', 'Docker', 'GCP']
+    }
+  ];
+
+  const connections = [
+    { from: 'client', to: 'frontend', label: 'HTTPS / WebSockets' },
+    { from: 'frontend', to: 'backend', label: 'REST API' },
+    { from: 'backend', to: 'databases', label: 'DB Queries / MQTT' }
+  ];
+
+  const handleNodeHover = (nodeId) => {
+    setActiveNode(nodeId);
+    if (nodeId) {
+      playHover(soundEnabled);
+    }
+  };
+
+  const getIsActive = (conn) => {
+    if (!activeNode) return false;
+    if (activeNode === 'client' && conn.from === 'client') return true;
+    if (activeNode === 'frontend' && (conn.from === 'client' || conn.to === 'frontend')) return true;
+    if (activeNode === 'backend' && (conn.from === 'frontend' || conn.to === 'backend' || conn.from === 'backend')) return true;
+    if (activeNode === 'databases' && (conn.from === 'backend' || conn.to === 'databases')) return true;
+    return false;
+  };
+
+  return (
+    <div className="flowchart-section">
+      <h3 className="flowchart-title">Interactive System Design Blueprint</h3>
+      <p className="flowchart-desc">Hover over any connection node to inspect requests routing, API serialization, and storage orchestration.</p>
+      
+      <div className="flowchart-canvas-wrapper">
+        <svg className="flowchart-svg" viewBox="0 0 1000 220">
+          <defs>
+            <filter id="flowGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          {/* Connection Lines */}
+          {connections.map((conn, idx) => {
+            const fromNode = nodes.find(n => n.id === conn.from);
+            const toNode = nodes.find(n => n.id === conn.to);
+            const x1 = fromNode.x * 10;
+            const y1 = fromNode.y * 2 + 10;
+            const x2 = toNode.x * 10;
+            const y2 = toNode.y * 2 + 10;
+            const isActive = getIsActive(conn);
+
+            return (
+              <g key={idx}>
+                <line 
+                  x1={x1} 
+                  y1={y1} 
+                  x2={x2} 
+                  y2={y2} 
+                  stroke="var(--border-color)" 
+                  strokeWidth="2" 
+                />
+                
+                <line 
+                  x1={x1} 
+                  y1={y1} 
+                  x2={x2} 
+                  y2={y2} 
+                  stroke={isActive ? "var(--accent-color)" : "transparent"} 
+                  strokeWidth="3" 
+                  strokeDasharray="6 6"
+                  className={isActive ? "flow-line-active" : ""}
+                  filter={isActive ? "url(#flowGlow)" : ""}
+                  style={{ transition: 'stroke 0.3s ease' }}
+                />
+
+                <text 
+                  x={(x1 + x2) / 2} 
+                  y={y1 - 12} 
+                  fill={isActive ? "var(--accent-color)" : "var(--text-secondary)"} 
+                  fontSize="10px"
+                  fontFamily="monospace"
+                  textAnchor="middle"
+                  style={{ transition: 'fill 0.3s ease' }}
+                >
+                  {conn.label}
+                </text>
+              </g>
+            );
+          })}
+
+          {/* Flow Nodes */}
+          {nodes.map(node => {
+            const x = node.x * 10;
+            const y = node.y * 2 + 10;
+            const isHovered = activeNode === node.id;
+
+            return (
+              <g 
+                key={node.id} 
+                className="flow-node-group" 
+                onMouseEnter={() => handleNodeHover(node.id)}
+                onMouseLeave={() => handleNodeHover(null)}
+                style={{ cursor: 'pointer' }}
+              >
+                <circle 
+                  cx={x} 
+                  cy={y} 
+                  r="30" 
+                  fill="var(--card-bg)" 
+                  stroke={isHovered ? "var(--accent-color)" : "var(--border-color)"} 
+                  strokeWidth="2"
+                  filter={isHovered ? "url(#flowGlow)" : ""}
+                  style={{ transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+                />
+                <text 
+                  x={x} 
+                  y={y + 6} 
+                  fontSize="20px" 
+                  textAnchor="middle"
+                  style={{ userSelect: 'none' }}
+                >
+                  {node.id === 'client' && '💻'}
+                  {node.id === 'frontend' && '⚡'}
+                  {node.id === 'backend' && '⚙️'}
+                  {node.id === 'databases' && '🗄️'}
+                </text>
+                
+                <text 
+                  x={x} 
+                  y={y + 50} 
+                  fill={isHovered ? "var(--accent-color)" : "var(--text-color)"}
+                  fontSize="11px"
+                  fontWeight="bold"
+                  textAnchor="middle"
+                  style={{ transition: 'fill 0.3s ease', userSelect: 'none' }}
+                >
+                  {node.id === 'client' && 'Client'}
+                  {node.id === 'frontend' && 'Frontend'}
+                  {node.id === 'backend' && 'Backend API'}
+                  {node.id === 'databases' && 'Storage & Ops'}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+
+      <div className="flowchart-details-card">
+        {activeNode ? (
+          <div>
+            <h4 style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '0.9rem' }}>
+              {nodes.find(n => n.id === activeNode).title}
+            </h4>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.25rem', lineHeight: '1.4' }}>
+              {nodes.find(n => n.id === activeNode).desc}
+            </p>
+            <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+              {nodes.find(n => n.id === activeNode).techs.map(t => (
+                <span key={t} className="flowchart-tech-pill">{t}</span>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', textAlign: 'center' }}>
+            Hover over any connection point/node to inspect active requests routing and deployment layers.
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1234,6 +1766,7 @@ function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [sandboxTab, setSandboxTab] = useState('ai');
   const [terminalOpen, setTerminalOpen] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -1250,7 +1783,9 @@ function App() {
   }, []);
 
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    playSweep(soundEnabled, 300, 700, 0.2);
   };
 
   const tabContentVariants = {
@@ -1260,24 +1795,24 @@ function App() {
   };
 
   return (
-    <div>
-      {/* Premium Navigation Header */}
+    <div className="app-layout">
+      <div className="bg-glow-1"></div>
+      <div className="bg-glow-2"></div>
+
       <div className="header-wrapper">
-        <header className="container header">
-          <div className="header-brand">
-            <img src={profilePic} alt="Ayush Singh" className="header-avatar" />
-            <div className="header-title">
-              Ayush Singh <span>at IITGN</span>
-            </div>
+        <header className="header container">
+          <div className="header-brand" onClick={() => { setActiveTab('about'); playClick(soundEnabled); }} style={{ cursor: 'pointer' }}>
+            <span className="brand-dot"></span>
+            destopianpirate
           </div>
-          
           <div className="header-right">
             <nav className="nav-tabs">
               {['about', 'projects', 'skills', 'stats'].map((tab) => (
                 <button
                   key={tab}
                   className={`tab-button ${activeTab === tab ? 'active' : ''}`}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => { setActiveTab(tab); playClick(soundEnabled); }}
+                  onMouseEnter={() => playHover(soundEnabled)}
                 >
                   {tab === 'about' && 'About'}
                   {tab === 'projects' && 'Projects'}
@@ -1286,9 +1821,14 @@ function App() {
                 </button>
               ))}
             </nav>
-            <button className="theme-toggle-btn" onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <button className="theme-toggle-btn" onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button className="sound-toggle-btn" onClick={() => setSoundEnabled(prev => !prev)} title={`Switch Sound ${soundEnabled ? 'Off' : 'On'}`} style={{ marginLeft: '0.5rem', background: soundEnabled ? 'rgba(16, 185, 129, 0.1)' : 'transparent', borderColor: soundEnabled ? '#10b981' : 'var(--border-color)', color: soundEnabled ? '#10b981' : 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-color)', padding: '0.4rem', borderRadius: '50%', cursor: 'pointer', transition: 'all 0.3s ease' }}>
+                {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+              </button>
+            </div>
           </div>
         </header>
       </div>
@@ -1307,8 +1847,6 @@ function App() {
               <div className="about-grid">
                 <div className="about-content">
                   <h1 style={{ fontWeight: 800 }}>Hi there, I'm <br /><span>Ayush Singh!</span></h1>
-                  
-                  {/* Profile Image - Mobile Only (rendered just after H1) */}
                   <div className="profile-card-container mobile-only-profile">
                     <div className="profile-image-frame">
                       <img src={profilePic} alt="Ayush Singh Profile" className="profile-large-image" />
@@ -1326,19 +1864,18 @@ function App() {
                     Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and modern frontend aesthetics.
                   </p>
                   <div className="about-socials">
-                    <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link">
+                    <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link" onMouseEnter={() => playHover(soundEnabled)} onClick={() => playClick(soundEnabled)}>
                       <Mail size={16} /> Email Me
                     </a>
-                    <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="footer-social-link">
+                    <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="footer-social-link" onMouseEnter={() => playHover(soundEnabled)} onClick={() => playClick(soundEnabled)}>
                       <Github size={16} /> GitHub
                     </a>
-                    <a href="https://linkedin.com/in/ayushxphoenix" target="_blank" rel="noreferrer" className="footer-social-link">
+                    <a href="https://linkedin.com/in/ayushxphoenix" target="_blank" rel="noreferrer" className="footer-social-link" onMouseEnter={() => playHover(soundEnabled)} onClick={() => playClick(soundEnabled)}>
                       <Linkedin size={16} /> LinkedIn
                     </a>
                   </div>
                 </div>
 
-                {/* Profile Image - Desktop Only */}
                 <div className="profile-card-container desktop-only-profile">
                   <div className="profile-image-frame">
                     <img src={profilePic} alt="Ayush Singh Profile" className="profile-large-image" />
@@ -1346,12 +1883,11 @@ function App() {
                 </div>
               </div>
 
-              {/* Academic Timeline */}
               <div className="about-timeline-section" style={{ marginTop: '3.5rem', marginBottom: '2.5rem' }}>
                 <h2 className="timeline-section-title">Academic Journey</h2>
                 <div className="timeline-container">
                   {timelineData.map((item, idx) => (
-                    <div className="timeline-item" key={idx}>
+                    <div className="timeline-item" key={idx} onMouseEnter={() => playHover(soundEnabled)}>
                       <div className="timeline-marker">
                         <div className="timeline-dot-wrapper">
                           <span className="timeline-icon-inner">{item.icon}</span>
@@ -1379,10 +1915,9 @@ function App() {
                 </div>
               </div>
 
-              {/* Dynamic Interactive Pillars Grid */}
               <div className="about-pillars-grid">
                 {bioPillars.map((pillar, idx) => (
-                  <div className="pillar-card" key={idx}>
+                  <div className="pillar-card" key={idx} onMouseEnter={() => playHover(soundEnabled)}>
                     <div className="pillar-card-header">
                       <span className="pillar-icon-wrapper">{pillar.icon}</span>
                       <span className="pillar-tag">{pillar.tag}</span>
@@ -1411,7 +1946,7 @@ function App() {
 
               <div className="projects-grid">
                 {projects.map((project, i) => (
-                  <div className="project-card" key={i}>
+                  <div className="project-card" key={i} onMouseEnter={() => playHover(soundEnabled)}>
                     <div className="project-header">
                       <div className="project-logo-container">
                         {project.logo}
@@ -1427,6 +1962,7 @@ function App() {
                             rel="noreferrer" 
                             className="project-link-btn"
                             title="View Repository"
+                            onClick={() => playClick(soundEnabled)}
                           >
                             <Github size={16} />
                           </a>
@@ -1437,6 +1973,7 @@ function App() {
                               rel="noreferrer" 
                               className="project-link-btn"
                               title="Visit Live App"
+                              onClick={() => playClick(soundEnabled)}
                             >
                               <ExternalLink size={16} />
                             </a>
@@ -1495,13 +2032,15 @@ function App() {
               </p>
 
               <div className="skills-radar-container" style={{ marginBottom: '3.5rem' }}>
-                <RadarChart activeProject={selectedProject} />
-                <TechStackConfigurator activeProject={selectedProject} setActiveProject={setSelectedProject} />
+                <RadarChart activeProject={selectedProject} soundEnabled={soundEnabled} />
+                <TechStackConfigurator activeProject={selectedProject} setActiveProject={setSelectedProject} soundEnabled={soundEnabled} />
               </div>
 
-              <div className="skills-tab-layout">
+              <ArchitectureFlowchart soundEnabled={soundEnabled} />
+
+              <div className="skills-tab-layout" style={{ marginTop: '3.5rem' }}>
                 {skillsData.map((category, i) => (
-                  <div className="skills-card" key={i}>
+                  <div className="skills-card" key={i} onMouseEnter={() => playHover(soundEnabled)}>
                     <h3 className="skills-category-title">
                       <span className="skill-icon-placeholder">{category.icon}</span>
                       {category.category}
@@ -1546,19 +2085,19 @@ function App() {
               <div className="sandbox-subtabs">
                 <button 
                   className={`sandbox-subtab-btn ${sandboxTab === 'ai' ? 'active' : ''}`}
-                  onClick={() => setSandboxTab('ai')}
+                  onClick={() => { setSandboxTab('ai'); playClick(soundEnabled); }}
                 >
                   <Cpu size={16} /> AI Prompt Sandbox
                 </button>
                 <button 
                   className={`sandbox-subtab-btn ${sandboxTab === 'iot' ? 'active' : ''}`}
-                  onClick={() => setSandboxTab('iot')}
+                  onClick={() => { setSandboxTab('iot'); playClick(soundEnabled); }}
                 >
                   <Activity size={16} /> IoT Telemetry Dashboard
                 </button>
               </div>
 
-              {sandboxTab === 'ai' ? <AISandbox /> : <IoTSimulator />}
+              {sandboxTab === 'ai' ? <AISandbox soundEnabled={soundEnabled} /> : <IoTSimulator soundEnabled={soundEnabled} />}
             </motion.div>
           )}
 
@@ -1630,21 +2169,23 @@ function App() {
                 </div>
 
                 <div className="stats-highlights-grid">
-                  <div className="highlight-card">
+                  <div className="highlight-card" onMouseEnter={() => playHover(soundEnabled)}>
                     <h4>Open Source Work</h4>
                     <p>Actively contributing to AI research repos, educational web portals, and edge computing automation scripts.</p>
                   </div>
-                  <div className="highlight-card">
+                  <div className="highlight-card" onMouseEnter={() => playHover(soundEnabled)}>
                     <h4>Tech Stack Preference</h4>
                     <p>Daily focus on Python (PyTorch/YOLOv8), React/Next.js ecosystem, and DevOps containerized integrations (Docker/Vercel).</p>
                   </div>
-                  <div className="highlight-card">
+                  <div className="highlight-card" onMouseEnter={() => playHover(soundEnabled)}>
                     <h4>Development Ethos</h4>
                     <p>Combining high-performance machine learning backend models with premium glassmorphic frontend user experiences.</p>
                   </div>
                 </div>
 
-                <div className="github-profile-banner">
+                <GithubExplorer soundEnabled={soundEnabled} />
+
+                <div className="github-profile-banner" onMouseEnter={() => playHover(soundEnabled)}>
                   <div className="banner-content">
                     <h3>Looking for more details?</h3>
                     <p>Explore my repositories, follow my open-source journey, and check out my full project archives directly on GitHub.</p>
@@ -1654,6 +2195,7 @@ function App() {
                     target="_blank" 
                     rel="noreferrer" 
                     className="banner-btn"
+                    onClick={() => playClick(soundEnabled)}
                   >
                     <Github size={18} /> View GitHub Profile
                   </a>
@@ -1664,7 +2206,6 @@ function App() {
         </AnimatePresence>
       </main>
 
-      {/* Global Footer */}
       <footer>
         <div className="container">
           <p className="footer-credits">
@@ -1673,21 +2214,20 @@ function App() {
         </div>
       </footer>
 
-      {/* CLI Terminal Floating Trigger */}
       <button 
         className="cli-floating-btn" 
-        onClick={() => setTerminalOpen(prev => !prev)}
+        onClick={() => { setTerminalOpen(prev => !prev); playClick(soundEnabled); }}
         title="Toggle CLI Console (HotKey: `)"
       >
         <Terminal size={22} />
       </button>
 
-      {/* CLI Drawer Console */}
       <TerminalCLI 
         isOpen={terminalOpen} 
         onClose={() => setTerminalOpen(false)} 
         theme={theme}
         toggleTheme={toggleTheme}
+        soundEnabled={soundEnabled}
       />
     </div>
   )

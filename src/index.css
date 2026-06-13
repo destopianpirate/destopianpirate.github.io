@@ -2143,3 +2143,299 @@ input:checked+.switch-slider:before {
 [data-theme='light'] .timeline-giant-percentage {
   opacity: 0.08;
 }
+
+/* Interactive System Design Flowchart */
+.flowchart-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--glass-glow);
+  width: 100%;
+}
+
+.flowchart-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.flowchart-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.flowchart-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1rem 0;
+}
+
+.flowchart-svg {
+  width: 100%;
+  min-width: 800px;
+  height: auto;
+  overflow: visible;
+}
+
+.flow-node-group circle {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.flow-node-group:hover circle {
+  stroke: var(--accent-color);
+  fill: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='light'] .flow-node-group:hover circle {
+  fill: rgba(0, 0, 0, 0.02);
+}
+
+.flow-node-group text {
+  transition: fill 0.3s ease;
+}
+
+/* Dash offset animation for request flows */
+@keyframes flowMovement {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.flow-line-active {
+  animation: flowMovement 0.6s linear infinite;
+  stroke-dasharray: 6 6;
+}
+
+.flowchart-details-card {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1rem;
+  min-height: 95px;
+  transition: all 0.3s ease;
+}
+
+[data-theme='light'] .flowchart-details-card {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.flowchart-tech-pill {
+  font-size: 0.75rem;
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+[data-theme='light'] .flowchart-tech-pill {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* GitHub Repo Explorer */
+.github-explorer-section {
+  margin-top: 3.5rem;
+  width: 100%;
+}
+
+.explorer-header {
+  margin-bottom: 1.5rem;
+}
+
+.explorer-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.explorer-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.explorer-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .explorer-controls {
+    flex-direction: column;
+  }
+}
+
+.explorer-search-input {
+  flex-grow: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.explorer-search-input:focus {
+  border-color: var(--border-hover);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='light'] .explorer-search-input:focus {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+}
+
+.explorer-lang-select {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.explorer-lang-select option {
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.explorer-loader,
+.explorer-no-results {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-family: monospace;
+  background: var(--card-bg);
+  border: 1px dashed var(--border-color);
+  border-radius: 16px;
+}
+
+.github-explorer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .github-explorer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1100px) {
+  .github-explorer-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.repo-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.repo-card:hover {
+  background: var(--card-hover-bg);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.repo-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.repo-card-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-color);
+  word-break: break-all;
+}
+
+.repo-lang-badge {
+  font-size: 0.7rem;
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+[data-theme='light'] .repo-lang-badge {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.repo-card-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.repo-card-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  font-family: monospace;
+  color: var(--text-secondary);
+}
+
+.repo-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Sound toggle button in header */
+.sound-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: var(--accent-color) !important;
+}
+
+[data-theme='light'] .sound-toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: #000000 !important;
+}
+
+/* CLI Snake Game board */
+.cli-game-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.cli-game-board {
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  color: #4ade80;
+  line-height: 1.25;
+  margin: 0.5rem 0;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  white-space: pre;
+  user-select: none;
+}
