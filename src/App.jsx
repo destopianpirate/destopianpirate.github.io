@@ -1,16 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Github, 
-  Linkedin, 
-  Mail, 
-  Code, 
-  Database, 
-  Server, 
-  Cpu, 
-  Globe, 
-  ExternalLink, 
-  Activity, 
+import {
+  Github,
+  Linkedin,
+  Mail,
+  Code,
+  Database,
+  Server,
+  Cpu,
+  Globe,
+  Activity,
   Terminal,
   Layers,
   Sun,
@@ -24,6 +23,10 @@ import {
   Award
 } from 'lucide-react'
 import profilePic from './assets/profile.png'
+import logoLight from './assets/logo_light.png'
+import logoZeroGpt from './assets/logo-zerogpt.png'
+import logoAssignmentAI from './assets/assignmentai.svg'
+import logoCompressor from './assets/compressor-logo.svg'
 
 const projects = [
   {
@@ -31,57 +34,46 @@ const projects = [
     stack: ["React", "Vite", "Framer Motion", "Custom CSS"],
     desc: "A sleek, glassmorphic academic planner and student workspace to manage university life. It coordinates coursework, monitors attendance, and calculates real-time academic standing.",
     features: [
-      "Synced timetables and calendar scheduling", 
-      "University holidays registry integration", 
-      "Automatic course conflict detection systems", 
-      "Dynamic GPA & attendance trackers", 
+      "Synced timetables and calendar scheduling",
+      "University holidays registry integration",
+      "Automatic course conflict detection systems",
+      "Dynamic GPA & attendance trackers",
       "Integrated Gemini AI study companion for personalized learning support"
     ],
     liveUrl: "https://stuiit.vercel.app",
-    logo: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-      </svg>
-    )
+    logo: <img src={logoLight} alt="AcadX Logo" />,
+    hasImageLogo: true
   },
   {
     title: "AssignmentAI",
     stack: ["React", "Gemini AI", "Python", "Vite"],
     desc: "A high-performance, vision-capable educational helper that reads, analyzes, and explains math and computer science assignments directly from files.",
     features: [
-      "Vision-capable OCR solving for handwritten and digital equations", 
-      "Fast client-side PDF document export & formatting", 
-      "Detailed step-by-step mathematical reasoning explanations", 
+      "Vision-capable OCR solving for handwritten and digital equations",
+      "Fast client-side PDF document export & formatting",
+      "Detailed step-by-step mathematical reasoning explanations",
       "Interactive AI tutor chat interface for real-time concept questions"
     ],
     liveUrl: "https://asignmentai.vercel.app",
-    logo: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <line x1="16" y1="13" x2="8" y2="13"/>
-        <line x1="16" y1="17" x2="8" y2="17"/>
-        <polyline points="10 9 9 9 8 9"/>
-      </svg>
-    )
+    logo: <img src={logoAssignmentAI} alt="AssignmentAI Logo" />,
+    hasImageLogo: true
   },
   {
     title: "IoT Dashboard",
     stack: ["React", "Vite", "Tailwind CSS", "WebSockets/MQTT", "Chart.js"],
     desc: "A professional real-time telemetry dashboard designed for large-scale sensor network configuration and graphical event log visualization.",
     features: [
-      "Real-time sensor telemetry streaming over WebSockets & MQTT", 
-      "Highly interactive widgets (dials, live line graphs, grid status controls)", 
-      "Automated system alerts and threshold breach logs", 
+      "Real-time sensor telemetry streaming over WebSockets & MQTT",
+      "Highly interactive widgets (dials, live line graphs, grid status controls)",
+      "Automated system alerts and threshold breach logs",
       "Comprehensive device connection logs & diagnostic telemetry"
     ],
     logo: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-        <line x1="9" y1="21" x2="9" y2="9"/>
-        <line x1="3" y1="9" x2="21" y2="9"/>
-        <path d="M14 13h3m-3 3h4"/>
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+        <line x1="9" y1="21" x2="9" y2="9" />
+        <line x1="3" y1="9" x2="21" y2="9" />
+        <path d="M14 13h3m-3 3h4" />
       </svg>
     )
   },
@@ -95,35 +87,27 @@ const projects = [
       "Interactive highlighter showing AI vs human written paragraphs"
     ],
     liveUrl: "https://zerogpti.vercel.app",
-    logo: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-        <path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
-        <polyline points="12 2 12 6"/>
-        <polyline points="12 18 12 22"/>
-        <polyline points="2 12 6 12"/>
-        <polyline points="18 12 22 12"/>
-      </svg>
-    )
+    logo: <img src={logoZeroGpt} alt="ZeroGPTi Logo" />,
+    hasImageLogo: true
   },
   {
     title: "RoadGuard AI",
     stack: ["YOLOv8", "Python", "Google Maps API", "GPS"],
     desc: "An Edge AI traffic safety application deploying real-time computer vision models to detect and report road infrastructure defects.",
     features: [
-      "YOLOv8 object detection model integration for anomalies", 
-      "Precise GPS coordinate mapping for road defects", 
-      "Automated system to sync coordinates with Google Maps API", 
+      "YOLOv8 object detection model integration for anomalies",
+      "Precise GPS coordinate mapping for road defects",
+      "Automated system to sync coordinates with Google Maps API",
       "Real-time processing dashboard for infrastructure logs"
     ],
     logo: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <circle cx="12" cy="12" r="4"/>
-        <line x1="12" y1="2" x2="12" y2="4"/>
-        <line x1="12" y1="20" x2="12" y2="22"/>
-        <line x1="2" y1="12" x2="4" y2="12"/>
-        <line x1="20" y1="12" x2="22" y2="12"/>
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="4" />
+        <line x1="12" y1="2" x2="12" y2="4" />
+        <line x1="12" y1="20" x2="12" y2="22" />
+        <line x1="2" y1="12" x2="4" y2="12" />
+        <line x1="20" y1="12" x2="22" y2="12" />
       </svg>
     )
   },
@@ -132,33 +116,27 @@ const projects = [
     stack: ["Python", "Flask", "Pillow", "HTML/CSS"],
     desc: "A lightning-fast web service that handles media optimization, file size compression, and instant conversion between next-gen image formats.",
     features: [
-      "High-ratio image optimization preserving high resolution", 
-      "Supports WebP, PNG, JPG, and AVIF image compression pipelines", 
+      "High-ratio image optimization preserving high resolution",
+      "Supports WebP, PNG, JPG, and AVIF image compression pipelines",
       "Batch upload capabilities and quick download links"
     ],
-    liveUrl: "https://imagepress.vercell.app",
-    logo: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4 22V4c0-.5.2-1 .6-1.4C5 2.2 5.5 2 6 2h8l6 6v14c0 .5-.2 1-.6 1.4-.4.4-.9.6-1.4.6H6c-.5 0-1-.2-1.4-.6C4.2 23 4 22.5 4 22z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <path d="m9 15 3 3 3-3"/>
-        <line x1="12" y1="11" x2="12" y2="18"/>
-      </svg>
-    )
+    liveUrl: "https://imagepresss.vercel.app",
+    logo: <img src={logoCompressor} alt="ImagePress Logo" />,
+    hasImageLogo: true
   },
   {
     title: "IITGN.AI",
     stack: ["Python", "Jupyter Notebooks", "PyTorch"],
     desc: "My academic research repository housing code, model training checkpoints, and deep learning notebooks written during courses at IIT Gandhinagar.",
     features: [
-      "Machine learning models & dataset pipelines", 
-      "Neural network research scripts developed under NewEra.ai", 
+      "Machine learning models & dataset pipelines",
+      "Neural network research scripts developed under NewEra.ai",
       "University coursework notebooks covering advanced algorithms"
     ],
     logo: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <path d="M9 17V7l7 10V7"/>
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M9 17V7l7 10V7" />
       </svg>
     )
   }
@@ -581,7 +559,7 @@ function AISandbox() {
       setLatency(latencyTimer);
       if (latencyTimer >= baseLatency) {
         clearInterval(latencyInterval);
-        
+
         const tokens = responseText.split(' ');
         let tokenIdx = 0;
         setTokensPerSec(finalTokensPerSec);
@@ -593,7 +571,7 @@ function AISandbox() {
             setOutputText(prev => prev + (tokenIdx === 0 ? '' : ' ') + tokens[tokenIdx]);
             setAttentionGrid(Array(64).fill(0).map(() => Math.random() * 0.8 + 0.2));
             setVram(prev => Math.min(16.0, Math.max(1.0, +(prev + (Math.random() * 0.4 - 0.2)).toFixed(2))));
-            
+
             tokenIdx++;
             setTimeout(streamTokens, typingDelay);
           } else {
@@ -622,11 +600,11 @@ function AISandbox() {
       <div className="sandbox-controls-card">
         <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>Engine Parameters</h3>
         <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>Adjust hyperparameters and trigger simulated deep learning queries.</p>
-        
+
         <div className="control-group">
           <label className="control-label">Target Model</label>
-          <select 
-            value={model} 
+          <select
+            value={model}
             onChange={(e) => setModel(e.target.value)}
             className="sandbox-select"
             disabled={isGenerating}
@@ -640,12 +618,12 @@ function AISandbox() {
 
         <div className="control-group">
           <label className="control-label">Temperature: <span>{temperature}</span></label>
-          <input 
-            type="range" 
-            min="0" 
-            max="1.5" 
+          <input
+            type="range"
+            min="0"
+            max="1.5"
             step="0.1"
-            value={temperature} 
+            value={temperature}
             onChange={(e) => setTemperature(parseFloat(e.target.value))}
             className="sandbox-slider"
             disabled={isGenerating}
@@ -654,12 +632,12 @@ function AISandbox() {
 
         <div className="control-group">
           <label className="control-label">Max Output Tokens: <span>{maxTokens}</span></label>
-          <input 
-            type="range" 
-            min="64" 
-            max="1024" 
+          <input
+            type="range"
+            min="64"
+            max="1024"
             step="64"
-            value={maxTokens} 
+            value={maxTokens}
             onChange={(e) => setMaxTokens(parseInt(e.target.value))}
             className="sandbox-slider"
             disabled={isGenerating}
@@ -668,12 +646,12 @@ function AISandbox() {
 
         <div className="control-group">
           <label className="control-label">Generation Speed: <span>{speed} tok/s</span></label>
-          <input 
-            type="range" 
-            min="10" 
-            max="120" 
+          <input
+            type="range"
+            min="10"
+            max="120"
             step="5"
-            value={speed} 
+            value={speed}
             onChange={(e) => setSpeed(parseInt(e.target.value))}
             className="sandbox-slider"
             disabled={isGenerating}
@@ -682,7 +660,7 @@ function AISandbox() {
 
         <div className="control-group">
           <label className="control-label">User Prompt</label>
-          <textarea 
+          <textarea
             placeholder="Ask about IITGN, my projects, my skills, or write a custom prompt..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -692,16 +670,16 @@ function AISandbox() {
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-          <button 
-            className="sandbox-button" 
+          <button
+            className="sandbox-button"
             onClick={handleGenerate}
             disabled={isGenerating || !prompt.trim()}
             style={{ flexGrow: 1 }}
           >
             Generate
           </button>
-          <button 
-            className="sandbox-button" 
+          <button
+            className="sandbox-button"
             onClick={handleReset}
             disabled={isGenerating}
             style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'var(--text-color)', border: '1px solid var(--border-color)', width: '50px', padding: 0 }}
@@ -731,7 +709,7 @@ function AISandbox() {
 
         <div className="attention-matrix-card">
           <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-color)', marginBottom: '0.5rem' }}>Inference Telemetry & Attention Head Weights</h4>
-          
+
           <div className="stats-grid-mini" style={{ marginBottom: '1rem' }}>
             <div className="stat-box-mini">
               <div className="stat-box-mini-label">Latency</div>
@@ -753,9 +731,9 @@ function AISandbox() {
 
           <div className="attention-grid">
             {attentionGrid.map((val, idx) => (
-              <div 
-                key={idx} 
-                className="attention-cell" 
+              <div
+                key={idx}
+                className="attention-cell"
                 style={{ opacity: val }}
                 title={`Head weight: ${val.toFixed(3)}`}
               />
@@ -785,7 +763,7 @@ function IoTSimulator() {
     const interval = setInterval(() => {
       let baseVal = 30 + (load * 0.4);
       let noise = (Math.random() * 14 - 7);
-      
+
       let nodeCount = Object.values(nodes).filter(Boolean).length;
       if (nodeCount === 0) {
         baseVal = 0;
@@ -805,7 +783,7 @@ function IoTSimulator() {
         const timestamp = new Date().toLocaleTimeString();
         const activeNodeKeys = Object.keys(nodes).filter(k => nodes[k]);
         const randomNode = activeNodeKeys[Math.floor(Math.random() * activeNodeKeys.length)];
-        
+
         let newLog = '';
         if (nextVal > 80) {
           newLog = `[${timestamp}] [ALERT] [${randomNode}] High threshold breached: ${nextVal}%!`;
@@ -831,7 +809,7 @@ function IoTSimulator() {
   const svgWidth = 500;
   const svgHeight = 180;
   const pointsCount = dataPoints.length;
-  
+
   const pointsStr = dataPoints.map((val, i) => {
     const x = (i * (svgWidth / (pointsCount - 1)));
     const y = svgHeight - (val * (svgHeight / 100));
@@ -857,30 +835,30 @@ function IoTSimulator() {
             {[25, 50, 75].map((lvl) => {
               const y = svgHeight - (lvl * (svgHeight / 100));
               return (
-                <line 
-                  key={lvl} 
-                  x1="0" 
-                  y1={y} 
-                  x2={svgWidth} 
-                  y2={y} 
+                <line
+                  key={lvl}
+                  x1="0"
+                  y1={y}
+                  x2={svgWidth}
+                  y2={y}
                   stroke="var(--border-color)"
                   strokeWidth="0.5"
                   strokeDasharray="4 4"
                 />
               );
             })}
-            
-            <line 
-              x1="0" 
-              y1={thresholdY} 
-              x2={svgWidth} 
-              y2={thresholdY} 
-              stroke="#ef4444" 
+
+            <line
+              x1="0"
+              y1={thresholdY}
+              x2={svgWidth}
+              y2={thresholdY}
+              stroke="#ef4444"
               strokeWidth="1.5"
               strokeDasharray="2 2"
               opacity="0.8"
             />
-            
+
             <polyline
               fill="none"
               stroke={isHighAlert ? '#ef4444' : 'var(--accent-color)'}
@@ -919,14 +897,14 @@ function IoTSimulator() {
 
       <div className="iot-controls-panel">
         <h3 style={{ fontSize: '1.25rem', fontWeight: 700, borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>Dashboard Controls</h3>
-        
+
         <div className="control-group">
           <label className="control-label">Regulator Load: <span>{load}% Clock</span></label>
-          <input 
-            type="range" 
-            min="10" 
+          <input
+            type="range"
+            min="10"
             max="100"
-            value={load} 
+            value={load}
             onChange={(e) => setLoad(parseInt(e.target.value))}
             className="sandbox-slider"
           />
@@ -941,8 +919,8 @@ function IoTSimulator() {
                 <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Node-01 (YOLOv8 Core)</span>
               </div>
               <label className="switch">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={nodes.Node_01_Edge_YOLO}
                   onChange={() => toggleNode('Node_01_Edge_YOLO')}
                 />
@@ -956,8 +934,8 @@ function IoTSimulator() {
                 <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Node-02 (Gateway Core)</span>
               </div>
               <label className="switch">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={nodes.Node_02_Gateway}
                   onChange={() => toggleNode('Node_02_Gateway')}
                 />
@@ -971,8 +949,8 @@ function IoTSimulator() {
                 <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Node-03 (MQTT Broker)</span>
               </div>
               <label className="switch">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={nodes.Node_03_MQTT_Broker}
                   onChange={() => toggleNode('Node_03_MQTT_Broker')}
                 />
@@ -1038,7 +1016,7 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
     if (!matrixActive || !canvasRef.current || !isOpen) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    
+
     canvas.width = canvas.parentElement.offsetWidth;
     canvas.height = canvas.parentElement.offsetHeight;
 
@@ -1057,7 +1035,7 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
         const char = String.fromCharCode(Math.floor(Math.random() * 96) + 33);
         const x = i * 14;
         const y = yPos[i];
-        
+
         ctx.fillText(char, x, y);
 
         if (y > 100 + Math.random() * 10000) {
@@ -1107,7 +1085,7 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
             if (nextScore > highScore) setHighScore(nextScore);
             return nextScore;
           });
-          
+
           let newFood;
           do {
             newFood = {
@@ -1140,14 +1118,14 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
     const width = 20;
     const height = 10;
     let boardStr = '╔════════════════════╗\n';
-    
+
     for (let y = 0; y < height; y++) {
       let row = '║';
       for (let x = 0; x < width; x++) {
         const isHead = snake[0] && snake[0].x === x && snake[0].y === y;
         const isBody = snake.slice(1).some(seg => seg.x === x && seg.y === y);
         const isFood = food.x === x && food.y === y;
-        
+
         if (isHead) {
           row += 'O';
         } else if (isBody) {
@@ -1161,7 +1139,7 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
       row += '║\n';
       boardStr += row;
     }
-    
+
     boardStr += '╚════════════════════╝\n';
     boardStr += `Score: ${score}   High Score: ${highScore}\n`;
     boardStr += `[Arrows] Steer  |  [Q] Exit Game`;
@@ -1172,7 +1150,7 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
     if (gameState === 'game') {
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'q', 'Q', 'Escape'].includes(e.key)) {
         e.preventDefault();
-        
+
         if (e.key === 'ArrowUp' && directionRef.current.y !== 1) {
           setDirection({ x: 0, y: -1 });
         } else if (e.key === 'ArrowDown' && directionRef.current.y !== -1) {
@@ -1193,7 +1171,7 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
       e.preventDefault();
       const val = inputVal.trim().toLowerCase();
       if (!val) return;
-      
+
       const commands = ['help', 'about', 'projects', 'skills', 'clear', 'theme', 'neofetch', 'matrix', 'snake', 'play'];
       const matches = commands.filter(c => c.startsWith(val));
       if (matches.length > 0) {
@@ -1237,7 +1215,7 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
       setHistoryIndex(-1);
 
       playClick(soundEnabled);
-      
+
       const args = cmdText.split(' ');
       const command = args[0].toLowerCase();
 
@@ -1260,7 +1238,7 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
   clear     - Reset the terminal output logs`
           });
           break;
-        
+
         case 'clear':
           setHistory([]);
           return;
@@ -1360,7 +1338,7 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
 
       <div className="cli-body" ref={bodyRef}>
         {matrixActive && <canvas ref={canvasRef} className="cli-matrix-canvas" />}
-        
+
         <div className="cli-contents">
           {history.map((line, idx) => {
             if (line.type === 'welcome') {
@@ -1373,7 +1351,7 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
               return (
                 <div key={idx} className="cli-neofetch-grid">
                   <div className="cli-ascii">
-{`   _
+                    {`   _
   ( )
    H
   / \\
@@ -1472,7 +1450,7 @@ function GithubExplorer() {
   const languages = ['All', ...new Set(repos.map(r => r.language).filter(Boolean))];
 
   const filteredRepos = repos.filter(repo => {
-    const matchesSearch = repo.name.toLowerCase().includes(search.toLowerCase()) || 
+    const matchesSearch = repo.name.toLowerCase().includes(search.toLowerCase()) ||
       (repo.description && repo.description.toLowerCase().includes(search.toLowerCase()));
     const matchesLanguage = selectedLanguage === 'All' || repo.language === selectedLanguage;
     return matchesSearch && matchesLanguage;
@@ -1486,14 +1464,14 @@ function GithubExplorer() {
       </div>
 
       <div className="explorer-controls">
-        <input 
-          type="text" 
-          placeholder="Search repositories..." 
+        <input
+          type="text"
+          placeholder="Search repositories..."
           className="explorer-search-input"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <select 
+        <select
           className="explorer-lang-select"
           value={selectedLanguage}
           onChange={(e) => setSelectedLanguage(e.target.value)}
@@ -1509,11 +1487,11 @@ function GithubExplorer() {
       ) : (
         <div className="github-explorer-grid">
           {filteredRepos.map(repo => (
-            <a 
-              href={repo.html_url} 
-              target="_blank" 
-              rel="noreferrer" 
-              className="repo-card" 
+            <a
+              href={repo.html_url}
+              target="_blank"
+              rel="noreferrer"
+              className="repo-card"
               key={repo.name}
             >
               <div className="repo-card-header">
@@ -1719,8 +1697,11 @@ function App() {
               <div className="projects-grid">
                 {projects.map((project, i) => (
                   <div className="project-card" key={i}>
+                    <div className={`project-bg-icon ${project.hasImageLogo ? 'image-watermark' : ''} ${project.title.includes('AcadX') ? 'acadx-bg-icon' : ''} ${project.title.includes('AssignmentAI') ? 'assignmentai-bg-icon' : ''} ${project.title.includes('ImagePress') || project.title.includes('Compressor') ? 'compressor-bg-icon' : ''}`}>
+                      {project.logo}
+                    </div>
                     <div className="project-header">
-                      <div className="project-logo-container">
+                      <div className={`project-logo-container ${project.hasImageLogo ? 'white-bg' : ''}`}>
                         {project.logo}
                       </div>
                       <div className="project-badges-wrapper">
@@ -1728,41 +1709,30 @@ function App() {
                           <span className="featured-badge">Featured</span>
                         )}
                         <div className="project-links">
-                          <a 
-                            href="https://github.com/destopianpirate" 
-                            target="_blank" 
-                            rel="noreferrer" 
+                          <a
+                            href="https://github.com/destopianpirate"
+                            target="_blank"
+                            rel="noreferrer"
                             className="project-link-btn"
                             title="View Repository"
                           >
                             <Github size={16} />
                           </a>
-                          {project.liveUrl && (
-                            <a 
-                              href={project.liveUrl} 
-                              target="_blank" 
-                              rel="noreferrer" 
-                              className="project-link-btn"
-                              title="Visit Live App"
-                            >
-                              <ExternalLink size={16} />
-                            </a>
-                          )}
                         </div>
                       </div>
                     </div>
 
                     <h3 className="project-title">{project.title}</h3>
                     <p className="project-desc">{project.desc}</p>
-                    
+
                     <div className="project-stack">
                       {project.stack.map((tech) => (
                         <span className="tech-pill" key={tech} title={tech}>
                           {techLogos[tech] ? (
-                            <img 
-                              src={techLogos[tech]} 
-                              alt={tech} 
-                              style={{ width: 18, height: 18, filter: theme === 'dark' && techLogos[tech].includes('000000') ? 'invert(1)' : 'none' }} 
+                            <img
+                              src={techLogos[tech]}
+                              alt={tech}
+                              style={{ width: 18, height: 18, filter: theme === 'dark' && techLogos[tech].includes('000000') ? 'invert(1)' : 'none' }}
                             />
                           ) : (
                             tech
@@ -1784,13 +1754,13 @@ function App() {
 
                     {project.liveUrl && (
                       <div className="project-visit-btn-wrapper" style={{ marginTop: 'auto', paddingTop: '1.25rem' }}>
-                        <a 
-                          href={project.liveUrl} 
-                          target="_blank" 
-                          rel="noreferrer" 
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noreferrer"
                           className="project-visit-btn"
                         >
-                          Visit Site <ExternalLink size={14} />
+                          Visit Site
                         </a>
                       </div>
                     )}
@@ -1866,13 +1836,13 @@ function App() {
               </p>
 
               <div className="sandbox-subtabs">
-                <button 
+                <button
                   className={`sandbox-subtab-btn ${sandboxTab === 'ai' ? 'active' : ''}`}
                   onClick={() => setSandboxTab('ai')}
                 >
                   <Cpu size={16} /> AI Prompt Sandbox
                 </button>
-                <button 
+                <button
                   className={`sandbox-subtab-btn ${sandboxTab === 'iot' ? 'active' : ''}`}
                   onClick={() => setSandboxTab('iot')}
                 >
@@ -1905,9 +1875,9 @@ function App() {
                       <BarChart2 size={18} /> Repository Statistics
                     </div>
                     <div className="stat-image-container">
-                      <img 
-                        src={`https://github-readme-stats.vercel.app/api?username=destopianpirate&show_icons=true&theme=transparent&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&icon_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&v=2`} 
-                        alt="GitHub Profile Statistics" 
+                      <img
+                        src={`https://github-readme-stats.vercel.app/api?username=destopianpirate&show_icons=true&theme=transparent&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&icon_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&v=2`}
+                        alt="GitHub Profile Statistics"
                       />
                     </div>
                   </div>
@@ -1917,9 +1887,9 @@ function App() {
                       <PieChart size={18} /> Language Distribution
                     </div>
                     <div className="stat-image-container">
-                      <img 
-                        src={`https://github-readme-stats.vercel.app/api/top-langs/?username=destopianpirate&layout=compact&theme=transparent&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&v=2`} 
-                        alt="Top Languages" 
+                      <img
+                        src={`https://github-readme-stats.vercel.app/api/top-langs/?username=destopianpirate&layout=compact&theme=transparent&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&v=2`}
+                        alt="Top Languages"
                       />
                     </div>
                   </div>
@@ -1931,9 +1901,9 @@ function App() {
                       <Activity size={18} /> Contribution Streaks
                     </div>
                     <div className="stat-image-container">
-                      <img 
-                        src={`https://github-readme-streak-stats.herokuapp.com/?user=destopianpirate&theme=${theme === 'dark' ? 'transparent' : 'light'}&hide_border=true&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&sideNums=${theme === 'dark' ? 'ffffff' : '111111'}&sideLabels=${theme === 'dark' ? 'aaaaaa' : '555555'}&ring=${theme === 'dark' ? 'ffffff' : '111111'}&fire=${theme === 'dark' ? 'ffffff' : '111111'}&currStreakNum=${theme === 'dark' ? 'ffffff' : '111111'}&v=2`} 
-                        alt="GitHub Streaks Metrics" 
+                      <img
+                        src={`https://github-readme-streak-stats.herokuapp.com/?user=destopianpirate&theme=${theme === 'dark' ? 'transparent' : 'light'}&hide_border=true&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&sideNums=${theme === 'dark' ? 'ffffff' : '111111'}&sideLabels=${theme === 'dark' ? 'aaaaaa' : '555555'}&ring=${theme === 'dark' ? 'ffffff' : '111111'}&fire=${theme === 'dark' ? 'ffffff' : '111111'}&currStreakNum=${theme === 'dark' ? 'ffffff' : '111111'}&v=2`}
+                        alt="GitHub Streaks Metrics"
                       />
                     </div>
                   </div>
@@ -1943,9 +1913,9 @@ function App() {
                       <Code size={18} /> Activity Graph
                     </div>
                     <div className="stat-image-container">
-                      <img 
-                        src={`https://github-readme-activity-graph.vercel.app/graph?username=destopianpirate&theme=${theme === 'dark' ? 'transparent' : 'light'}&color=${theme === 'dark' ? 'ffffff' : '111111'}&line=${theme === 'dark' ? 'ffffff' : '111111'}&point=${theme === 'dark' ? 'ffffff' : '111111'}&hide_border=true&v=2`} 
-                        alt="Commit Activity Graph" 
+                      <img
+                        src={`https://github-readme-activity-graph.vercel.app/graph?username=destopianpirate&theme=${theme === 'dark' ? 'transparent' : 'light'}&color=${theme === 'dark' ? 'ffffff' : '111111'}&line=${theme === 'dark' ? 'ffffff' : '111111'}&point=${theme === 'dark' ? 'ffffff' : '111111'}&hide_border=true&v=2`}
+                        alt="Commit Activity Graph"
                       />
                     </div>
                   </div>
@@ -1973,10 +1943,10 @@ function App() {
                     <h3>Looking for more details?</h3>
                     <p>Explore my repositories, follow my open-source journey, and check out my full project archives directly on GitHub.</p>
                   </div>
-                  <a 
-                    href="https://github.com/destopianpirate" 
-                    target="_blank" 
-                    rel="noreferrer" 
+                  <a
+                    href="https://github.com/destopianpirate"
+                    target="_blank"
+                    rel="noreferrer"
                     className="banner-btn"
                   >
                     <Github size={18} /> View GitHub Profile
@@ -1996,17 +1966,17 @@ function App() {
         </div>
       </footer>
 
-      <button 
-        className="cli-floating-btn" 
+      <button
+        className="cli-floating-btn"
         onClick={() => setTerminalOpen(prev => !prev)}
         title="Toggle CLI Console (HotKey: `)"
       >
         <Terminal size={22} />
       </button>
 
-      <TerminalCLI 
-        isOpen={terminalOpen} 
-        onClose={() => setTerminalOpen(false)} 
+      <TerminalCLI
+        isOpen={terminalOpen}
+        onClose={() => setTerminalOpen(false)}
         theme={theme}
         toggleTheme={toggleTheme}
       />
