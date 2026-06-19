@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion'
 import {
   Github,
   Linkedin,
@@ -978,23 +978,105 @@ function IoTSimulator() {
 function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
   const [inputVal, setInputVal] = useState('');
   const [history, setHistory] = useState([
-    { type: 'welcome', text: "destopianpirate console [Version 1.0.0]\n(c) 2026 Ayush Singh. Type 'help' for commands, Press ` (backtick) or click Close to dismiss." }
+    { type: 'welcome', text: "destopianpirate console [Version 1.0.0]\n(c) 2026 Ayush Singh. Type 'help' for commands, Tap screen to focus input on mobile, Press ` (backtick) or click Close to dismiss." }
   ]);
   const [matrixActive, setMatrixActive] = useState(false);
   const [commandHistory, setCommandHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
 
   // Snake Game State
-  const [gameState, setGameState] = useState('cli'); // 'cli' or 'game'
+  const [gameState, setGameState] = useState('cli'); // 'cli', 'snake', 'ttt', 'guess', 'guess_won'
   const [snake, setSnake] = useState([{ x: 10, y: 5 }]);
   const [food, setFood] = useState({ x: 5, y: 3 });
   const [direction, setDirection] = useState({ x: 1, y: 0 });
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
 
+  // Tic-Tac-Toe State
+  const [tttBoard, setTttBoard] = useState(Array(9).fill(' '));
+  const [tttStatus, setTttStatus] = useState('Your turn (X). Press keys 1-9 to place, or [Q] to quit:');
+  const [tttOver, setTttOver] = useState(false);
+
+  // Guess the Number State
+  const [guessTarget, setGuessTarget] = useState(0);
+  const [guessAttempts, setGuessAttempts] = useState(0);
+  const [guessFeedback, setGuessFeedback] = useState('');
+
   const canvasRef = useRef(null);
   const bodyRef = useRef(null);
   const inputRef = useRef(null);
+
+  const checkTttWin = (board, player) => {
+    const wins = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Cols
+      [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
+    return wins.some(combo => combo.every(idx => board[idx] === player));
+  };
+
+  const getTttAiMove = (board) => {
+    const wins = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+    // 1. Can AI win?
+    for (let combo of wins) {
+      const oCount = combo.filter(idx => board[idx] === 'O').length;
+      const emptyCount = combo.filter(idx => board[idx] === ' ').length;
+      if (oCount === 2 && emptyCount === 1) {
+        return combo.find(idx => board[idx] === ' ');
+      }
+    }
+    // 2. Can AI block player X?
+    for (let combo of wins) {
+      const xCount = combo.filter(idx => board[idx] === 'X').length;
+      const emptyCount = combo.filter(idx => board[idx] === ' ').length;
+      if (xCount === 2 && emptyCount === 1) {
+        return combo.find(idx => board[idx] === ' ');
+      }
+    }
+    // 3. Take center if open
+    if (board[4] === ' ') return 4;
+    // 4. Take corner
+    const corners = [0, 2, 6, 8];
+    const openCorners = corners.filter(idx => board[idx] === ' ');
+    if (openCorners.length > 0) {
+      return openCorners[Math.floor(Math.random() * openCorners.length)];
+    }
+    // 5. Take any empty
+    const empties = board.map((val, idx) => val === ' ' ? idx : null).filter(val => val !== null);
+    return empties[Math.floor(Math.random() * empties.length)];
+  };
+
+  const renderTttBoard = () => {
+    let boardStr = '  Tic-Tac-Toe vs Bot\n';
+    boardStr += ' ╔═══╦═══╦═══╗\n';
+    boardStr += ` ║ ${tttBoard[0]} ║ ${tttBoard[1]} ║ ${tttBoard[2]} ║\n`;
+    boardStr += ' ╠═══╬═══╬═══╣\n';
+    boardStr += ` ║ ${tttBoard[3]} ║ ${tttBoard[4]} ║ ${tttBoard[5]} ║\n`;
+    boardStr += ' ╠═══╬═══╬═══╣\n';
+    boardStr += ` ║ ${tttBoard[6]} ║ ${tttBoard[7]} ║ ${tttBoard[8]} ║\n`;
+    boardStr += ' ╚═══╩═══╩═══╝\n\n';
+    boardStr += ' Cell map:\n 1 │ 2 │ 3 \n───┼───┼───\n 4 │ 5 │ 6 \n───┼───┼───\n 7 │ 8 │ 9 \n\n';
+    boardStr += ` Status: ${tttStatus}\n`;
+    return boardStr;
+  };
+
+  const renderGuessGame = () => {
+    let boardStr = '  Guess the Number (1 - 100)\n';
+    boardStr += ' ┌─────────────────────────┐\n';
+    boardStr += ` │ Attempts: ${guessAttempts.toString().padEnd(14)}│\n`;
+    boardStr += ' └─────────────────────────┘\n\n';
+    boardStr += ` ${guessFeedback}\n\n`;
+    if (gameState === 'guess_won') {
+      boardStr += ' Press [Enter] to return to CLI...';
+    } else {
+      boardStr += ' Type guess below and press [Enter] (or escape/q to quit):';
+    }
+    return boardStr;
+  };
 
   const directionRef = useRef(direction);
   useEffect(() => {
@@ -1147,21 +1229,115 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
   };
 
   const handleKeyDown = (e) => {
-    if (gameState === 'game') {
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'q', 'Q', 'Escape'].includes(e.key)) {
+    if (gameState === 'snake') {
+      const key = e.key.toLowerCase();
+      if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd', 'q', 'escape'].includes(key)) {
         e.preventDefault();
 
-        if (e.key === 'ArrowUp' && directionRef.current.y !== 1) {
+        if ((e.key === 'ArrowUp' || key === 'w') && directionRef.current.y !== 1) {
           setDirection({ x: 0, y: -1 });
-        } else if (e.key === 'ArrowDown' && directionRef.current.y !== -1) {
+        } else if ((e.key === 'ArrowDown' || key === 's') && directionRef.current.y !== -1) {
           setDirection({ x: 0, y: 1 });
-        } else if (e.key === 'ArrowLeft' && directionRef.current.x !== 1) {
+        } else if ((e.key === 'ArrowLeft' || key === 'a') && directionRef.current.x !== 1) {
           setDirection({ x: -1, y: 0 });
-        } else if (e.key === 'ArrowRight' && directionRef.current.x !== -1) {
+        } else if ((e.key === 'ArrowRight' || key === 'd') && directionRef.current.x !== -1) {
           setDirection({ x: 1, y: 0 });
-        } else if (e.key.toLowerCase() === 'q' || e.key === 'Escape') {
+        } else if (key === 'q' || e.key === 'Escape') {
           setGameState('cli');
-          setHistory(prev => [...prev, { type: 'output', text: 'Game quit. Returning to shell.' }]);
+          setHistory(prev => [...prev, { type: 'output', text: 'Snake game quit. Returning to shell.' }]);
+        }
+      }
+      return;
+    }
+
+    if (gameState === 'ttt') {
+      const key = e.key.toLowerCase();
+      if (key === 'q' || e.key === 'Escape') {
+        setGameState('cli');
+        setHistory(prev => [...prev, { type: 'output', text: 'Tic-Tac-Toe quit. Returning to shell.' }]);
+        return;
+      }
+      if (key >= '1' && key <= '9' && !tttOver) {
+        e.preventDefault();
+        const idx = parseInt(key) - 1;
+        if (tttBoard[idx] === ' ') {
+          const nextBoard = [...tttBoard];
+          nextBoard[idx] = 'X';
+          
+          if (checkTttWin(nextBoard, 'X')) {
+            setTttBoard(nextBoard);
+            setTttStatus('🎉 CONGRATS! You won! Press [Q] to exit.');
+            setTttOver(true);
+            return;
+          }
+          
+          const empties = nextBoard.filter(v => v === ' ').length;
+          if (empties === 0) {
+            setTttBoard(nextBoard);
+            setTttStatus("🤝 It's a DRAW! Press [Q] to exit.");
+            setTttOver(true);
+            return;
+          }
+          
+          // AI Move
+          const aiIdx = getTttAiMove(nextBoard);
+          nextBoard[aiIdx] = 'O';
+          
+          if (checkTttWin(nextBoard, 'O')) {
+            setTttBoard(nextBoard);
+            setTttStatus('🤖 AI wins! Better luck next time. Press [Q] to exit.');
+            setTttOver(true);
+            return;
+          }
+          
+          const nextEmpties = nextBoard.filter(v => v === ' ').length;
+          if (nextEmpties === 0) {
+            setTttBoard(nextBoard);
+            setTttStatus("🤝 It's a DRAW! Press [Q] to exit.");
+            setTttOver(true);
+            return;
+          }
+          
+          setTttBoard(nextBoard);
+        }
+      }
+      return;
+    }
+
+    if (gameState === 'guess' || gameState === 'guess_won') {
+      if (e.key === 'Escape') {
+        setGameState('cli');
+        setHistory(prev => [...prev, { type: 'output', text: 'Guess game quit. Returning to shell.' }]);
+        return;
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (gameState === 'guess_won') {
+          setGameState('cli');
+          return;
+        }
+        const val = inputVal.trim();
+        setInputVal('');
+        if (val.toLowerCase() === 'q' || val.toLowerCase() === 'quit') {
+          setGameState('cli');
+          setHistory(prev => [...prev, { type: 'output', text: 'Guess game quit. Returning to shell.' }]);
+          return;
+        }
+        const parsed = parseInt(val);
+        if (isNaN(parsed) || parsed < 1 || parsed > 100) {
+          setGuessFeedback('⚠️ Please enter a valid number between 1 and 100.');
+          return;
+        }
+        const newAttempts = guessAttempts + 1;
+        setGuessAttempts(newAttempts);
+        if (parsed === guessTarget) {
+          setGuessFeedback(`🎉 CORRECT! The number was ${guessTarget}. You guessed it in ${newAttempts} attempts!`);
+          setGameState('guess_won');
+          setHistory(prev => [...prev, { type: 'output', text: `Completed Guess Game in ${newAttempts} attempts.` }]);
+        } else if (parsed < guessTarget) {
+          setGuessFeedback(`📈 Too LOW! Try a number higher than ${parsed}.`);
+        } else {
+          setGuessFeedback(`📉 Too HIGH! Try a number lower than ${parsed}.`);
         }
       }
       return;
@@ -1172,7 +1348,7 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
       const val = inputVal.trim().toLowerCase();
       if (!val) return;
 
-      const commands = ['help', 'about', 'projects', 'skills', 'clear', 'theme', 'neofetch', 'matrix', 'snake', 'play'];
+      const commands = ['help', 'about', 'projects', 'skills', 'clear', 'theme', 'neofetch', 'matrix', 'snake', 'play', 'ttt', 'guess', 'tictactoe'];
       const matches = commands.filter(c => c.startsWith(val));
       if (matches.length > 0) {
         setInputVal(matches[0]);
@@ -1214,8 +1390,6 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
       });
       setHistoryIndex(-1);
 
-      playClick(soundEnabled);
-
       const args = cmdText.split(' ');
       const command = args[0].toLowerCase();
 
@@ -1235,6 +1409,8 @@ function TerminalCLI({ isOpen, onClose, theme, toggleTheme }) {
   neofetch  - Display system specifications and ASCII logo
   snake     - Play the classic preformatted ASCII snake game
   play      - Shortcut to start the snake game
+  ttt       - Play interactive Tic-Tac-Toe vs Smart Bot (keys 1-9)
+  guess     - Play Guess the Number (1-100) challenge game
   clear     - Reset the terminal output logs`
           });
           break;
@@ -1307,8 +1483,26 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
           setFood({ x: 5, y: 3 });
           setDirection({ x: 1, y: 0 });
           setScore(0);
-          setGameState('game');
+          setGameState('snake');
           newHistory.push({ type: 'output', text: 'Initiating Snake Game Engine v1.0.0...' });
+          break;
+
+        case 'ttt':
+        case 'tictactoe':
+          setTttBoard(Array(9).fill(' '));
+          setTttStatus('Your turn (X). Press keys 1-9 to place, or [Q] to quit:');
+          setTttOver(false);
+          setGameState('ttt');
+          newHistory.push({ type: 'output', text: 'Initiating Tic-Tac-Toe Game Engine v1.0.0...' });
+          break;
+
+        case 'guess':
+          const targetNum = Math.floor(Math.random() * 100) + 1;
+          setGuessTarget(targetNum);
+          setGuessAttempts(0);
+          setGuessFeedback('I am thinking of a number between 1 and 100. Guess it!');
+          setGameState('guess');
+          newHistory.push({ type: 'output', text: 'Initiating Guess the Number Game Engine v1.0.0...' });
           break;
 
         default:
@@ -1336,7 +1530,7 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
         </button>
       </div>
 
-      <div className="cli-body" ref={bodyRef}>
+      <div className="cli-body" ref={bodyRef} onClick={() => inputRef.current?.focus()} style={{ cursor: 'text' }}>
         {matrixActive && <canvas ref={canvasRef} className="cli-matrix-canvas" />}
 
         <div className="cli-contents">
@@ -1377,17 +1571,40 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
             return <div key={idx} className="cli-line cli-output-text">{line.text}</div>;
           })}
 
-          {gameState === 'game' ? (
+          {gameState !== 'cli' ? (
             <div className="cli-game-container" style={{ position: 'relative' }}>
-              <pre className="cli-game-board">{renderBoard()}</pre>
-              <input
-                ref={inputRef}
-                type="text"
-                className="cli-hidden-input"
-                onKeyDown={handleKeyDown}
-                style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }}
-                autoFocus
-              />
+              {gameState === 'snake' && <pre className="cli-game-board">{renderBoard()}</pre>}
+              {gameState === 'ttt' && <pre className="cli-game-board">{renderTttBoard()}</pre>}
+              {(gameState === 'guess' || gameState === 'guess_won') && (
+                <div className="cli-game-board">
+                  <pre style={{ fontFamily: 'inherit', margin: 0, whiteSpace: 'pre-wrap' }}>{renderGuessGame()}</pre>
+                  {gameState === 'guess' && (
+                    <div style={{ display: 'flex', alignItems: 'center', marginTop: '1rem', color: '#4ade80' }}>
+                      <span style={{ marginRight: '0.5rem', fontFamily: 'monospace' }}>Guess:</span>
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        className="cli-input"
+                        value={inputVal}
+                        onChange={(e) => setInputVal(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        style={{ border: 'none', background: 'transparent', outline: 'none', color: '#e2e8f0', flexGrow: 1, fontFamily: 'monospace' }}
+                        autoFocus
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+              {gameState !== 'guess' && (
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className="cli-hidden-input"
+                  onKeyDown={handleKeyDown}
+                  style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }}
+                  autoFocus
+                />
+              )}
             </div>
           ) : (
             <div className="cli-prompt-line">
@@ -1521,6 +1738,42 @@ function App() {
   const [sandboxTab, setSandboxTab] = useState('ai');
   const [terminalOpen, setTerminalOpen] = useState(false);
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const { scrollY } = useScroll();
+
+  // Create a spring-smoothed scroll position to prevent scroll jitter and lag smoothly
+  const scrollYSpring = useSpring(scrollY, {
+    stiffness: 35,
+    damping: 24,
+    mass: 0.5,
+    restDelta: 0.001
+  });
+
+  const yGlow1 = useTransform(scrollYSpring, [0, 1000], [0, 150]);
+  const yGlow2 = useTransform(scrollYSpring, [0, 1000], [0, -150]);
+  const yHeroText = useTransform(scrollYSpring, [0, 600], [0, isMobile ? 0 : -45]);
+  const yProfile = useTransform(scrollYSpring, [0, 600], [0, isMobile ? 0 : 55]);
+
+  // Pillar card parallax translations (staggered rates)
+  const yPillar1 = useTransform(scrollYSpring, [100, 1000], [0, isMobile ? 0 : -25]);
+  const yPillar2 = useTransform(scrollYSpring, [100, 1000], [0, isMobile ? 0 : -10]);
+  const yPillar3 = useTransform(scrollYSpring, [100, 1000], [0, isMobile ? 0 : -45]);
+
+  // Timeline parallax translations
+  const yTimelineHeader = useTransform(scrollYSpring, [50, 700], [0, isMobile ? 0 : -35]);
+  const yTimeline = useTransform(scrollYSpring, [50, 850], [0, isMobile ? 0 : 15]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [activeTab]);
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
@@ -1548,8 +1801,8 @@ function App() {
 
   return (
     <div className="app-layout">
-      <div className="bg-glow-1"></div>
-      <div className="bg-glow-2"></div>
+      <motion.div className="bg-glow-1" style={{ y: yGlow1 }}></motion.div>
+      <motion.div className="bg-glow-2" style={{ y: yGlow2 }}></motion.div>
 
       <div className="header-wrapper">
         <header className="header container">
@@ -1595,7 +1848,7 @@ function App() {
               className="about-tab-container"
             >
               <div className="about-grid">
-                <div className="about-content">
+                <motion.div className="about-content" style={{ y: yHeroText }}>
                   <h1 style={{ fontWeight: 800 }}>Hi there, I'm <br /><span>Ayush Singh!</span></h1>
                   <div className="profile-card-container mobile-only-profile">
                     <div className="profile-image-frame">
@@ -1614,7 +1867,7 @@ function App() {
                     Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and modern frontend aesthetics.
                   </p>
                   <div className="about-socials">
-                    <a href="mailto:ayushspna4040@gmail.com" className="footer-social-link">
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ayushspna4040@gmail.com" target="_blank" rel="noreferrer" className="footer-social-link">
                       <Mail size={16} /> Email Me
                     </a>
                     <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="footer-social-link">
@@ -1624,20 +1877,27 @@ function App() {
                       <Linkedin size={16} /> LinkedIn
                     </a>
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="profile-card-container desktop-only-profile">
+                <motion.div className="profile-card-container desktop-only-profile" style={{ y: yProfile }}>
                   <div className="profile-image-frame">
                     <img src={profilePic} alt="Ayush Singh Profile" className="profile-large-image" />
                   </div>
-                </div>
+                </motion.div>
               </div>
 
               <div className="about-timeline-section" style={{ marginTop: '3.5rem', marginBottom: '2.5rem' }}>
                 <h2 className="timeline-section-title">Academic Journey</h2>
                 <div className="timeline-container">
                   {timelineData.map((item, idx) => (
-                    <div className="timeline-item" key={idx}>
+                    <motion.div 
+                      className="timeline-item" 
+                      key={idx}
+                      initial={{ opacity: 0, y: 35 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{ duration: 0.55, ease: "easeOut" }}
+                    >
                       <div className="timeline-marker">
                         <div className="timeline-dot-wrapper">
                           <span className="timeline-icon-inner">{item.icon}</span>
@@ -1660,22 +1920,25 @@ function App() {
                           <div className="timeline-giant-percentage">{item.giantPercentage}</div>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
 
               <div className="about-pillars-grid">
-                {bioPillars.map((pillar, idx) => (
-                  <div className="pillar-card" key={idx}>
-                    <div className="pillar-card-header">
-                      <span className="pillar-icon-wrapper">{pillar.icon}</span>
-                      <span className="pillar-tag">{pillar.tag}</span>
-                    </div>
-                    <h3 className="pillar-title">{pillar.title}</h3>
-                    <p className="pillar-desc">{pillar.desc}</p>
-                  </div>
-                ))}
+                {bioPillars.map((pillar, idx) => {
+                  const yPillar = idx === 0 ? yPillar1 : idx === 1 ? yPillar2 : yPillar3;
+                  return (
+                    <motion.div className="pillar-card" key={idx} style={{ y: yPillar }}>
+                      <div className="pillar-card-header">
+                        <span className="pillar-icon-wrapper">{pillar.icon}</span>
+                        <span className="pillar-tag">{pillar.tag}</span>
+                      </div>
+                      <h3 className="pillar-title">{pillar.title}</h3>
+                      <p className="pillar-desc">{pillar.desc}</p>
+                    </motion.div>
+                  );
+                })}
               </div>
             </motion.div>
           )}
@@ -1960,6 +2223,39 @@ function App() {
 
       <footer>
         <div className="container">
+          <section className="footer-contact-section">
+            <div className="contact-card-wrapper">
+              <div className="contact-glow-bg"></div>
+              <h2 className="contact-title">Let's Connect</h2>
+              <p className="contact-desc">
+                Whether you want to discuss a research opportunity, collaborate on an AI/Web project, or just say hello, my inbox is always open.
+              </p>
+              <div className="contact-links-grid">
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ayushspna4040@gmail.com" target="_blank" rel="noreferrer" className="contact-link-card mail-card">
+                  <div className="contact-icon-box mail-glow"><Mail size={22} /></div>
+                  <div className="contact-info-text">
+                    <span className="contact-label">Email Me</span>
+                    <span className="contact-val">ayushspna4040@gmail.com</span>
+                  </div>
+                </a>
+                <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="contact-link-card github-card">
+                  <div className="contact-icon-box github-glow"><Github size={22} /></div>
+                  <div className="contact-info-text">
+                    <span className="contact-label">GitHub</span>
+                    <span className="contact-val">github.com/destopianpirate</span>
+                  </div>
+                </a>
+                <a href="https://linkedin.com/in/ayushxphoenix" target="_blank" rel="noreferrer" className="contact-link-card linkedin-card">
+                  <div className="contact-icon-box linkedin-glow"><Linkedin size={22} /></div>
+                  <div className="contact-info-text">
+                    <span className="contact-label">LinkedIn</span>
+                    <span className="contact-val">linkedin.com/in/ayushxphoenix</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </section>
+
           <p className="footer-credits">
             &copy; {new Date().getFullYear()} Ayush Singh.
           </p>
