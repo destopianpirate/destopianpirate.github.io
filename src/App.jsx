@@ -2235,6 +2235,50 @@ function App() {
                   );
                 })}
               </div>
+
+              <div className="about-featured-projects-section">
+                <h2 className="timeline-section-title" style={{ textAlign: 'center', marginBottom: '0.5rem' }}>Featured Projects</h2>
+                <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '2.5rem', fontSize: '0.95rem' }}>
+                  A curated list of deep learning models, edge systems, and full-stack web platforms. Click any card to explore.
+                </p>
+                <div className="featured-projects-grid">
+                  {projects.slice(0, 3).map((project, idx) => (
+                    <div 
+                      key={idx} 
+                      className="featured-project-card" 
+                      onClick={() => {
+                        setActiveTab('projects');
+                        window.scrollTo({ top: 0, behavior: 'instant' });
+                      }}
+                    >
+                      <div className="featured-project-header">
+                        <div className="featured-project-logo">
+                          {project.logo}
+                        </div>
+                        <span className="featured-project-tag">Explore &rarr;</span>
+                      </div>
+                      <h3 className="featured-project-title">{project.title}</h3>
+                      <p className="featured-project-desc">{project.desc}</p>
+                      <div className="featured-project-stack">
+                        {project.stack.slice(0, 3).map((tech, i) => (
+                          <span key={i} className="featured-tech-pill">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+                  <button 
+                    className="view-all-projects-btn"
+                    onClick={() => {
+                      setActiveTab('projects');
+                      window.scrollTo({ top: 0, behavior: 'instant' });
+                    }}
+                  >
+                    View All Projects
+                  </button>
+                </div>
+              </div>
             </motion.div>
           )}
 
