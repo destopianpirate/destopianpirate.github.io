@@ -94,7 +94,6 @@ body {
   width: 700px;
   height: 700px;
   border-radius: 50%;
-  filter: blur(10px);
   opacity: 0.12;
   pointer-events: none;
   z-index: -1;
@@ -3114,6 +3113,7 @@ input:checked+.switch-slider:before {
   -webkit-backdrop-filter: none;
   pointer-events: auto;
   cursor: pointer;
+  will-change: transform, left;
 }
 
 .oscilloscope-floating-icon-card img {

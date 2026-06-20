@@ -1873,11 +1873,13 @@ function OscilloscopeDivider({ theme, isMobile }) {
 
           el.style.left = `${displayPct}%`;
           el.style.transform = `translate(-50%, -50%) translateY(${pixelY}px)`;
-          el.style.opacity = '0.85';
-          el.style.visibility = 'visible';
+          if (el.style.opacity !== '0.85') el.style.opacity = '0.85';
+          if (el.style.visibility !== 'visible') el.style.visibility = 'visible';
         } else {
-          el.style.opacity = '0';
-          el.style.visibility = 'hidden';
+          if (el.style.opacity !== '0') {
+            el.style.opacity = '0';
+            el.style.visibility = 'hidden';
+          }
         }
       });
 
@@ -1951,13 +1953,28 @@ function AttentionText({ children }) {
     setDots(points);
   }, []);
 
+  const frameRef = useRef(null);
+
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMousePos({ x, y });
+    if (frameRef.current) {
+      cancelAnimationFrame(frameRef.current);
+    }
+    frameRef.current = requestAnimationFrame(() => {
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      setMousePos({ x, y });
+    });
   };
+
+  useEffect(() => {
+    return () => {
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div
