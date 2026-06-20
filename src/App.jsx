@@ -207,6 +207,7 @@ const skillsData = [
       { name: "Scikit-Learn ML", level: "88%", logoUrl: "https://cdn.simpleicons.org/scikitlearn/F7931E" },
       { name: "YOLOv8 Edge Implementations", level: "88%", logoUrl: "https://cdn.simpleicons.org/ultralytics/0071C5" },
       { name: "Hugging Face (Model Hub)", level: "85%", logoUrl: "https://cdn.simpleicons.org/huggingface/FFD21E" },
+      { name: "NLP APIs", level: "85%", logoUrl: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg?color=000000" },
       { name: "Computer Vision (OpenCV)", level: "82%", logoUrl: "https://cdn.simpleicons.org/opencv/5C3EE8" },
       { name: "Model Quantization & Inference", level: "80%", logoUrl: "https://cdn.simpleicons.org/onnx/00529B" }
     ]
@@ -272,7 +273,7 @@ const techLogos = {
   "Python": "https://cdn.simpleicons.org/python/3776AB",
   "WebSockets/MQTT": "https://cdn.simpleicons.org/mqtt/3C5280",
   "Chart.js": "https://cdn.simpleicons.org/chartdotjs/FF6384",
-  "NLP APIs": "https://cdn.simpleicons.org/openai/412991",
+  "NLP APIs": "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg?color=000000",
   "YOLOv8": "https://cdn.simpleicons.org/pytorch/EE4C2C",
   "Google Maps API": "https://cdn.simpleicons.org/googlemaps/4285F4",
   "GPS": "https://cdn.simpleicons.org/googleearth/1A73E8",
@@ -1763,52 +1764,17 @@ function OscilloscopeDivider({ theme, isMobile }) {
     isMobileRef.current = isMobile;
   }); // runs on every render to sync refs
 
-  const skills = [
-    "Python", "React", "PyTorch", "YOLOv8", "Docker", "TypeScript", "C++", 
-    "JavaScript", "Next.js", "HTML5 / CSS3", "Framer Motion", "Node.js", 
-    "Django", "Flask", "MongoDB", "Firebase", "SQLite", "PostgreSQL", 
-    "GCP", "Vercel", "OpenCV", "WebSockets", "MQTT", "Git", "Machine Learning", 
-    "Deep Learning", "Computer Vision", "Model Quantization", "NLP APIs", "GitHub",
-    "Render", "n8n", "Netlify", "Scikit-Learn", "TensorFlow"
-  ];
+  const skills = [];
+  const skillIcons = {};
 
-  const skillIcons = {
-    "Python": "https://cdn.simpleicons.org/python/3776AB",
-    "React": "https://cdn.simpleicons.org/react/61DAFB",
-    "PyTorch": "https://cdn.simpleicons.org/pytorch/EE4C2C",
-    "YOLOv8": "https://cdn.simpleicons.org/ultralytics/0071C5",
-    "Docker": "https://cdn.simpleicons.org/docker/2496ED",
-    "TypeScript": "https://cdn.simpleicons.org/typescript/3178C6",
-    "C++": "https://cdn.simpleicons.org/cplusplus/00599C",
-    "JavaScript": "https://cdn.simpleicons.org/javascript/F7DF1E",
-    "Next.js": "https://cdn.simpleicons.org/nextdotjs/000000",
-    "HTML5 / CSS3": "https://cdn.simpleicons.org/html5/E34F26",
-    "Framer Motion": "https://cdn.simpleicons.org/framer/0055FF",
-    "Node.js": "https://cdn.simpleicons.org/nodedotjs/339933",
-    "Django": "https://cdn.simpleicons.org/django/092E20",
-    "Flask": "https://cdn.simpleicons.org/flask/000000",
-    "MongoDB": "https://cdn.simpleicons.org/mongodb/47A248",
-    "Firebase": "https://cdn.simpleicons.org/firebase/FFCA28",
-    "SQLite": "https://cdn.simpleicons.org/sqlite/003B57",
-    "PostgreSQL": "https://cdn.simpleicons.org/postgresql/4169E1",
-    "GCP": "https://cdn.simpleicons.org/googlecloud/4285F4",
-    "Vercel": "https://cdn.simpleicons.org/vercel/000000",
-    "OpenCV": "https://cdn.simpleicons.org/opencv/5C3EE8",
-    "WebSockets": "https://cdn.simpleicons.org/socketdotio/010101",
-    "MQTT": "https://cdn.simpleicons.org/hivemq/F05A28",
-    "Git": "https://cdn.simpleicons.org/git/F05032",
-    "Machine Learning": "https://cdn.simpleicons.org/scikitlearn/F7931E",
-    "Deep Learning": "https://cdn.simpleicons.org/keras/D00000",
-    "Computer Vision": "https://cdn.simpleicons.org/opencv/5C3EE8",
-    "Model Quantization": "https://cdn.simpleicons.org/onnx/00529B",
-    "NLP APIs": "https://cdn.simpleicons.org/openai/412991",
-    "GitHub": "https://cdn.simpleicons.org/github/181717",
-    "Render": "https://cdn.simpleicons.org/render/000000",
-    "n8n": "https://cdn.simpleicons.org/n8n/FF6C37",
-    "Netlify": "https://cdn.simpleicons.org/netlify/00AD9F",
-    "Scikit-Learn": "https://cdn.simpleicons.org/scikitlearn/F7931E",
-    "TensorFlow": "https://cdn.simpleicons.org/tensorflow/FF6F00"
-  };
+  skillsData.forEach(category => {
+    category.items.forEach(item => {
+      if (item.logoUrl) {
+        skills.push(item.name);
+        skillIcons[item.name] = item.logoUrl;
+      }
+    });
+  });
 
   useEffect(() => {
     let animationId;
