@@ -283,6 +283,26 @@ const techLogos = {
   "PyTorch": "https://cdn.simpleicons.org/pytorch/EE4C2C",
 };
 
+function isDarkLogo(url) {
+  if (!url) return false;
+  if (url.includes('000000') || url.includes('181717')) return true;
+  
+  const parts = url.split('/');
+  const lastPart = parts[parts.length - 1];
+  const hexPart = lastPart.split('?')[0];
+  
+  if (hexPart && hexPart.length === 6) {
+    const r = parseInt(hexPart.substring(0, 2), 16);
+    const g = parseInt(hexPart.substring(2, 4), 16);
+    const b = parseInt(hexPart.substring(4, 6), 16);
+    if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
+      const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+      return luminance < 80;
+    }
+  }
+  return false;
+}
+
 const projectRadarFocus = {
   "AcadX (student_portal)": { "AI / ML": 40, "Frontend": 95, "Backend": 70, "Databases": 80, "DevOps": 60, "Systems": 50 },
   "AssignmentAI": { "AI / ML": 95, "Frontend": 85, "Backend": 80, "Databases": 40, "DevOps": 60, "Systems": 70 },
@@ -1776,6 +1796,14 @@ function OscilloscopeDivider({ theme, isMobile }) {
     });
   });
 
+  const skillsRef = useRef(skills);
+  const skillIconsRef = useRef(skillIcons);
+
+  useEffect(() => {
+    skillsRef.current = skills;
+    skillIconsRef.current = skillIcons;
+  }); // runs on every render to sync refs
+
   useEffect(() => {
     let animationId;
     let time = 0;
@@ -1805,13 +1833,15 @@ function OscilloscopeDivider({ theme, isMobile }) {
       if (pathRef2.current) pathRef2.current.setAttribute('d', d2);
 
       // Animate flowing skill elements from left to right
+      const currentSkills = skillsRef.current;
+      const currentSkillIcons = skillIconsRef.current;
       const spacingPct = 14; 
-      const totalWidthPct = skills.length * spacingPct;
+      const totalWidthPct = currentSkills.length * spacingPct;
       // Responsive speed (slower on laptop/desktop screen sizes)
       const speedFactor = isMobileRef.current ? 3.2 : 1.2;
       const flowOffsetPct = (time * speedFactor) % totalWidthPct;
 
-      skills.forEach((skill, i) => {
+      currentSkills.forEach((skill, i) => {
         const el = skillRefs.current[i];
         if (!el) return;
 
@@ -1820,10 +1850,8 @@ function OscilloscopeDivider({ theme, isMobile }) {
         if (posPct < 0) posPct += totalWidthPct;
 
         let displayPct = posPct;
-        if (displayPct > 115) {
-          if (displayPct > totalWidthPct - 15) {
-            displayPct -= totalWidthPct;
-          }
+        if (displayPct >= totalWidthPct - 15) {
+          displayPct -= totalWidthPct;
         }
 
         const isVisible = displayPct >= -15 && displayPct <= 115;
@@ -1864,7 +1892,7 @@ function OscilloscopeDivider({ theme, isMobile }) {
       </svg>
       {skills.map((skill, idx) => {
         const iconUrl = skillIcons[skill];
-        const isInverted = theme === 'dark' && (iconUrl?.includes('000000') || iconUrl?.includes('181717'));
+        const isInverted = theme === 'dark' && isDarkLogo(iconUrl);
         return (
           <span
             key={skill}
@@ -2264,7 +2292,7 @@ function App() {
                             <img
                               src={techLogos[tech]}
                               alt={tech}
-                              style={{ width: 18, height: 18, filter: theme === 'dark' && techLogos[tech].includes('000000') ? 'invert(1)' : 'none' }}
+                              style={{ width: 18, height: 18, filter: theme === 'dark' && isDarkLogo(techLogos[tech]) ? 'invert(1)' : 'none' }}
                             />
                           ) : (
                             tech
@@ -2335,7 +2363,7 @@ function App() {
                         <div className="skill-row" key={idx}>
                           <div className="skill-info">
                             {item.logoUrl ? (
-                              <img src={item.logoUrl} alt={item.name} style={{ width: 24, height: 24, filter: theme === 'dark' && !item.logoUrl.includes('000000') ? 'none' : theme === 'dark' ? 'invert(1)' : 'none' }} />
+                              <img src={item.logoUrl} alt={item.name} style={{ width: 24, height: 24, filter: theme === 'dark' && isDarkLogo(item.logoUrl) ? 'invert(1)' : 'none' }} />
                             ) : (
                               <div style={{ width: 24, height: 24, background: 'rgba(255,255,255,0.04)', borderRadius: '4px' }}></div>
                             )}
