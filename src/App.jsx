@@ -20,7 +20,9 @@ import {
   RotateCcw,
   AlertTriangle,
   GraduationCap,
-  Award
+  Award,
+  Briefcase,
+  Home
 } from 'lucide-react'
 import profilePic from './assets/profile.png'
 import logoLight from './assets/logo_light.png'
@@ -190,17 +192,23 @@ const skillsData = [
       { name: "Docker Containerization", level: "82%", logoUrl: "https://cdn.simpleicons.org/docker/2496ED" },
       { name: "Google Cloud Platform", level: "78%", logoUrl: "https://cdn.simpleicons.org/googlecloud/4285F4" },
       { name: "GitHub Version Control", level: "92%", logoUrl: "https://cdn.simpleicons.org/github/000000" },
-      { name: "Vercel Hostings", level: "90%", logoUrl: "https://cdn.simpleicons.org/vercel/000000" }
+      { name: "Vercel Hostings", level: "90%", logoUrl: "https://cdn.simpleicons.org/vercel/000000" },
+      { name: "Render Hostings", level: "80%", logoUrl: "https://cdn.simpleicons.org/render/000000" },
+      { name: "Netlify Cloud", level: "82%", logoUrl: "https://cdn.simpleicons.org/netlify/00AD9F" },
+      { name: "n8n Automation", level: "85%", logoUrl: "https://cdn.simpleicons.org/n8n/FF6C37" }
     ]
   },
   {
     category: "Edge AI & Computer Vision",
     icon: <Cpu />,
     items: [
-      { name: "YOLOv8 Edge Implementations", level: "88%", logoUrl: null },
+      { name: "PyTorch Deep Learning", level: "90%", logoUrl: "https://cdn.simpleicons.org/pytorch/EE4C2C" },
+      { name: "TensorFlow Engine", level: "82%", logoUrl: "https://cdn.simpleicons.org/tensorflow/FF6F00" },
+      { name: "Scikit-Learn ML", level: "88%", logoUrl: "https://cdn.simpleicons.org/scikitlearn/F7931E" },
+      { name: "YOLOv8 Edge Implementations", level: "88%", logoUrl: "https://cdn.simpleicons.org/ultralytics/0071C5" },
       { name: "Hugging Face (Model Hub)", level: "85%", logoUrl: "https://cdn.simpleicons.org/huggingface/FFD21E" },
-      { name: "Computer Vision (OpenCV)", level: "82%", logoUrl: null },
-      { name: "Model Quantization & Inference", level: "80%", logoUrl: null }
+      { name: "Computer Vision (OpenCV)", level: "82%", logoUrl: "https://cdn.simpleicons.org/opencv/5C3EE8" },
+      { name: "Model Quantization & Inference", level: "80%", logoUrl: "https://cdn.simpleicons.org/onnx/00529B" }
     ]
   }
 ];
@@ -1731,6 +1739,276 @@ function GithubExplorer() {
   );
 }
 
+function OscilloscopeDivider({ theme, isMobile }) {
+  const containerRef = useRef(null);
+  const pathRef1 = useRef(null);
+  const pathRef2 = useRef(null);
+  const skillRefs = useRef([]);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const amplitude = useTransform(scrollYProgress, [0, 1], [12, 38]);
+  const frequency = useTransform(scrollYProgress, [0, 1], [2.5, 6]);
+
+  const amplitudeRef = useRef(amplitude);
+  const frequencyRef = useRef(frequency);
+  const isMobileRef = useRef(isMobile);
+
+  useEffect(() => {
+    amplitudeRef.current = amplitude;
+    frequencyRef.current = frequency;
+    isMobileRef.current = isMobile;
+  }); // runs on every render to sync refs
+
+  const skills = [
+    "Python", "React", "PyTorch", "YOLOv8", "Docker", "TypeScript", "C++", 
+    "JavaScript", "Next.js", "HTML5 / CSS3", "Framer Motion", "Node.js", 
+    "Django", "Flask", "MongoDB", "Firebase", "SQLite", "PostgreSQL", 
+    "GCP", "Vercel", "OpenCV", "WebSockets", "MQTT", "Git", "Machine Learning", 
+    "Deep Learning", "Computer Vision", "Model Quantization", "NLP APIs", "GitHub",
+    "Render", "n8n", "Netlify", "Scikit-Learn", "TensorFlow"
+  ];
+
+  const skillIcons = {
+    "Python": "https://cdn.simpleicons.org/python/3776AB",
+    "React": "https://cdn.simpleicons.org/react/61DAFB",
+    "PyTorch": "https://cdn.simpleicons.org/pytorch/EE4C2C",
+    "YOLOv8": "https://cdn.simpleicons.org/ultralytics/0071C5",
+    "Docker": "https://cdn.simpleicons.org/docker/2496ED",
+    "TypeScript": "https://cdn.simpleicons.org/typescript/3178C6",
+    "C++": "https://cdn.simpleicons.org/cplusplus/00599C",
+    "JavaScript": "https://cdn.simpleicons.org/javascript/F7DF1E",
+    "Next.js": "https://cdn.simpleicons.org/nextdotjs/000000",
+    "HTML5 / CSS3": "https://cdn.simpleicons.org/html5/E34F26",
+    "Framer Motion": "https://cdn.simpleicons.org/framer/0055FF",
+    "Node.js": "https://cdn.simpleicons.org/nodedotjs/339933",
+    "Django": "https://cdn.simpleicons.org/django/092E20",
+    "Flask": "https://cdn.simpleicons.org/flask/000000",
+    "MongoDB": "https://cdn.simpleicons.org/mongodb/47A248",
+    "Firebase": "https://cdn.simpleicons.org/firebase/FFCA28",
+    "SQLite": "https://cdn.simpleicons.org/sqlite/003B57",
+    "PostgreSQL": "https://cdn.simpleicons.org/postgresql/4169E1",
+    "GCP": "https://cdn.simpleicons.org/googlecloud/4285F4",
+    "Vercel": "https://cdn.simpleicons.org/vercel/000000",
+    "OpenCV": "https://cdn.simpleicons.org/opencv/5C3EE8",
+    "WebSockets": "https://cdn.simpleicons.org/socketdotio/010101",
+    "MQTT": "https://cdn.simpleicons.org/hivemq/F05A28",
+    "Git": "https://cdn.simpleicons.org/git/F05032",
+    "Machine Learning": "https://cdn.simpleicons.org/scikitlearn/F7931E",
+    "Deep Learning": "https://cdn.simpleicons.org/keras/D00000",
+    "Computer Vision": "https://cdn.simpleicons.org/opencv/5C3EE8",
+    "Model Quantization": "https://cdn.simpleicons.org/onnx/00529B",
+    "NLP APIs": "https://cdn.simpleicons.org/openai/412991",
+    "GitHub": "https://cdn.simpleicons.org/github/181717",
+    "Render": "https://cdn.simpleicons.org/render/000000",
+    "n8n": "https://cdn.simpleicons.org/n8n/FF6C37",
+    "Netlify": "https://cdn.simpleicons.org/netlify/00AD9F",
+    "Scikit-Learn": "https://cdn.simpleicons.org/scikitlearn/F7931E",
+    "TensorFlow": "https://cdn.simpleicons.org/tensorflow/FF6F00"
+  };
+
+  useEffect(() => {
+    let animationId;
+    let time = 0;
+
+    const updateWave = () => {
+      time += 0.035;
+      const amp = amplitudeRef.current.get();
+      const freq = frequencyRef.current.get();
+      
+      const width = 1200;
+      const height = 100;
+      const midY = height / 2;
+
+      let d1 = `M 0 ${midY}`;
+      let d2 = `M 0 ${midY}`;
+
+      for (let x = 0; x <= width; x += 10) {
+        const angle = (x / width) * Math.PI * freq - time;
+        const y1 = midY + Math.sin(angle) * amp;
+        const y2 = midY + Math.sin(angle + Math.PI * 0.5) * (amp * 0.65);
+        
+        d1 += ` L ${x} ${y1}`;
+        d2 += ` L ${x} ${y2}`;
+      }
+
+      if (pathRef1.current) pathRef1.current.setAttribute('d', d1);
+      if (pathRef2.current) pathRef2.current.setAttribute('d', d2);
+
+      // Animate flowing skill elements from left to right
+      const spacingPct = 14; 
+      const totalWidthPct = skills.length * spacingPct;
+      // Responsive speed (slower on laptop/desktop screen sizes)
+      const speedFactor = isMobileRef.current ? 3.2 : 1.2;
+      const flowOffsetPct = (time * speedFactor) % totalWidthPct;
+
+      skills.forEach((skill, i) => {
+        const el = skillRefs.current[i];
+        if (!el) return;
+
+        const basePosPct = i * spacingPct;
+        let posPct = (basePosPct + flowOffsetPct) % totalWidthPct;
+        if (posPct < 0) posPct += totalWidthPct;
+
+        let displayPct = posPct;
+        if (displayPct > 115) {
+          if (displayPct > totalWidthPct - 15) {
+            displayPct -= totalWidthPct;
+          }
+        }
+
+        const isVisible = displayPct >= -15 && displayPct <= 115;
+
+        if (isVisible) {
+          const wavePct = Math.max(0, Math.min(100, displayPct));
+          const x = (wavePct / 100) * width;
+          const angle = (x / width) * Math.PI * freq - time;
+          const y = midY + Math.sin(angle) * amp;
+
+          const scaleY = 70 / 100;
+          const pixelY = (y - midY) * scaleY;
+
+          el.style.left = `${displayPct}%`;
+          el.style.transform = `translate(-50%, -50%) translateY(${pixelY}px)`;
+          el.style.opacity = '0.85';
+          el.style.visibility = 'visible';
+        } else {
+          el.style.opacity = '0';
+          el.style.visibility = 'hidden';
+        }
+      });
+
+      animationId = requestAnimationFrame(updateWave);
+    };
+
+    animationId = requestAnimationFrame(updateWave);
+    return () => cancelAnimationFrame(animationId);
+  }, []);
+
+  return (
+    <div ref={containerRef} className="oscilloscope-divider">
+      <svg viewBox="0 0 1200 100" width="100%" height="70" fill="none" preserveAspectRatio="none">
+        <path ref={pathRef1} stroke="var(--border-hover)" strokeWidth="1.5" opacity="0.45" />
+        <path ref={pathRef2} stroke="var(--text-secondary)" strokeWidth="1" opacity="0.2" strokeDasharray="3 3" />
+      </svg>
+      {skills.map((skill, idx) => {
+        const iconUrl = skillIcons[skill];
+        const isInverted = theme === 'dark' && (iconUrl?.includes('000000') || iconUrl?.includes('181717'));
+        return (
+          <span
+            key={skill}
+            ref={el => skillRefs.current[idx] = el}
+            className="oscilloscope-floating-icon-card"
+            title={skill}
+            style={{
+              position: 'absolute',
+              transform: 'translate(-50%, -50%)',
+              pointerEvents: 'auto',
+              visibility: 'hidden',
+              opacity: 0
+            }}
+          >
+            {iconUrl ? (
+              <img 
+                src={iconUrl} 
+                alt={skill} 
+                style={{ 
+                  filter: isInverted ? 'invert(1)' : 'none' 
+                }} 
+              />
+            ) : (
+              skill
+            )}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function AttentionText({ children }) {
+  const containerRef = useRef(null);
+  const [hovered, setHovered] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [dots, setDots] = useState([]);
+
+  useEffect(() => {
+    const cols = 12;
+    const rows = 4;
+    const points = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        points.push({
+          id: `${r}-${c}`,
+          rx: (c / (cols - 1)) * 100,
+          ry: (r / (rows - 1)) * 100,
+        });
+      }
+    }
+    setDots(points);
+  }, []);
+
+  const handleMouseMove = (e) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setMousePos({ x, y });
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className={`attention-text-wrapper ${hovered ? 'hovered' : ''}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onMouseMove={handleMouseMove}
+    >
+      {hovered && (
+        <div className="attention-matrix-overlay">
+          <svg className="attention-svg" width="100%" height="100%">
+            {dots.map(dot => {
+              const dx = dot.rx - mousePos.x;
+              const dy = dot.ry - mousePos.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              const weight = Math.exp(-(dist * dist) / 400); // Gaussian weight
+              
+              if (weight < 0.05) return null;
+
+              return (
+                <g key={dot.id}>
+                  <line
+                    x1={`${mousePos.x}%`}
+                    y1={`${mousePos.y}%`}
+                    x2={`${dot.rx}%`}
+                    y2={`${dot.ry}%`}
+                    stroke="var(--text-secondary)"
+                    strokeWidth={weight * 1.2}
+                    opacity={weight * 0.15}
+                  />
+                  <circle
+                    cx={`${dot.rx}%`}
+                    cy={`${dot.ry}%`}
+                    r={1.5 + weight * 1.5}
+                    fill="var(--text-secondary)"
+                    opacity={weight * 0.35}
+                  />
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      )}
+      <div className="attention-content">
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [activeTab, setActiveTab] = useState('about');
   const [theme, setTheme] = useState('light');
@@ -1836,6 +2114,12 @@ function App() {
         </header>
       </div>
 
+      <div className="header-grid-pattern">
+        <div className="grid-glow-square square-1"></div>
+        <div className="grid-glow-square square-2"></div>
+        <div className="grid-glow-square square-3"></div>
+      </div>
+
       <main className="container">
         <AnimatePresence mode="wait">
           {activeTab === 'about' && (
@@ -1860,12 +2144,14 @@ function App() {
                     Pursuing B.Tech in Artificial Intelligence at IIT Gandhinagar (Entered 2025)
                   </div>
 
-                  <p className="about-bio">
-                    I design and engineer intelligent applications at the intersection of Artificial Intelligence and Full-Stack Web Development. I focus on translating complex neural networks into beautiful, responsive, and production-ready interfaces, bridging the gap between machine learning models and user-friendly software architectures.
-                  </p>
-                  <p className="about-bio-highlight">
-                    Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and modern frontend aesthetics.
-                  </p>
+                  <AttentionText>
+                    <p className="about-bio">
+                      I design and engineer intelligent applications at the intersection of Artificial Intelligence and Full-Stack Web Development. I focus on translating complex neural networks into beautiful, responsive, and production-ready interfaces, bridging the gap between machine learning models and user-friendly software architectures.
+                    </p>
+                    <p className="about-bio-highlight">
+                      Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and modern frontend aesthetics.
+                    </p>
+                  </AttentionText>
                   <div className="about-socials">
                     <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ayushspna4040@gmail.com" target="_blank" rel="noreferrer" className="footer-social-link">
                       <Mail size={16} /> Email Me
@@ -2221,6 +2507,8 @@ function App() {
         </AnimatePresence>
       </main>
 
+      <OscilloscopeDivider theme={theme} isMobile={isMobile} />
+
       <footer>
         <div className="container">
           <section className="footer-contact-section">
@@ -2250,6 +2538,20 @@ function App() {
                   <div className="contact-info-text">
                     <span className="contact-label">LinkedIn</span>
                     <span className="contact-val">linkedin.com/in/ayushxphoenix</span>
+                  </div>
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=IIT+Gandhinagar+Gujarat" target="_blank" rel="noreferrer" className="contact-link-card work-card">
+                  <div className="contact-icon-box work-glow"><Briefcase size={22} /></div>
+                  <div className="contact-info-text">
+                    <span className="contact-label">Work / University</span>
+                    <span className="contact-val">IIT Gandhinagar, Gujarat</span>
+                  </div>
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Prayagraj+Uttar+Pradesh" target="_blank" rel="noreferrer" className="contact-link-card home-card">
+                  <div className="contact-icon-box home-glow"><Home size={22} /></div>
+                  <div className="contact-info-text">
+                    <span className="contact-label">Home Town</span>
+                    <span className="contact-val">Prayagraj, UP</span>
                   </div>
                 </a>
               </div>

@@ -82,6 +82,12 @@ body {
   overflow-x: hidden;
 }
 
+.app-layout {
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
 .bg-glow-1,
 .bg-glow-2 {
   position: fixed;
@@ -943,8 +949,7 @@ a {
 footer {
   padding: 5rem 0 3rem;
   text-align: center;
-  border-top: 1px solid var(--border-color);
-  margin-top: 6rem;
+  margin-top: 2rem;
   background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.01) 100%);
 }
 
@@ -1296,6 +1301,7 @@ footer {
   }
 
   .cli-floating-btn {
+    position: fixed !important;
     bottom: 1.25rem !important;
     right: 1.25rem !important;
     width: 44px !important;
@@ -2801,7 +2807,16 @@ input:checked+.switch-slider:before {
 
 @media (min-width: 768px) {
   .contact-links-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .contact-links-grid .mail-card,
+  .contact-links-grid .github-card,
+  .contact-links-grid .linkedin-card {
+    grid-column: span 2;
+  }
+  .contact-links-grid .work-card,
+  .contact-links-grid .home-card {
+    grid-column: span 3;
   }
 }
 
@@ -2842,6 +2857,20 @@ input:checked+.switch-slider:before {
   border-color: rgba(59, 130, 246, 0.4);
   transform: translateY(-4px);
   box-shadow: 0 10px 30px rgba(59, 130, 246, 0.12);
+}
+
+.contact-link-card.work-card:hover {
+  background: var(--card-hover-bg);
+  border-color: rgba(245, 158, 11, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.12);
+}
+
+.contact-link-card.home-card:hover {
+  background: var(--card-hover-bg);
+  border-color: rgba(16, 185, 129, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.12);
 }
 
 .contact-icon-box {
@@ -2897,6 +2926,20 @@ input:checked+.switch-slider:before {
   box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
 }
 
+.contact-link-card:hover .contact-icon-box.work-glow {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #f59e0b;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+}
+
+.contact-link-card:hover .contact-icon-box.home-glow {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #10b981;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+}
+
 .contact-info-text {
   display: flex;
   flex-direction: column;
@@ -2915,4 +2958,188 @@ input:checked+.switch-slider:before {
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-color);
+}
+
+/* Header Grid Pattern */
+.header-grid-pattern {
+  position: absolute;
+  top: 75px;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  pointer-events: none;
+  z-index: 1;
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, var(--border-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-color) 1px, transparent 1px);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0) 100%);
+  animation: gridFadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  overflow: hidden;
+}
+
+@keyframes gridFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.grid-glow-square {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, rgba(120, 119, 198, 0.18) 0%, transparent 80%);
+  border: 1px dashed rgba(120, 119, 198, 0.2);
+  animation: pulseSquare 5s infinite ease-in-out;
+}
+
+.grid-glow-square.square-1 {
+  top: 50px;
+  left: 15%;
+  animation-delay: 0s;
+}
+
+.grid-glow-square.square-2 {
+  top: 100px;
+  left: 55%;
+  animation-delay: 1.8s;
+}
+
+.grid-glow-square.square-3 {
+  top: 150px;
+  left: 80%;
+  animation-delay: 3.2s;
+}
+
+@keyframes pulseSquare {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.08);
+  }
+}
+
+[data-theme='light'] .grid-glow-square {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.04) 0%, transparent 80%);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* Oscilloscope Divider Styles */
+.oscilloscope-divider {
+  width: 100%;
+  height: 240px;
+  margin: 3rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+}
+
+[data-theme='light'] .oscilloscope-divider svg path {
+  stroke: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='light'] .oscilloscope-divider svg path:last-child {
+  stroke: rgba(0, 0, 0, 0.3);
+}
+
+/* Attention Grid Text Highlight Styles */
+.attention-text-wrapper {
+  position: relative;
+  overflow: visible;
+  z-index: 10;
+}
+
+.attention-text-wrapper.hovered {
+  background: transparent;
+}
+
+[data-theme='light'] .attention-text-wrapper.hovered {
+  background: transparent;
+}
+
+.attention-matrix-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.attention-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.attention-content {
+  position: relative;
+  z-index: 1;
+}
+
+.oscilloscope-divider svg {
+  height: 70px;
+}
+
+.oscilloscope-floating-icon-card {
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.oscilloscope-floating-icon-card img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.oscilloscope-floating-icon-card:hover img {
+  transform: scale(1.22);
+}
+
+[data-theme='light'] .oscilloscope-floating-icon-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+@media (min-width: 768px) {
+  .oscilloscope-floating-icon-card {
+    width: 56px;
+    height: 56px;
+  }
+  .oscilloscope-floating-icon-card img {
+    width: 120px;
+    height: 120px;
+  }
 }
