@@ -180,9 +180,7 @@ const skillsData = [
     icon: <Database />,
     items: [
       { name: "MongoDB (NoSQL Document)", level: "86%", logoUrl: "https://cdn.simpleicons.org/mongodb/47A248" },
-      { name: "Firebase (Realtime DB & Auth)", level: "85%", logoUrl: "https://cdn.simpleicons.org/firebase/FFCA28" },
-      { name: "SQLite (Relational Core)", level: "90%", logoUrl: "https://cdn.simpleicons.org/sqlite/003B57" },
-      { name: "PostgreSQL (Enterprise)", level: "80%", logoUrl: "https://cdn.simpleicons.org/postgresql/4169E1" }
+      { name: "Firebase (Realtime DB & Auth)", level: "85%", logoUrl: "https://cdn.simpleicons.org/firebase/FFCA28" }
     ]
   },
   {
@@ -365,7 +363,7 @@ function RadarChart({ activeProject }) {
     "AI / ML": ["YOLOv8 Edge Models", "PyTorch Deep Learning", "Hugging Face Models", "Computer Vision (OpenCV)", "Model Quantization"],
     "Frontend": ["React & Hooks & Context", "Next.js App Router", "HTML5 / CSS3 Grid & Flex", "Framer Motion Animations"],
     "Backend": ["Node.js / Express", "Django Robust APIs", "Flask Microservices", "High-Performance Systems"],
-    "Databases": ["MongoDB Document Store", "Firebase Realtime DB & Auth", "SQLite Relational Core", "PostgreSQL Enterprise SQL"],
+    "Databases": ["MongoDB Document Store", "Firebase Realtime DB & Auth"],
     "DevOps": ["Docker Containerization", "Google Cloud Platform", "GitHub Version Control", "Vercel Cloud Deployments"],
     "Systems": ["C++ Edge Implementations", "TypeScript Typing Systems", "Python (AI/ML & Scripts)", "Data Structures & Algorithms"]
   };
@@ -539,7 +537,7 @@ const aiMockAnswers = [
   },
   {
     keywords: ["skills", "language", "stack", "python"],
-    response: "Primary capabilities cover: Programming Languages (Python, Javascript, TypeScript, C++), Frontend (React, Next.js, Framer Motion), Backend (Node.js/Express, Django, Flask), Databases (MongoDB, PostgreSQL, Firebase, SQLite), DevOps (Docker, GCP, Vercel), and Edge AI (YOLOv8, OpenCV, Model Quantization)."
+    response: "Primary capabilities cover: Programming Languages (Python, Javascript, TypeScript, C++), Frontend (React, Next.js, Framer Motion), Backend (Node.js/Express, Django, Flask), Databases (MongoDB, Firebase), DevOps (Docker, GCP, Vercel), and Edge AI (YOLOv8, OpenCV, Model Quantization)."
   }
 ];
 
@@ -1478,7 +1476,7 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
   • Programming Languages    - Python, JavaScript, TypeScript, C++
   • Frontend Development     - React, Next.js, HTML5/CSS3, Framer Motion
   • Backend & Systems        - Node.js, Django, Flask, Express
-  • Databases & Cloud        - MongoDB, PostgreSQL, SQLite, Firebase, Docker, GCP`
+  • Databases & Cloud        - MongoDB, Firebase, Docker, GCP`
           });
           break;
 
