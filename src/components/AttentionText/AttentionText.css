@@ -1,0 +1,39 @@
+/* Attention Grid Text Highlight Styles */
+.attention-text-wrapper {
+  position: relative;
+  overflow: visible;
+  z-index: 10;
+}
+
+.attention-text-wrapper.hovered {
+  background: transparent;
+}
+
+[data-theme='light'] .attention-text-wrapper.hovered {
+  background: transparent;
+}
+
+.attention-matrix-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.attention-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.attention-content {
+  position: relative;
+  z-index: 1;
+}

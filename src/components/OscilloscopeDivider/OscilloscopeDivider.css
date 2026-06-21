@@ -1,0 +1,70 @@
+/* Oscilloscope Divider Styles */
+.oscilloscope-divider {
+  width: 100%;
+  height: 240px;
+  margin: 3rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+}
+
+[data-theme='light'] .oscilloscope-divider svg path {
+  stroke: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='light'] .oscilloscope-divider svg path:last-child {
+  stroke: rgba(0, 0, 0, 0.3);
+}
+
+.oscilloscope-divider svg {
+  height: 70px;
+}
+
+.oscilloscope-floating-icon-card {
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: auto;
+  cursor: pointer;
+  will-change: transform, left;
+}
+
+.oscilloscope-floating-icon-card img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.oscilloscope-floating-icon-card:hover img {
+  transform: scale(1.22);
+}
+
+[data-theme='light'] .oscilloscope-floating-icon-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+@media (min-width: 768px) {
+  .oscilloscope-floating-icon-card {
+    width: 56px;
+    height: 56px;
+  }
+  .oscilloscope-floating-icon-card img {
+    width: 120px;
+    height: 120px;
+  }
+}
