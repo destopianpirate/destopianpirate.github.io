@@ -10,11 +10,13 @@ const BounceCards = ({
   easeType = 'elastic.out(1, 0.8)',
   enableHover = true,
   desktopTransforms = [
-    'rotate(4deg) translate(-170px)',
-    'rotate(1deg) translate(-80px)',
-    'rotate(-3deg)',
-    'rotate(3deg) translate(80px)',
-    'rotate(-4deg) translate(170px)'
+    'rotate(6deg) translate(-270px)',
+    'rotate(3deg) translate(-180px)',
+    'rotate(1deg) translate(-90px)',
+    'rotate(-2deg)',
+    'rotate(2deg) translate(90px)',
+    'rotate(-3deg) translate(180px)',
+    'rotate(-6deg) translate(270px)'
   ],
   mobileTransforms = [
     'rotate(5deg) translate(-90px)',
@@ -33,7 +35,7 @@ const BounceCards = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const cardCount = isMobile ? 3 : 5;
+  const cardCount = isMobile ? 3 : 7;
   const transforms = isMobile ? mobileTransforms : desktopTransforms;
   const visibleProjects = projects.slice(0, cardCount);
 

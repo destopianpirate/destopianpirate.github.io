@@ -607,11 +607,13 @@ function App() {
                 easeType="back.out(1.4)"
                 enableHover={true}
                 desktopTransforms={[
-                  'rotate(4deg) translate(-180px)',
-                  'rotate(1deg) translate(-85px)',
+                  'rotate(6deg) translate(-270px)',
+                  'rotate(3deg) translate(-180px)',
+                  'rotate(1deg) translate(-90px)',
                   'rotate(-2deg)',
-                  'rotate(2deg) translate(85px)',
-                  'rotate(-4deg) translate(180px)'
+                  'rotate(2deg) translate(90px)',
+                  'rotate(-3deg) translate(180px)',
+                  'rotate(-6deg) translate(270px)'
                 ]}
                 mobileTransforms={[
                   'rotate(5deg) translate(-95px)',
