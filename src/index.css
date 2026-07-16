@@ -269,8 +269,9 @@ a {
   .header-wrapper {
     position: fixed !important;
     border-bottom: 1px solid var(--border-color) !important;
-    background: var(--bg-color) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    background: var(--header-bg) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
   }
 
   .container {
@@ -1199,8 +1200,9 @@ footer {
   .header-wrapper {
     position: fixed !important;
     border-bottom: 1px solid var(--border-color) !important;
-    background: var(--bg-color) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    background: var(--header-bg) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
   }
 
   .header-grid-pattern {
