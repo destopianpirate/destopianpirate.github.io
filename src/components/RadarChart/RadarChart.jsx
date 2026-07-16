@@ -8,7 +8,8 @@ const projectRadarFocus = {
   "ZeroGPTi": { "AI / ML": 90, "Frontend": 70, "Backend": 60, "Databases": 30, "DevOps": 40, "Systems": 65 },
   "RoadGuard AI": { "AI / ML": 95, "Frontend": 40, "Backend": 75, "Databases": 50, "DevOps": 60, "Systems": 90 },
   "ImagePress - Image Compressor": { "AI / ML": 20, "Frontend": 70, "Backend": 90, "Databases": 40, "DevOps": 70, "Systems": 80 },
-  "IITGN.AI": { "AI / ML": 95, "Frontend": 20, "Backend": 50, "Databases": 30, "DevOps": 40, "Systems": 85 }
+  "QS IITGN": { "AI / ML": 10, "Frontend": 95, "Backend": 40, "Databases": 30, "DevOps": 50, "Systems": 40 },
+  "FamShield": { "AI / ML": 20, "Frontend": 80, "Backend": 85, "Databases": 75, "DevOps": 60, "Systems": 90 }
 };
 
 const radarAxes = [
@@ -197,7 +198,7 @@ export function TechStackConfigurator({ activeProject, setActiveProject, project
         Click a repository to map its engineering dependencies and highlight specific skill integrations on the Radar Chart.
       </p>
       <div className="configurator-projects-list">
-        {projects.filter(project => project.title !== "IITGN.AI").map((project, idx) => (
+        {projects.map((project, idx) => (
           <div
             key={idx}
             className={`configurator-project-item ${activeProject === project.title ? 'active' : ''}`}
@@ -213,7 +214,9 @@ export function TechStackConfigurator({ activeProject, setActiveProject, project
               </div>
             </div>
             <div className="configurator-project-tag">
-              {project.title.includes('AcadX') || project.title.includes('AssignmentAI') || project.title.includes('RoadGuard') ? 'AI/Web' : 'System'}
+              {project.title.includes('QS IITGN') ? 'UI/Web' :
+               project.title.includes('FamShield') ? 'Mobile' :
+               project.title.includes('AcadX') || project.title.includes('AssignmentAI') || project.title.includes('RoadGuard') ? 'AI/Web' : 'System'}
             </div>
           </div>
         ))}

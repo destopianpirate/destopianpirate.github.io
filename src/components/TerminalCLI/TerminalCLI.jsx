@@ -460,12 +460,14 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
           newHistory.push({
             type: 'output',
             text: `Featured Repositories:
-  1. AcadX (student_portal) - React, Vite, Framer Motion, AI Study Companion
-  2. AssignmentAI - OCR Vision solver, Client PDF export, AI tutor chat
-  3. IoT Dashboard - WebSockets/MQTT, sensor telemetry, active alerts
+  1. QS IITGN - Official Quizzing Society website with GSAP & PWA support
+  2. AcadX (student_portal) - React, Vite, Framer Motion, AI Study Companion
+  3. AssignmentAI - OCR Vision solver, Client PDF export, AI tutor chat
   4. RoadGuard AI - YOLOv8, GPS coordinate mapper, Google Maps API
-  5. ZeroGPTi - NLP sentence grading scales, AI content highlighter
-  6. ImagePress - Image Compressor - Flask media optimization pipeline`
+  5. FamShield - Mobile parental safety & remote device telemetry app
+  6. ZeroGPTi - NLP sentence grading scales, AI content highlighter
+  7. IoT Dashboard - WebSockets/MQTT, sensor telemetry, active alerts
+  8. ImagePress - Image Compressor - Flask media optimization pipeline`
           });
           break;
 
@@ -474,9 +476,9 @@ Currently looking for research initiatives in CV edge pipelines and scalable AI 
             type: 'output',
             text: `Core Skill Sets:
   • Programming Languages    - Python, JavaScript, TypeScript, C++
-  • Frontend Development     - React, Next.js, HTML5/CSS3, Framer Motion
+  • Frontend Development     - React, CSS, HTML5/CSS3, Framer Motion
   • Backend & Systems        - Node.js, Django, Flask, Express
-  • Databases & Cloud        - MongoDB, Firebase, Docker, GCP`
+  • Databases & Cloud        - Supabase, Firebase, Docker, GCP`
           });
           break;
 

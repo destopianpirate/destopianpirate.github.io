@@ -520,9 +520,11 @@ a {
   bottom: -2rem;
 }
 
-/* Custom sizing and alignment for AssignmentAI and Compressor watermark background logos */
+/* Custom sizing and alignment for AssignmentAI, Compressor, QS, and FamShield watermark background logos */
 .project-bg-icon.assignmentai-bg-icon,
-.project-bg-icon.compressor-bg-icon {
+.project-bg-icon.compressor-bg-icon,
+.project-bg-icon.qs-bg-icon,
+.project-bg-icon.famshield-bg-icon {
   width: 195px;
   height: 195px;
   right: -0.25rem;
@@ -596,7 +598,9 @@ a {
   }
 
   .project-bg-icon.assignmentai-bg-icon,
-  .project-bg-icon.compressor-bg-icon {
+  .project-bg-icon.compressor-bg-icon,
+  .project-bg-icon.qs-bg-icon,
+  .project-bg-icon.famshield-bg-icon {
     width: 135px;
     height: 135px;
     right: -0.25rem;
@@ -861,6 +865,12 @@ a {
   padding: 2.5rem;
   box-shadow: var(--glass-glow);
   will-change: transform, opacity;
+}
+
+.skills-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
 }
 
 .skills-category-title {

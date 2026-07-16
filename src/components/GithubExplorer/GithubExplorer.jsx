@@ -28,11 +28,13 @@ export default function GithubExplorer() {
         if (active) {
           setLoading(false);
           setRepos([
+            { name: 'QS-IITGN', description: 'The official interactive Web platform for Quizzing Society of IIT Gandhinagar built with GSAP scroll animation systems.', html_url: 'https://github.com/destopianpirate/qs_iitgn', language: 'JavaScript', stargazers_count: 5, forks_count: 0 },
             { name: 'AcadX', description: 'Academic planner and student workspace featuring calendar schedules and Gemini AI companion.', html_url: 'https://github.com/destopianpirate', language: 'JavaScript', stargazers_count: 5, forks_count: 1 },
             { name: 'AssignmentAI', description: 'Deep learning homework helper utilizing document vision OCR models and PDF compiler.', html_url: 'https://github.com/destopianpirate', language: 'JavaScript', stargazers_count: 4, forks_count: 0 },
-            { name: 'IoT-Dashboard', description: 'Low-latency edge sensor network dashboard mapping telemetry curves via MQTT broker.', html_url: 'https://github.com/destopianpirate', language: 'JavaScript', stargazers_count: 3, forks_count: 1 },
             { name: 'RoadGuard-AI', description: 'Real-time road cracking detect system utilizing YOLOv8 and Google Maps GPS coordinates.', html_url: 'https://github.com/destopianpirate', language: 'Python', stargazers_count: 6, forks_count: 2 },
-            { name: 'ZeroGPTi', description: 'NLP linguistic checker assessing sentence grammar structures and machine probability rates.', html_url: 'https://github.com/destopianpirate', language: 'Python', stargazers_count: 2, forks_count: 0 }
+            { name: 'FamShield', description: 'Mobile parental safety tracker and remote device telemetry app built with React Native and Expo.', html_url: 'https://github.com/destopianpirate/famapp', language: 'TypeScript', stargazers_count: 3, forks_count: 0 },
+            { name: 'ZeroGPTi', description: 'NLP linguistic checker assessing sentence grammar structures and machine probability rates.', html_url: 'https://github.com/destopianpirate', language: 'Python', stargazers_count: 2, forks_count: 0 },
+            { name: 'IoT-Dashboard', description: 'Low-latency edge sensor network dashboard mapping telemetry curves via MQTT broker.', html_url: 'https://github.com/destopianpirate', language: 'JavaScript', stargazers_count: 3, forks_count: 1 }
           ]);
         }
       });

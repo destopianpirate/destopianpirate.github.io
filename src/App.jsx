@@ -39,8 +39,25 @@ import logoLight from './assets/logo_light.png'
 import logoZeroGpt from './assets/logo-zerogpt.png'
 import logoAssignmentAI from './assets/assignmentai.svg'
 import logoCompressor from './assets/compressor-logo.svg'
+import logoQs from './assets/qs_logo.png'
+import logoFamShield from './assets/famshield_logo.png'
 
 const projects = [
+  {
+    title: "QS IITGN",
+    stack: ["HTML/CSS", "JavaScript", "GSAP"],
+    desc: "The official interactive web platform for the Quizzing Society of IIT Gandhinagar. Designed to host daily trivia challenges, manage society events, and catalog campus quiz archives.",
+    features: [
+      "Interactive Daily Challenge trivia engine with animated countdowns",
+      "On This Day historical timeline dynamically generated from local JSON databases",
+      "Cinematic GSAP entrance choreographies and scroll-triggered transitions",
+      "Context-aware interactive mascot (Quizby) providing dynamic trivia feedback",
+      "Progressive Web App (PWA) configurations with offline assets caching"
+    ],
+    liveUrl: "https://destopianpirate.github.io/qs_iitgn/",
+    logo: <img src={logoQs} alt="QS IITGN Logo" />,
+    hasImageLogo: true
+  },
   {
     title: "AcadX (student_portal)",
     stack: ["React", "Vite", "Framer Motion", "Custom CSS"],
@@ -71,38 +88,6 @@ const projects = [
     hasImageLogo: true
   },
   {
-    title: "IoT Dashboard",
-    stack: ["React", "Vite", "Tailwind CSS", "WebSockets/MQTT", "Chart.js"],
-    desc: "A professional real-time telemetry dashboard designed for large-scale sensor network configuration and graphical event log visualization.",
-    features: [
-      "Real-time sensor telemetry streaming over WebSockets & MQTT",
-      "Highly interactive widgets (dials, live line graphs, grid status controls)",
-      "Automated system alerts and threshold breach logs",
-      "Comprehensive device connection logs & diagnostic telemetry"
-    ],
-    logo: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-        <line x1="9" y1="21" x2="9" y2="9" />
-        <line x1="3" y1="9" x2="21" y2="9" />
-        <path d="M14 13h3m-3 3h4" />
-      </svg>
-    )
-  },
-  {
-    title: "ZeroGPTi",
-    stack: ["React", "Vite", "NLP APIs", "Vanilla CSS"],
-    desc: "An advanced content analysis system built to inspect, identify, and report machine-generated or paraphrased text.",
-    features: [
-      "Proprietary grading scales for AI-generated sentence structures",
-      "Deep natural language pattern analysis logs",
-      "Interactive highlighter showing AI vs human written paragraphs"
-    ],
-    liveUrl: "https://zerogpti.vercel.app",
-    logo: <img src={logoZeroGpt} alt="ZeroGPTi Logo" />,
-    hasImageLogo: true
-  },
-  {
     title: "RoadGuard AI",
     stack: ["YOLOv8", "Python", "Google Maps API", "GPS"],
     desc: "An Edge AI traffic safety application deploying real-time computer vision models to detect and report road infrastructure defects.",
@@ -124,6 +109,52 @@ const projects = [
     )
   },
   {
+    title: "FamShield",
+    stack: ["React Native", "Expo", "Firebase", "TypeScript"],
+    desc: "A cross-platform mobile application designed for real-time family safety, device telemetry tracking, and remote parent administration. Built with a Firebase backend, it coordinates real-time location mapping and remote command executions.",
+    features: [
+      "Real-time location tracking and geo-fencing overlays powered by React Native Maps",
+      "Comprehensive device telemetry reporting including battery level, volume, and connection states",
+      "Low-latency remote command listener execution system utilizing Firebase Firestore",
+      "Custom native power management modules and overlay integration via Expo modules",
+      "Secure client-side pairing system separating parent dashboards from child terminals"
+    ],
+    logo: <img src={logoFamShield} alt="FamShield Logo" />,
+    hasImageLogo: true
+  },
+  {
+    title: "ZeroGPTi",
+    stack: ["React", "Vite", "NLP APIs", "Vanilla CSS"],
+    desc: "An advanced content analysis system built to inspect, identify, and report machine-generated or paraphrased text.",
+    features: [
+      "Proprietary grading scales for AI-generated sentence structures",
+      "Deep natural language pattern analysis logs",
+      "Interactive highlighter showing AI vs human written paragraphs"
+    ],
+    liveUrl: "https://zerogpti.vercel.app",
+    logo: <img src={logoZeroGpt} alt="ZeroGPTi Logo" />,
+    hasImageLogo: true
+  },
+  {
+    title: "IoT Dashboard",
+    stack: ["React", "Vite", "Tailwind CSS", "WebSockets/MQTT", "Chart.js"],
+    desc: "A professional real-time telemetry dashboard designed for large-scale sensor network configuration and graphical event log visualization.",
+    features: [
+      "Real-time sensor telemetry streaming over WebSockets & MQTT",
+      "Highly interactive widgets (dials, live line graphs, grid status controls)",
+      "Automated system alerts and threshold breach logs",
+      "Comprehensive device connection logs & diagnostic telemetry"
+    ],
+    logo: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+        <line x1="9" y1="21" x2="9" y2="9" />
+        <line x1="3" y1="9" x2="21" y2="9" />
+        <path d="M14 13h3m-3 3h4" />
+      </svg>
+    )
+  },
+  {
     title: "ImagePress - Image Compressor",
     stack: ["Python", "Flask", "Pillow", "HTML/CSS"],
     desc: "A lightning-fast web service that handles media optimization, file size compression, and instant conversion between next-gen image formats.",
@@ -135,22 +166,6 @@ const projects = [
     liveUrl: "https://imagepresss.vercel.app",
     logo: <img src={logoCompressor} alt="ImagePress Logo" />,
     hasImageLogo: true
-  },
-  {
-    title: "IITGN.AI",
-    stack: ["Python", "Jupyter Notebooks", "PyTorch"],
-    desc: "My academic research repository housing code, model training checkpoints, and deep learning notebooks written during courses at IIT Gandhinagar.",
-    features: [
-      "Machine learning models & dataset pipelines",
-      "Neural network research scripts developed under NewEra.ai",
-      "University coursework notebooks covering advanced algorithms"
-    ],
-    logo: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <path d="M9 17V7l7 10V7" />
-      </svg>
-    )
   }
 ];
 
@@ -170,7 +185,7 @@ const skillsData = [
     icon: <Code />,
     items: [
       { name: "React (Hooks & Context)", level: "92%", logoUrl: "https://cdn.simpleicons.org/react/61DAFB" },
-      { name: "Next.js (App Router)", level: "85%", logoUrl: "https://cdn.simpleicons.org/nextdotjs/000000" },
+      { name: "CSS (Vanilla & Flex/Grid)", level: "95%", logoUrl: "https://cdn.simpleicons.org/css3/1572B6" },
       { name: "HTML5 / CSS3 (Aesthetics)", level: "95%", logoUrl: "https://cdn.simpleicons.org/html5/E34F26" },
       { name: "Framer Motion", level: "88%", logoUrl: "https://cdn.simpleicons.org/framer/0055FF" }
     ]
@@ -189,21 +204,8 @@ const skillsData = [
     category: "Databases & Storage",
     icon: <Database />,
     items: [
-      { name: "MongoDB (NoSQL Document)", level: "86%", logoUrl: "https://cdn.simpleicons.org/mongodb/47A248" },
+      { name: "Supabase (PostgreSQL & Auth)", level: "86%", logoUrl: "https://cdn.simpleicons.org/supabase/3ECF8E" },
       { name: "Firebase (Realtime DB & Auth)", level: "85%", logoUrl: "https://cdn.simpleicons.org/firebase/FFCA28" }
-    ]
-  },
-  {
-    category: "DevOps & Cloud Integration",
-    icon: <Globe />,
-    items: [
-      { name: "Docker Containerization", level: "82%", logoUrl: "https://cdn.simpleicons.org/docker/2496ED" },
-      { name: "Google Cloud Platform", level: "78%", logoUrl: "https://cdn.simpleicons.org/googlecloud/4285F4" },
-      { name: "GitHub Version Control", level: "92%", logoUrl: "https://cdn.simpleicons.org/github/000000" },
-      { name: "Vercel Hostings", level: "90%", logoUrl: "https://cdn.simpleicons.org/vercel/000000" },
-      { name: "Render Hostings", level: "80%", logoUrl: "https://cdn.simpleicons.org/render/000000" },
-      { name: "Netlify Cloud", level: "82%", logoUrl: "https://cdn.simpleicons.org/netlify/00AD9F" },
-      { name: "n8n Automation", level: "85%", logoUrl: "https://cdn.simpleicons.org/n8n/FF6C37" }
     ]
   },
   {
@@ -218,6 +220,19 @@ const skillsData = [
       { name: "NLP APIs", level: "85%", logoUrl: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg?color=000000" },
       { name: "Computer Vision (OpenCV)", level: "82%", logoUrl: "https://cdn.simpleicons.org/opencv/5C3EE8" },
       { name: "Model Quantization & Inference", level: "80%", logoUrl: "https://cdn.simpleicons.org/onnx/00529B" }
+    ]
+  },
+  {
+    category: "DevOps & Cloud Integration",
+    icon: <Globe />,
+    items: [
+      { name: "Docker Containerization", level: "82%", logoUrl: "https://cdn.simpleicons.org/docker/2496ED" },
+      { name: "Google Cloud Platform", level: "78%", logoUrl: "https://cdn.simpleicons.org/googlecloud/4285F4" },
+      { name: "GitHub Version Control", level: "92%", logoUrl: "https://cdn.simpleicons.org/github/000000" },
+      { name: "Vercel Hostings", level: "90%", logoUrl: "https://cdn.simpleicons.org/vercel/000000" },
+      { name: "Render Hostings", level: "80%", logoUrl: "https://cdn.simpleicons.org/render/000000" },
+      { name: "Netlify Cloud", level: "82%", logoUrl: "https://cdn.simpleicons.org/netlify/00AD9F" },
+      { name: "n8n Automation", level: "85%", logoUrl: "https://cdn.simpleicons.org/n8n/FF6C37" }
     ]
   }
 ];
@@ -284,11 +299,16 @@ const techLogos = {
   "NLP APIs": "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg?color=000000",
   "YOLOv8": "https://cdn.simpleicons.org/pytorch/EE4C2C",
   "Google Maps API": "https://cdn.simpleicons.org/googlemaps/4285F4",
-  "GPS": "https://cdn.simpleicons.org/googleearth/1A73E8",
+  "GPS": "https://cdn.google.com/search?q=gps",
   "Flask": "https://cdn.simpleicons.org/flask/000000",
   "Pillow": "https://cdn.simpleicons.org/python/3776AB",
   "Jupyter Notebooks": "https://cdn.simpleicons.org/jupyter/F37626",
   "PyTorch": "https://cdn.simpleicons.org/pytorch/EE4C2C",
+  "GSAP": "https://cdn.simpleicons.org/greensock/88CE02",
+  "React Native": "https://cdn.simpleicons.org/react/61DAFB",
+  "Expo": "https://cdn.simpleicons.org/expo/000020",
+  "TypeScript": "https://cdn.simpleicons.org/typescript/3178C6",
+  "Firebase": "https://cdn.simpleicons.org/firebase/FFCA28",
 };
 
 function isDarkLogo(url) {
@@ -318,7 +338,8 @@ const projectRadarFocus = {
   "ZeroGPTi": { "AI / ML": 90, "Frontend": 70, "Backend": 60, "Databases": 30, "DevOps": 40, "Systems": 65 },
   "RoadGuard AI": { "AI / ML": 95, "Frontend": 40, "Backend": 75, "Databases": 50, "DevOps": 60, "Systems": 90 },
   "ImagePress - Image Compressor": { "AI / ML": 20, "Frontend": 70, "Backend": 90, "Databases": 40, "DevOps": 70, "Systems": 80 },
-  "IITGN.AI": { "AI / ML": 95, "Frontend": 20, "Backend": 50, "Databases": 30, "DevOps": 40, "Systems": 85 }
+  "QS IITGN": { "AI / ML": 10, "Frontend": 95, "Backend": 40, "Databases": 30, "DevOps": 50, "Systems": 40 },
+  "FamShield": { "AI / ML": 20, "Frontend": 80, "Backend": 85, "Databases": 75, "DevOps": 60, "Systems": 90 }
 };
 
 const radarAxes = [
@@ -618,7 +639,7 @@ function App() {
               <div className="projects-grid">
                 {projects.map((project, i) => (
                   <div className="project-card" key={i}>
-                    <div className={`project-bg-icon ${project.hasImageLogo ? 'image-watermark' : ''} ${project.title.includes('AcadX') ? 'acadx-bg-icon' : ''} ${project.title.includes('AssignmentAI') ? 'assignmentai-bg-icon' : ''} ${project.title.includes('ImagePress') || project.title.includes('Compressor') ? 'compressor-bg-icon' : ''}`}>
+                    <div className={`project-bg-icon ${project.hasImageLogo ? 'image-watermark' : ''} ${project.title.includes('AcadX') ? 'acadx-bg-icon' : ''} ${project.title.includes('AssignmentAI') ? 'assignmentai-bg-icon' : ''} ${project.title.includes('ImagePress') || project.title.includes('Compressor') ? 'compressor-bg-icon' : ''} ${project.title.includes('QS IITGN') ? 'qs-bg-icon' : ''} ${project.title.includes('FamShield') ? 'famshield-bg-icon' : ''}`}>
                       {project.logo}
                     </div>
                     <div className="project-header">
@@ -626,7 +647,7 @@ function App() {
                         {project.logo}
                       </div>
                       <div className="project-badges-wrapper">
-                        {(project.title.includes('AcadX') || project.title.includes('Image Compressor') || project.title.includes('ImagePress')) && (
+                        {(project.title.includes('AcadX') || project.title.includes('Image Compressor') || project.title.includes('ImagePress') || project.title.includes('QS') || project.title.includes('FamShield')) && (
                           <span className="featured-badge">Featured</span>
                         )}
                         <div className="project-links">
@@ -713,31 +734,61 @@ function App() {
 
 
               <div className="skills-tab-layout" style={{ marginTop: '3.5rem' }}>
-                {skillsData.map((category, i) => (
-                  <div className="skills-card" key={i}>
-                    <h3 className="skills-category-title">
-                      <span className="skill-icon-placeholder">{category.icon}</span>
-                      {category.category}
-                    </h3>
-                    <div className="skills-list-wrapper">
-                      {category.items.map((item, idx) => (
-                        <div className="skill-row" key={idx}>
-                          <div className="skill-info">
-                            {item.logoUrl ? (
-                              <img src={item.logoUrl} alt={item.name} style={{ width: 24, height: 24, filter: theme === 'dark' && isDarkLogo(item.logoUrl) ? 'invert(1)' : 'none' }} />
-                            ) : (
-                              <div style={{ width: 24, height: 24, background: 'rgba(255,255,255,0.04)', borderRadius: '4px' }}></div>
-                            )}
-                            <span className="skill-name">{item.name}</span>
+                <div className="skills-column">
+                  {skillsData.slice(0, 4).map((category, i) => (
+                    <div className={`skills-card ${category.category.includes('Databases') ? 'databases-storage-card' : ''}`} key={category.category}>
+                      <h3 className="skills-category-title">
+                        <span className="skill-icon-placeholder">{category.icon}</span>
+                        {category.category}
+                      </h3>
+                      <div className="skills-list-wrapper">
+                        {category.items.map((item, idx) => (
+                          <div className="skill-row" key={idx}>
+                            <div className="skill-info">
+                              {item.logoUrl ? (
+                                <img src={item.logoUrl} alt={item.name} style={{ width: 24, height: 24, filter: theme === 'dark' && isDarkLogo(item.logoUrl) ? 'invert(1)' : 'none' }} />
+                              ) : (
+                                <div style={{ width: 24, height: 24, background: 'rgba(255,255,255,0.04)', borderRadius: '4px' }}></div>
+                              )}
+                              <span className="skill-name">{item.name}</span>
+                            </div>
+                            <div className="skill-bar-bg" title={`${item.name} proficiency level: ${item.level}`}>
+                              <div className="skill-bar-fill" style={{ width: item.level }}></div>
+                            </div>
                           </div>
-                          <div className="skill-bar-bg" title={`${item.name} proficiency level: ${item.level}`}>
-                            <div className="skill-bar-fill" style={{ width: item.level }}></div>
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
+                <div className="skills-column">
+                  {skillsData.slice(4, 6).map((category, i) => (
+                    <div className="skills-card" key={category.category}>
+                      <h3 className="skills-category-title">
+                        <span className="skill-icon-placeholder">{category.icon}</span>
+                        {category.category}
+                      </h3>
+                      <div className="skills-list-wrapper">
+                        {category.items.map((item, idx) => (
+                          <div className="skill-row" key={idx}>
+                            <div className="skill-info">
+                              {item.logoUrl ? (
+                                <img src={item.logoUrl} alt={item.name} style={{ width: 24, height: 24, filter: theme === 'dark' && isDarkLogo(item.logoUrl) ? 'invert(1)' : 'none' }} />
+                              ) : (
+                                <div style={{ width: 24, height: 24, background: 'rgba(255,255,255,0.04)', borderRadius: '4px' }}></div>
+                              )}
+                              <span className="skill-name">{item.name}</span>
+                            </div>
+                            <div className="skill-bar-bg" title={`${item.name} proficiency level: ${item.level}`}>
+                              <div className="skill-bar-fill" style={{ width: item.level }}></div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </motion.div>
           )}
