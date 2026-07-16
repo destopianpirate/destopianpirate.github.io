@@ -268,7 +268,9 @@ a {
 @media (max-width: 768px) {
   .header-wrapper {
     position: fixed !important;
-    border-bottom: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    background: var(--bg-color) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   }
 
   .container {
@@ -1196,11 +1198,13 @@ footer {
   /* Keep header fixed on mobile for a premium, accessible feel */
   .header-wrapper {
     position: fixed !important;
-    border-bottom: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    background: var(--bg-color) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   }
 
   .header-grid-pattern {
-    top: 110px;
+    top: 120px !important;
   }
 
   /* Hide cyberpunk sound toggle on mobile */
