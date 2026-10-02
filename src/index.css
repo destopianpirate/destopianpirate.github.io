@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
 :root {
   --bg-color: #030303;
   --text-color: #f5f5f7;
@@ -9,6 +11,7 @@
   --border-hover: rgba(255, 255, 255, 0.2);
   --header-bg: rgba(3, 3, 3, 0.7);
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   --neo-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8), -4px -4px 10px rgba(255, 255, 255, 0.05);
   --neo-button-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8), -2px -2px 5px rgba(255, 255, 255, 0.05);
@@ -219,6 +222,7 @@ a {
 }
 
 .header-title {
+  font-family: var(--font-heading);
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -242,12 +246,13 @@ a {
 }
 
 .tab-button {
+  font-family: var(--font-heading);
   background: transparent;
   border: none;
   color: var(--text-secondary);
   padding: 0.5rem 1.25rem;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   border-radius: 20px;
   cursor: pointer;
   position: relative;
@@ -523,11 +528,14 @@ a {
   bottom: -2rem;
 }
 
-/* Custom sizing and alignment for AssignmentAI, Compressor, QS, and FamShield watermark background logos */
+/* Custom sizing and alignment for AssignmentAI, Compressor, QS, FamShield, CloudForge, and Octrops watermark background logos */
 .project-bg-icon.assignmentai-bg-icon,
 .project-bg-icon.compressor-bg-icon,
 .project-bg-icon.qs-bg-icon,
-.project-bg-icon.famshield-bg-icon {
+.project-bg-icon.famshield-bg-icon,
+.project-bg-icon.cloudforge-bg-icon,
+.project-bg-icon.octrops-bg-icon,
+.project-bg-icon.manthan-bg-icon {
   width: 195px;
   height: 195px;
   right: -0.25rem;
@@ -603,7 +611,10 @@ a {
   .project-bg-icon.assignmentai-bg-icon,
   .project-bg-icon.compressor-bg-icon,
   .project-bg-icon.qs-bg-icon,
-  .project-bg-icon.famshield-bg-icon {
+  .project-bg-icon.famshield-bg-icon,
+  .project-bg-icon.cloudforge-bg-icon,
+  .project-bg-icon.octrops-bg-icon,
+  .project-bg-icon.manthan-bg-icon {
     width: 135px;
     height: 135px;
     right: -0.25rem;

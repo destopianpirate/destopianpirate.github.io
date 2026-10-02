@@ -1,0 +1,207 @@
+/* Full-Screen Page Loader Overlay */
+.page-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.page-loader-overlay.is-fading {
+  pointer-events: none;
+}
+
+/* Backdrop layer that smoothly fades to transparent */
+.loader-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+
+.loader-backdrop.backdrop-faded {
+  opacity: 0;
+}
+
+/* Light Mode: White background & pure black text */
+.page-loader-overlay.theme-light .loader-backdrop {
+  background-color: #ffffff;
+}
+
+.page-loader-overlay.theme-light .loader-name-text {
+  color: #000000;
+}
+
+.page-loader-overlay.theme-light .loader-avatar-img {
+  border: 1.5px solid #000000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.page-loader-overlay.theme-light .loader-tag-text {
+  color: #555555;
+}
+
+/* Dark Mode: Black background & pure white text */
+.page-loader-overlay.theme-dark .loader-backdrop {
+  background-color: #030303;
+}
+
+.page-loader-overlay.theme-dark .loader-name-text {
+  color: #ffffff;
+}
+
+.page-loader-overlay.theme-dark .loader-avatar-img {
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
+}
+
+.page-loader-overlay.theme-dark .loader-tag-text {
+  color: #86868b;
+}
+
+/* Center Stage */
+.loader-center-stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* 
+   Brand Cluster:
+   Base dimensions are 100% IDENTICAL to .header-brand in the top navbar:
+   - Avatar: 38px
+   - Gap: 0.75rem
+   - Title: 1.15rem, weight 700
+   - Tag: 0.9rem, weight 400
+   In the center stage, it starts scaled up (scale(2.4)), and smoothly scales down to scale(1.0)
+   when it reaches the top navbar so the size matches with 100% pixel precision!
+*/
+.loader-brand-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transform-origin: center center;
+  transform: scale(2.4);
+  will-change: transform;
+}
+
+/* Slide from Left: Avatar Box */
+.loader-avatar-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  will-change: transform, opacity, max-width, margin;
+  transition: max-width 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              margin 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.loader-avatar-box.avatar-out {
+  max-width: 0;
+  opacity: 0;
+  transform: translateX(-35px) scale(0.7);
+  margin-right: -0.75rem;
+  pointer-events: none;
+}
+
+.loader-avatar-box.avatar-in {
+  max-width: 48px;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  margin-right: 0;
+}
+
+.loader-avatar-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Title Box (Name + Tag) */
+.loader-title-box {
+  display: flex;
+  align-items: baseline;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.loader-name-text {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.loader-word {
+  display: inline-block;
+  min-width: 1ch;
+  transition: transform 0.05s ease-out;
+}
+
+.loader-word-ayush {
+  text-align: right;
+}
+
+.loader-word-singh {
+  text-align: left;
+}
+
+.loader-spacer {
+  display: inline-block;
+}
+
+/* Slide from Right: Tag Box ('at IITGN') */
+.loader-tag-box {
+  display: inline-flex;
+  align-items: baseline;
+  overflow: hidden;
+  will-change: transform, opacity, max-width;
+  transition: max-width 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.loader-tag-box.tag-out {
+  max-width: 0;
+  opacity: 0;
+  transform: translateX(35px);
+  pointer-events: none;
+}
+
+.loader-tag-box.tag-in {
+  max-width: 100px;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.loader-tag-text {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .loader-brand-cluster {
+    transform: scale(1.75);
+    gap: 0.75rem;
+  }
+}

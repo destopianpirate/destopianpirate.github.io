@@ -28,8 +28,11 @@ export default function GithubExplorer() {
         if (active) {
           setLoading(false);
           setRepos([
-            { name: 'QS-IITGN', description: 'The official interactive Web platform for Quizzing Society of IIT Gandhinagar built with GSAP scroll animation systems.', html_url: 'https://github.com/destopianpirate/qs_iitgn', language: 'JavaScript', stargazers_count: 5, forks_count: 0 },
+            { name: 'OctropsCode', description: 'Serverless AI coding assistant and IDE extension connecting to 17+ LLM providers with zero telemetry.', html_url: 'https://github.com/destopianpirate/destopian-octrops', language: 'TypeScript', stargazers_count: 7, forks_count: 1 },
             { name: 'AcadX', description: 'Academic planner and student workspace featuring calendar schedules and Gemini AI companion.', html_url: 'https://github.com/destopianpirate', language: 'JavaScript', stargazers_count: 5, forks_count: 1 },
+            { name: 'QS-IITGN', description: 'The official interactive Web platform for Quizzing Society of IIT Gandhinagar built with GSAP scroll animation systems.', html_url: 'https://github.com/destopianpirate/qs_iitgn', language: 'JavaScript', stargazers_count: 5, forks_count: 0 },
+            { name: 'CloudForge', description: 'Backend-as-a-Service providing unlimited MTProto cloud storage, SQLite hibernation, and FastAPI telemetry.', html_url: 'https://github.com/destopianpirate', language: 'Python', stargazers_count: 4, forks_count: 0 },
+            { name: 'Manthan-SCIF', description: 'Societal Innovation Collaboration Platform (SIH Problem Statement 43) connecting grassroots challenges, R&D labs, and CSR funding.', html_url: 'https://github.com/destopianpirate/scif_b', language: 'TypeScript', stargazers_count: 6, forks_count: 1 },
             { name: 'AssignmentAI', description: 'Deep learning homework helper utilizing document vision OCR models and PDF compiler.', html_url: 'https://github.com/destopianpirate', language: 'JavaScript', stargazers_count: 4, forks_count: 0 },
             { name: 'RoadGuard-AI', description: 'Real-time road cracking detect system utilizing YOLOv8 and Google Maps GPS coordinates.', html_url: 'https://github.com/destopianpirate', language: 'Python', stargazers_count: 6, forks_count: 2 },
             { name: 'FamShield', description: 'Mobile parental safety tracker and remote device telemetry app built with React Native and Expo.', html_url: 'https://github.com/destopianpirate/famapp', language: 'TypeScript', stargazers_count: 3, forks_count: 0 },

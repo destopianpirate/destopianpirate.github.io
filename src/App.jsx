@@ -27,6 +27,7 @@ import {
 import profilePic from './assets/profile.png'
 import LightRays from './components/LightRays/LightRays'
 import PillNav from './components/PillNav/PillNav'
+import PageLoader from './components/PageLoader/PageLoader'
 import { RadarChart, TechStackConfigurator } from './components/RadarChart/RadarChart';
 import AISandbox from './components/AISandbox/AISandbox';
 import IoTSimulator from './components/IoTSimulator/IoTSimulator';
@@ -35,27 +36,32 @@ import GithubExplorer from './components/GithubExplorer/GithubExplorer';
 import OscilloscopeDivider from './components/OscilloscopeDivider/OscilloscopeDivider';
 import AttentionText from './components/AttentionText/AttentionText';
 import BounceCards from './components/BounceCards/BounceCards';
+import Skiper34 from './components/StickyProjects/StickyProjects';
 import logoLight from './assets/logo_light.png'
 import logoZeroGpt from './assets/logo-zerogpt.png'
 import logoAssignmentAI from './assets/assignmentai.svg'
 import logoCompressor from './assets/compressor-logo.svg'
 import logoQs from './assets/qs_logo.png'
 import logoFamShield from './assets/famshield_logo.png'
+import logoCloudforge from './assets/cloudforge_logo.png'
+import logoOctrops from './assets/octrops_logo.png'
+import logoManthan from './assets/manthan_logo.png'
 
 const projects = [
   {
-    title: "QS IITGN",
-    stack: ["HTML/CSS", "JavaScript", "GSAP"],
-    desc: "The official interactive web platform for the Quizzing Society of IIT Gandhinagar. Designed to host daily trivia challenges, manage society events, and catalog campus quiz archives.",
+    title: "Octrops Code",
+    stack: ["TypeScript", "VS Code API", "Gemini AI", "Node.js", "AI APIs"],
+    desc: "A serverless AI coding assistant and developer extension for VS Code and Antigravity IDE. Connects directly to 17+ LLM providers with zero telemetry, multi-file codebase indexing, interactive code explanations, and privacy-first local API routing.",
     features: [
-      "Interactive Daily Challenge trivia engine with animated countdowns",
-      "On This Day historical timeline dynamically generated from local JSON databases",
-      "Cinematic GSAP entrance choreographies and scroll-triggered transitions",
-      "Context-aware interactive mascot (Quizby) providing dynamic trivia feedback",
-      "Progressive Web App (PWA) configurations with offline assets caching"
+      "Multi-provider LLM gateway supporting Gemini 2.0, Groq, OpenRouter, and NVIDIA NIM",
+      "Privacy-first architecture running locally with zero intermediary telemetry or data retention",
+      "Context-aware codebase indexing and semantic search for multi-file code generation",
+      "Interactive sidebar chat, inline code refactoring, and automated diff previewer",
+      "Custom API Extender gateway with automatic rate-limit cooldowns and multi-key fallback"
     ],
-    liveUrl: "https://destopianpirate.github.io/qs_iitgn/",
-    logo: <img src={logoQs} alt="QS IITGN Logo" />,
+    liveUrl: "https://octrops.vercel.app",
+    repoUrl: "https://github.com/destopianpirate/destopian-octrops",
+    logo: <img src={logoOctrops} alt="Octrops Code Logo" />,
     hasImageLogo: true
   },
   {
@@ -70,7 +76,56 @@ const projects = [
       "Integrated Gemini AI study companion for personalized learning support"
     ],
     liveUrl: "https://stuiit.vercel.app",
+    repoUrl: "https://github.com/destopianpirate",
     logo: <img src={logoLight} alt="AcadX Logo" />,
+    hasImageLogo: true
+  },
+  {
+    title: "QS IITGN",
+    stack: ["HTML/CSS", "JavaScript", "GSAP"],
+    desc: "The official interactive web platform for the Quizzing Society of IIT Gandhinagar. Designed to host daily trivia challenges, manage society events, and catalog campus quiz archives.",
+    features: [
+      "Interactive Daily Challenge trivia engine with animated countdowns",
+      "On This Day historical timeline dynamically generated from local JSON databases",
+      "Cinematic GSAP entrance choreographies and scroll-triggered transitions",
+      "Context-aware interactive mascot (Quizby) providing dynamic trivia feedback",
+      "Progressive Web App (PWA) configurations with offline assets caching"
+    ],
+    liveUrl: "https://destopianpirate.github.io/qs_iitgn/",
+    repoUrl: "https://github.com/destopianpirate/qs_iitgn",
+    logo: <img src={logoQs} alt="QS IITGN Logo" />,
+    hasImageLogo: true
+  },
+  {
+    title: "CloudForge",
+    stack: ["Python", "FastAPI", "Docker", "Rust", "React", "SQLite"],
+    desc: "A high-performance Backend-as-a-Service (BaaS) and cloud infrastructure platform designed for zero-cost unlimited storage and serverless databases. Features a custom Rust MTProto storage bridge, dynamic SQLite database hibernation, and an intuitive developer dashboard.",
+    features: [
+      "Custom Rust storage daemon (CFDrive) bridging HTTP requests to encrypted cloud channels",
+      "Serverless SQLite database engine with intelligent auto-hibernation and instant warm-up",
+      "Full-featured developer dashboard with real-time API metrics, keys, and bucket management",
+      "Multi-tenant authentication system with fine-grained RBAC and rate-limiting middleware",
+      "Containerized deployment architecture orchestrated via Docker Compose and microservices"
+    ],
+    liveUrl: "https://cloudforge-frontend-psi.vercel.app",
+    repoUrl: "https://github.com/destopianpirate",
+    logo: <img src={logoCloudforge} alt="CloudForge Logo" />,
+    hasImageLogo: true
+  },
+  {
+    title: "Manthan (SCIF)",
+    stack: ["Next.js", "React", "Tailwind CSS", "Supabase", "TypeScript"],
+    desc: "A state-scale Societal Innovation Collaboration Platform (SICP) engineered for Smart India Hackathon (Problem Statement 43). Crowdsources grassroots societal challenges, automates AI-driven triage, matches university R&D research labs, and accelerates corporate CSR sponsorships.",
+    features: [
+      "State-scale grassroots problem crowdsourcing engine with AI-assisted categorization",
+      "Automated R&D laboratory matching algorithm pairing researchers with community challenges",
+      "Corporate CSR sponsorship acceleration portal with transparent fund milestone tracking",
+      "Multi-tenant Supabase PostgreSQL architecture with connection pooling and RBAC security",
+      "High-performance Next.js 16 App Router interface built with Tailwind CSS v4 and responsive telemetry"
+    ],
+    liveUrl: "https://github.com/destopianpirate/scif_b",
+    repoUrl: "https://github.com/destopianpirate/scif_b",
+    logo: <img src={logoManthan} alt="Manthan Logo" />,
     hasImageLogo: true
   },
   {
@@ -168,6 +223,16 @@ const projects = [
     hasImageLogo: true
   }
 ];
+
+const homeFeaturedProjects = [
+  projects.find(p => p.title.includes('Octrops')),
+  projects.find(p => p.title.includes('Manthan')),
+  projects.find(p => p.title.includes('CloudForge')),
+  projects.find(p => p.title.includes('AcadX')),
+  projects.find(p => p.title.includes('QS')),
+  projects.find(p => p.title.includes('AssignmentAI')),
+  projects.find(p => p.title.includes('FamShield')),
+].filter(Boolean);
 
 const skillsData = [
   {
@@ -288,8 +353,8 @@ const techLogos = {
   "React": "https://cdn.simpleicons.org/react/61DAFB",
   "Vite": "https://cdn.simpleicons.org/vite/646CFF",
   "Framer Motion": "https://cdn.simpleicons.org/framer/0055FF",
-  "Custom CSS": "https://cdn.simpleicons.org/css3/1572B6",
-  "Vanilla CSS": "https://cdn.simpleicons.org/css3/1572B6",
+  "Custom CSS": "https://cdn.simpleicons.org/css/1572B6",
+  "Vanilla CSS": "https://cdn.simpleicons.org/css/1572B6",
   "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
   "HTML/CSS": "https://cdn.simpleicons.org/html5/E34F26",
   "Gemini AI": "https://cdn.simpleicons.org/google/4285F4",
@@ -299,7 +364,7 @@ const techLogos = {
   "NLP APIs": "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg?color=000000",
   "YOLOv8": "https://cdn.simpleicons.org/pytorch/EE4C2C",
   "Google Maps API": "https://cdn.simpleicons.org/googlemaps/4285F4",
-  "GPS": "https://cdn.google.com/search?q=gps",
+  "GPS": "https://cdn.simpleicons.org/openstreetmap/7EBC6F",
   "Flask": "https://cdn.simpleicons.org/flask/000000",
   "Pillow": "https://cdn.simpleicons.org/python/3776AB",
   "Jupyter Notebooks": "https://cdn.simpleicons.org/jupyter/F37626",
@@ -309,6 +374,15 @@ const techLogos = {
   "Expo": "https://cdn.simpleicons.org/expo/000020",
   "TypeScript": "https://cdn.simpleicons.org/typescript/3178C6",
   "Firebase": "https://cdn.simpleicons.org/firebase/FFCA28",
+  "Docker": "https://cdn.simpleicons.org/docker/2496ED",
+  "FastAPI": "https://cdn.simpleicons.org/fastapi/009688",
+  "Rust": "https://cdn.simpleicons.org/rust/000000",
+  "SQLite": "https://cdn.simpleicons.org/sqlite/003B57",
+  "VS Code API": "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/visualstudiocode.svg",
+  "Node.js": "https://cdn.simpleicons.org/nodedotjs/5FA04E",
+  "AI APIs": "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg?color=000000",
+  "Next.js": "https://cdn.simpleicons.org/nextdotjs/000000",
+  "Supabase": "https://cdn.simpleicons.org/supabase/3ECF8E",
 };
 
 function isDarkLogo(url) {
@@ -339,7 +413,10 @@ const projectRadarFocus = {
   "RoadGuard AI": { "AI / ML": 95, "Frontend": 40, "Backend": 75, "Databases": 50, "DevOps": 60, "Systems": 90 },
   "ImagePress - Image Compressor": { "AI / ML": 20, "Frontend": 70, "Backend": 90, "Databases": 40, "DevOps": 70, "Systems": 80 },
   "QS IITGN": { "AI / ML": 10, "Frontend": 95, "Backend": 40, "Databases": 30, "DevOps": 50, "Systems": 40 },
-  "FamShield": { "AI / ML": 20, "Frontend": 80, "Backend": 85, "Databases": 75, "DevOps": 60, "Systems": 90 }
+  "FamShield": { "AI / ML": 20, "Frontend": 80, "Backend": 85, "Databases": 75, "DevOps": 60, "Systems": 90 },
+  "CloudForge": { "AI / ML": 25, "Frontend": 80, "Backend": 95, "Databases": 90, "DevOps": 94, "Systems": 96 },
+  "Manthan (SCIF)": { "AI / ML": 55, "Frontend": 92, "Backend": 88, "Databases": 90, "DevOps": 80, "Systems": 75 },
+  "Octrops Code": { "AI / ML": 96, "Frontend": 88, "Backend": 85, "Databases": 55, "DevOps": 75, "Systems": 92 }
 };
 
 const radarAxes = [
@@ -371,6 +448,8 @@ function App() {
   const [activeTab, setActiveTab] = useState('about');
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved;
       return window.innerWidth > 768 ? 'dark' : 'light';
     }
     return 'light';
@@ -378,9 +457,17 @@ function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [sandboxTab, setSandboxTab] = useState('ai');
   const [terminalOpen, setTerminalOpen] = useState(false);
+  const [loaderActive, setLoaderActive] = useState(true);
+  const [debugPauseAt, setDebugPauseAt] = useState(null);
+  const [loaderKey, setLoaderKey] = useState(0);
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
+    window.restartLoader = (pauseMode = null) => {
+      setDebugPauseAt(pauseMode);
+      setLoaderKey(k => k + 1);
+      setLoaderActive(true);
+    };
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -432,16 +519,28 @@ function App() {
   const toggleTheme = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(nextTheme);
+    try {
+      localStorage.setItem('theme', nextTheme);
+    } catch {}
   };
 
   const tabContentVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] } },
-    exit: { opacity: 0, y: -10, transition: { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] } }
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] } },
+    exit: { opacity: 0, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }
   };
 
   return (
     <div className="app-layout">
+      {loaderActive && (
+        <PageLoader
+          key={loaderKey}
+          theme={theme}
+          profilePic={profilePic}
+          debugPauseAt={debugPauseAt}
+          onComplete={() => setLoaderActive(false)}
+        />
+      )}
       <motion.div className="bg-glow-1" style={{ y: yGlow1 }}></motion.div>
       <motion.div className="bg-glow-2" style={{ y: yGlow2 }}></motion.div>
 
@@ -465,7 +564,14 @@ function App() {
 
       <div className="header-wrapper">
         <header className="header container">
-          <div className="header-brand" onClick={() => setActiveTab('about')} style={{ cursor: 'pointer' }}>
+          <div
+            className="header-brand"
+            onClick={() => setActiveTab('about')}
+            style={{
+              cursor: 'pointer',
+              opacity: loaderActive ? 0 : 1
+            }}
+          >
             <img src={profilePic} alt="Ayush Singh" className="header-avatar" />
             <div className="header-title">
               Ayush Singh <span>at IITGN</span>
@@ -597,7 +703,7 @@ function App() {
               </div>
 
               <BounceCards
-                projects={projects}
+                projects={homeFeaturedProjects}
                 onViewAll={() => {
                   setActiveTab('projects');
                   window.scrollTo({ top: 0, behavior: 'instant' });
@@ -638,79 +744,12 @@ function App() {
                 A selection of web platforms, deep learning applications, and edge telemetry projects built using cutting-edge frameworks.
               </p>
 
-              <div className="projects-grid">
-                {projects.map((project, i) => (
-                  <div className="project-card" key={i}>
-                    <div className={`project-bg-icon ${project.hasImageLogo ? 'image-watermark' : ''} ${project.title.includes('AcadX') ? 'acadx-bg-icon' : ''} ${project.title.includes('AssignmentAI') ? 'assignmentai-bg-icon' : ''} ${project.title.includes('ImagePress') || project.title.includes('Compressor') ? 'compressor-bg-icon' : ''} ${project.title.includes('QS IITGN') ? 'qs-bg-icon' : ''} ${project.title.includes('FamShield') ? 'famshield-bg-icon' : ''}`}>
-                      {project.logo}
-                    </div>
-                    <div className="project-header">
-                      <div className={`project-logo-container ${project.hasImageLogo ? 'white-bg' : ''}`}>
-                        {project.logo}
-                      </div>
-                      <div className="project-badges-wrapper">
-                        {(project.title.includes('AcadX') || project.title.includes('Image Compressor') || project.title.includes('ImagePress') || project.title.includes('QS') || project.title.includes('FamShield')) && (
-                          <span className="featured-badge">Featured</span>
-                        )}
-                        <div className="project-links">
-                          <a
-                            href="https://github.com/destopianpirate"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="project-link-btn"
-                            title="View Repository"
-                          >
-                            <Github size={16} />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-
-                    <h3 className="project-title">{project.title}</h3>
-                    <p className="project-desc">{project.desc}</p>
-
-                    <div className="project-stack">
-                      {project.stack.map((tech) => (
-                        <span className="tech-pill" key={tech} title={tech}>
-                          {techLogos[tech] ? (
-                            <img
-                              src={techLogos[tech]}
-                              alt={tech}
-                              style={{ width: 18, height: 18, filter: theme === 'dark' && isDarkLogo(techLogos[tech]) ? 'invert(1)' : 'none' }}
-                            />
-                          ) : (
-                            tech
-                          )}
-                        </span>
-                      ))}
-                    </div>
-
-                    {project.features.length > 0 && (
-                      <div>
-                        <div className="project-bullet-title">Key Core Features</div>
-                        <ul className="project-bullets">
-                          {project.features.map((feature, idx) => (
-                            <li key={idx}>{feature}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {project.liveUrl && (
-                      <div className="project-visit-btn-wrapper" style={{ marginTop: 'auto', paddingTop: '1.25rem' }}>
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="project-visit-btn"
-                        >
-                          Visit Site
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+              <Skiper34
+                projects={projects}
+                theme={theme}
+                techLogos={techLogos}
+                isDarkLogo={isDarkLogo}
+              />
             </motion.div>
           )}
 

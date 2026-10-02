@@ -1,0 +1,463 @@
+/* Sticky Projects Section Styling (Skiper 34 / StickyCard_003) */
+
+.sticky-projects-section {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 0 35vh 0; /* Smooth scroll space at the bottom for full unstacking */
+}
+
+/* Subtle Scroll Hint from Skiper34 */
+.sticky-scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto 3.5rem auto;
+  text-align: center;
+}
+
+.sticky-hint-text {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  opacity: 0.6;
+  font-weight: 600;
+  display: block;
+}
+
+.sticky-hint-line {
+  width: 1.5px;
+  height: 48px;
+  margin-top: 0.75rem;
+  background: linear-gradient(to bottom, var(--accent-color), transparent);
+  animation: hintLinePulse 2s infinite ease-in-out;
+  border-radius: 1px;
+}
+
+@keyframes hintLinePulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scaleY(0.7);
+    transform-origin: top;
+  }
+  50% {
+    opacity: 0.9;
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+/* Container for all stacked cards */
+.sticky-cards-stack {
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12vh; /* Distance between cards in scroll flow */
+  position: relative;
+}
+
+/* The Sticky Card Outer Shell (matching rounded-4xl and Skiper34 specs) */
+.sticky-project-card-wrapper {
+  position: sticky;
+  width: 100%;
+  max-width: 980px;
+  height: min(600px, 80vh);
+  min-height: 510px;
+  border-radius: 32px; /* rounded-4xl from Skiper34 */
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+  will-change: transform, scale;
+  transform-origin: center center;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+[data-theme='light'] .sticky-project-card-wrapper {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+.sticky-project-card-wrapper:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.85), 0 0 25px rgba(99, 102, 241, 0.12);
+}
+
+[data-theme='light'] .sticky-project-card-wrapper:hover {
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.18), 0 0 20px rgba(99, 102, 241, 0.08);
+}
+
+/* Inner Container that counter-rotates to keep content level */
+.sticky-project-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 2.25rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transform-origin: center center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  z-index: 1;
+}
+
+.sticky-project-card-inner::-webkit-scrollbar {
+  display: none;
+}
+
+/* Inner Layout: 2 Columns on desktop */
+.sticky-card-layout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 2.25rem;
+  align-items: stretch;
+  height: 100%;
+  min-height: 100%;
+}
+
+/* Left Column */
+.sticky-card-left {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.sticky-card-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.sticky-card-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.sticky-card-index {
+  font-size: 0.72rem;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  color: var(--accent-color);
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.1rem;
+  opacity: 0.9;
+}
+
+.sticky-project-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-color);
+  letter-spacing: -0.025em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.sticky-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sticky-project-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sticky-project-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.sticky-visit-cta-wrapper {
+  margin-top: auto;
+  padding-top: 0.25rem;
+}
+
+.sticky-visit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.4rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  border-radius: 999px;
+  background: var(--text-color);
+  color: var(--bg-color);
+  border: 1px solid transparent;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  text-decoration: none;
+}
+
+.sticky-visit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  opacity: 0.95;
+}
+
+[data-theme='light'] .sticky-visit-btn {
+  background: #090a0f;
+  color: #ffffff;
+}
+
+[data-theme='light'] .sticky-visit-btn:hover {
+  background: #1e293b;
+}
+
+/* Right Column: Features Panel */
+.sticky-card-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.sticky-features-box {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 1.4rem 1.6rem;
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 2;
+}
+
+[data-theme='light'] .sticky-features-box {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+.sticky-bullet-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-color);
+  margin-bottom: 0.85rem;
+}
+
+.sparkle-accent {
+  color: #f59e0b;
+}
+
+.sticky-features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.sticky-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.sticky-bullet-diamond {
+  color: var(--accent-color);
+  font-size: 0.9rem;
+  line-height: 1.1;
+  flex-shrink: 0;
+}
+
+/* Watermark adjustments for Sticky Card */
+.sticky-project-card-inner .project-bg-icon {
+  right: -0.75rem;
+  bottom: -0.75rem;
+  width: 240px;
+  height: 240px;
+}
+
+/* ========================================================= */
+/* Responsive Breakpoints & Enhanced Mobile Card Sizing      */
+/* ========================================================= */
+
+@media (max-width: 820px) {
+  /* Give the cards almost full width on mobile for maximum readability */
+  .sticky-projects-section {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 40vh;
+  }
+
+  .sticky-cards-stack {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 8px;
+    gap: 12vh;
+  }
+
+  /* INCREASED CARD SIZE ON MOBILE: Generous height and width so all content fits easily */
+  .sticky-project-card-wrapper {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 640px;
+    max-height: 86vh;
+    border-radius: 28px;
+    box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .sticky-project-card-inner {
+    padding: 1.75rem 1.35rem 1.5rem 1.35rem;
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+  }
+
+  .sticky-card-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    min-height: auto;
+    justify-content: flex-start;
+  }
+
+  .sticky-card-left {
+    height: auto;
+    justify-content: flex-start;
+  }
+
+  .sticky-card-right {
+    height: auto;
+  }
+
+  .sticky-project-title {
+    font-size: 1.45rem;
+  }
+
+  .sticky-project-desc {
+    font-size: 0.86rem;
+    line-height: 1.5;
+    -webkit-line-clamp: 4;
+    margin-bottom: 0.85rem;
+  }
+
+  .sticky-project-stack {
+    gap: 0.4rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .sticky-features-box {
+    padding: 1.1rem 1.2rem;
+    border-radius: 18px;
+    margin-bottom: 0.5rem;
+  }
+
+  .sticky-features-list {
+    gap: 0.55rem;
+  }
+
+  .sticky-feature-item {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .sticky-visit-cta-wrapper {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .sticky-visit-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.92rem;
+  }
+
+  .sticky-project-card-inner .project-bg-icon {
+    width: 170px;
+    height: 170px;
+    right: -0.5rem;
+    bottom: -0.5rem;
+    opacity: 0.04;
+  }
+}
+
+@media (max-width: 480px) {
+  .sticky-cards-stack {
+    padding: 0 4px;
+    gap: 10vh;
+  }
+
+  /* Extra height boost on smaller phones to accommodate full content */
+  .sticky-project-card-wrapper {
+    min-height: 610px;
+    max-height: 88vh;
+    border-radius: 24px;
+  }
+
+  .sticky-project-card-inner {
+    padding: 1.4rem 1.15rem 1.25rem 1.15rem;
+  }
+
+  .sticky-project-title {
+    font-size: 1.3rem;
+  }
+
+  .sticky-project-desc {
+    font-size: 0.82rem;
+    line-height: 1.48;
+    -webkit-line-clamp: 3;
+    margin-bottom: 0.75rem;
+  }
+
+  .sticky-features-box {
+    padding: 0.95rem 1.05rem;
+  }
+
+  .sticky-feature-item {
+    font-size: 0.78rem;
+    line-height: 1.38;
+  }
+
+  .sticky-bullet-diamond {
+    font-size: 0.82rem;
+  }
+
+  .sticky-visit-btn {
+    padding: 0.7rem 1.25rem;
+    font-size: 0.88rem;
+  }
+}

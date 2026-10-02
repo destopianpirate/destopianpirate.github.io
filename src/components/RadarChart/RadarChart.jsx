@@ -9,7 +9,10 @@ const projectRadarFocus = {
   "RoadGuard AI": { "AI / ML": 95, "Frontend": 40, "Backend": 75, "Databases": 50, "DevOps": 60, "Systems": 90 },
   "ImagePress - Image Compressor": { "AI / ML": 20, "Frontend": 70, "Backend": 90, "Databases": 40, "DevOps": 70, "Systems": 80 },
   "QS IITGN": { "AI / ML": 10, "Frontend": 95, "Backend": 40, "Databases": 30, "DevOps": 50, "Systems": 40 },
-  "FamShield": { "AI / ML": 20, "Frontend": 80, "Backend": 85, "Databases": 75, "DevOps": 60, "Systems": 90 }
+  "FamShield": { "AI / ML": 20, "Frontend": 80, "Backend": 85, "Databases": 75, "DevOps": 60, "Systems": 90 },
+  "CloudForge": { "AI / ML": 25, "Frontend": 80, "Backend": 95, "Databases": 90, "DevOps": 94, "Systems": 96 },
+  "Manthan (SCIF)": { "AI / ML": 55, "Frontend": 92, "Backend": 88, "Databases": 90, "DevOps": 80, "Systems": 75 },
+  "Octrops Code": { "AI / ML": 96, "Frontend": 88, "Backend": 85, "Databases": 55, "DevOps": 75, "Systems": 92 }
 };
 
 const radarAxes = [
@@ -215,7 +218,10 @@ export function TechStackConfigurator({ activeProject, setActiveProject, project
             </div>
             <div className="configurator-project-tag">
               {project.title.includes('QS IITGN') ? 'UI/Web' :
+               project.title.includes('Manthan') ? 'SICP/Web' :
                project.title.includes('FamShield') ? 'Mobile' :
+               project.title.includes('Octrops') ? 'AI/Tool' :
+               project.title.includes('CloudForge') ? 'Cloud/BaaS' :
                project.title.includes('AcadX') || project.title.includes('AssignmentAI') || project.title.includes('RoadGuard') ? 'AI/Web' : 'System'}
             </div>
           </div>
