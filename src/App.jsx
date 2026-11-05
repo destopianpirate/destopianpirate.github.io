@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion'
 import {
   Github,
@@ -34,9 +34,10 @@ import IoTSimulator from './components/IoTSimulator/IoTSimulator';
 import TerminalCLI from './components/TerminalCLI/TerminalCLI';
 import GithubExplorer from './components/GithubExplorer/GithubExplorer';
 import OscilloscopeDivider from './components/OscilloscopeDivider/OscilloscopeDivider';
-import AttentionText from './components/AttentionText/AttentionText';
+import HomePage from './home/HomePage';
+import { useLenis, scrollToTop } from './hooks/useLenis';
 import BounceCards from './components/BounceCards/BounceCards';
-import Skiper34 from './components/StickyProjects/StickyProjects';
+import ProjectDeck from './components/ProjectDeck/ProjectDeck';
 import logoLight from './assets/logo_light.png'
 import logoZeroGpt from './assets/logo-zerogpt.png'
 import logoAssignmentAI from './assets/assignmentai.svg'
@@ -250,7 +251,7 @@ const skillsData = [
     icon: <Code />,
     items: [
       { name: "React (Hooks & Context)", level: "92%", logoUrl: "https://cdn.simpleicons.org/react/61DAFB" },
-      { name: "CSS (Vanilla & Flex/Grid)", level: "95%", logoUrl: "https://cdn.simpleicons.org/css3/1572B6" },
+      { name: "CSS (Vanilla & Flex/Grid)", level: "95%", logoUrl: "https://cdn.simpleicons.org/css/1572B6" },
       { name: "HTML5 / CSS3 (Aesthetics)", level: "95%", logoUrl: "https://cdn.simpleicons.org/html5/E34F26" },
       { name: "Framer Motion", level: "88%", logoUrl: "https://cdn.simpleicons.org/framer/0055FF" }
     ]
@@ -450,7 +451,7 @@ function App() {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme');
       if (saved) return saved;
-      return window.innerWidth > 768 ? 'dark' : 'light';
+      return 'light';
     }
     return 'light';
   });
@@ -486,20 +487,11 @@ function App() {
 
   const yGlow1 = useTransform(scrollYSpring, [0, 1000], [0, 150]);
   const yGlow2 = useTransform(scrollYSpring, [0, 1000], [0, -150]);
-  const yHeroText = useTransform(scrollYSpring, [0, 600], [0, isMobile ? 0 : -45]);
-  const yProfile = useTransform(scrollYSpring, [0, 600], [0, isMobile ? 0 : 55]);
 
-  // Pillar card parallax translations (staggered rates)
-  const yPillar1 = useTransform(scrollYSpring, [100, 1000], [0, isMobile ? 0 : -25]);
-  const yPillar2 = useTransform(scrollYSpring, [100, 1000], [0, isMobile ? 0 : -10]);
-  const yPillar3 = useTransform(scrollYSpring, [100, 1000], [0, isMobile ? 0 : -45]);
-
-  // Timeline parallax translations
-  const yTimelineHeader = useTransform(scrollYSpring, [50, 700], [0, isMobile ? 0 : -35]);
-  const yTimeline = useTransform(scrollYSpring, [50, 850], [0, isMobile ? 0 : 15]);
+  useLenis();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    scrollToTop();
   }, [activeTab]);
 
   useEffect(() => {
@@ -544,23 +536,25 @@ function App() {
       <motion.div className="bg-glow-1" style={{ y: yGlow1 }}></motion.div>
       <motion.div className="bg-glow-2" style={{ y: yGlow2 }}></motion.div>
 
-      <div style={{ width: '100%', height: '600px', position: 'absolute', top: isMobile ? '110px' : '75px', left: 0, zIndex: 0, pointerEvents: 'none', opacity: theme === 'dark' ? 0.7 : 0.2, maskImage: 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)', WebkitMaskImage: 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)' }}>
-        <LightRays
-          raysOrigin="top-center"
-          raysColor={theme === 'dark' ? "#ffffff" : "#000000"}
-          raysSpeed={1}
-          lightSpread={0.5}
-          rayLength={3}
-          followMouse={true}
-          mouseInfluence={0.1}
-          noiseAmount={0}
-          distortion={0}
-          className="custom-rays"
-          pulsating={false}
-          fadeDistance={1}
-          saturation={1}
-        />
-      </div>
+      {activeTab !== 'about' && (
+        <div style={{ width: '100%', height: '600px', position: 'absolute', top: isMobile ? '110px' : '75px', left: 0, zIndex: 0, pointerEvents: 'none', opacity: theme === 'dark' ? 0.7 : 0.2, maskImage: 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)', WebkitMaskImage: 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)' }}>
+          <LightRays
+            raysOrigin="top-center"
+            raysColor={theme === 'dark' ? "#ffffff" : "#000000"}
+            raysSpeed={1}
+            lightSpread={0.5}
+            rayLength={3}
+            followMouse={true}
+            mouseInfluence={0.1}
+            noiseAmount={0}
+            distortion={0}
+            className="custom-rays"
+            pulsating={false}
+            fadeDistance={1}
+            saturation={1}
+          />
+        </div>
+      )}
 
       <div className="header-wrapper">
         <header className="header container">
@@ -604,128 +598,41 @@ function App() {
               animate="visible"
               exit="exit"
               variants={tabContentVariants}
-              className="about-tab-container"
+              className="home-tab-container"
             >
-              <div className="about-grid">
-                <motion.div className="about-content" style={{ y: yHeroText }}>
-                  <h1 style={{ fontWeight: 800 }}>Hi there, I'm <br /><span>Ayush Singh!</span></h1>
-                  <div className="profile-card-container mobile-only-profile">
-                    <div className="profile-image-frame">
-                      <img src={profilePic} alt="Ayush Singh Profile" className="profile-large-image" />
-                    </div>
-                  </div>
-
-                  <div className="about-subtitle">
-                    Pursuing B.Tech in Artificial Intelligence at IIT Gandhinagar (Entered 2025)
-                  </div>
-
-                  <AttentionText>
-                    <p className="about-bio">
-                      I design and engineer intelligent applications at the intersection of Artificial Intelligence and Full-Stack Web Development. I focus on translating complex neural networks into beautiful, responsive, and production-ready interfaces, bridging the gap between machine learning models and user-friendly software architectures.
-                    </p>
-                    <p className="about-bio-highlight">
-                      Let's build something intelligent. Exploring ways to merge deep learning software with scalable systems and modern frontend aesthetics.
-                    </p>
-                  </AttentionText>
-                  <div className="about-socials">
-                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ayushspna4040@gmail.com" target="_blank" rel="noreferrer" className="footer-social-link">
-                      <Mail size={16} /> Email Me
-                    </a>
-                    <a href="https://github.com/destopianpirate" target="_blank" rel="noreferrer" className="footer-social-link">
-                      <Github size={16} /> GitHub
-                    </a>
-                    <a href="https://linkedin.com/in/ayushxphoenix" target="_blank" rel="noreferrer" className="footer-social-link">
-                      <Linkedin size={16} /> LinkedIn
-                    </a>
-                  </div>
-                </motion.div>
-
-                <motion.div className="profile-card-container desktop-only-profile" style={{ y: yProfile }}>
-                  <div className="profile-image-frame">
-                    <img src={profilePic} alt="Ayush Singh Profile" className="profile-large-image" />
-                  </div>
-                </motion.div>
-              </div>
-
-              <div className="about-timeline-section" style={{ marginTop: '3.5rem', marginBottom: '2.5rem' }}>
-                <h2 className="timeline-section-title">Academic Journey</h2>
-                <div className="timeline-container">
-                  {timelineData.map((item, idx) => (
-                    <motion.div 
-                      className="timeline-item" 
-                      key={idx}
-                      initial={{ opacity: 0, y: 35 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: false, amount: 0.2 }}
-                      transition={{ duration: 0.55, ease: "easeOut" }}
-                    >
-                      <div className="timeline-marker">
-                        <div className="timeline-dot-wrapper">
-                          <span className="timeline-icon-inner">{item.icon}</span>
-                        </div>
-                        {idx !== timelineData.length - 1 && <div className="timeline-line"></div>}
-                      </div>
-                      <div className="timeline-content">
-                        <div className="timeline-header-row">
-                          <div className="timeline-date">{item.date}</div>
-                          {item.badge && (
-                            <span className="timeline-badge" style={{ borderColor: item.badgeColor, color: item.badgeColor }}>
-                              {item.badge}
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="timeline-title">{item.title}</h3>
-                        <div className="timeline-institution">{item.institution}</div>
-                        <p className="timeline-description">{item.desc}</p>
-                        {item.giantPercentage && (
-                          <div className="timeline-giant-percentage">{item.giantPercentage}</div>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="about-pillars-grid">
-                {bioPillars.map((pillar, idx) => {
-                  const yPillar = idx === 0 ? yPillar1 : idx === 1 ? yPillar2 : yPillar3;
-                  return (
-                    <motion.div className="pillar-card" key={idx} style={{ y: yPillar }}>
-                      <div className="pillar-card-header">
-                        <span className="pillar-icon-wrapper">{pillar.icon}</span>
-                        <span className="pillar-tag">{pillar.tag}</span>
-                      </div>
-                      <h3 className="pillar-title">{pillar.title}</h3>
-                      <p className="pillar-desc">{pillar.desc}</p>
-                    </motion.div>
-                  );
-                })}
-              </div>
-
-              <BounceCards
-                projects={homeFeaturedProjects}
-                onViewAll={() => {
-                  setActiveTab('projects');
-                  window.scrollTo({ top: 0, behavior: 'instant' });
-                }}
-                animationDelay={0.3}
-                animationStagger={0.06}
-                easeType="back.out(1.4)"
-                enableHover={true}
-                desktopTransforms={[
-                  'rotate(6deg) translate(-270px)',
-                  'rotate(3deg) translate(-180px)',
-                  'rotate(1deg) translate(-90px)',
-                  'rotate(-2deg)',
-                  'rotate(2deg) translate(90px)',
-                  'rotate(-3deg) translate(180px)',
-                  'rotate(-6deg) translate(270px)'
-                ]}
-                mobileTransforms={[
-                  'rotate(5deg) translate(-95px)',
-                  'rotate(-2deg)',
-                  'rotate(-5deg) translate(95px)'
-                ]}
+              <HomePage
+                theme={theme}
+                isMobile={isMobile}
+                introReady={!loaderActive}
+                bioPillars={bioPillars}
+                timelineData={timelineData}
+                projectsSlot={
+                    <BounceCards
+                      projects={homeFeaturedProjects}
+                      onViewAll={() => {
+                        setActiveTab('projects');
+                        scrollToTop();
+                      }}
+                      animationDelay={0.3}
+                      animationStagger={0.06}
+                      easeType="back.out(1.4)"
+                      enableHover={true}
+                      desktopTransforms={[
+                        'rotate(6deg) translate(-270px)',
+                        'rotate(3deg) translate(-180px)',
+                        'rotate(1deg) translate(-90px)',
+                        'rotate(-2deg)',
+                        'rotate(2deg) translate(90px)',
+                        'rotate(-3deg) translate(180px)',
+                        'rotate(-6deg) translate(270px)'
+                      ]}
+                      mobileTransforms={[
+                        'rotate(5deg) translate(-95px)',
+                        'rotate(-2deg)',
+                        'rotate(-5deg) translate(95px)'
+                      ]}
+                    />
+                }
               />
             </motion.div>
           )}
@@ -739,12 +646,7 @@ function App() {
               variants={tabContentVariants}
               className="tab-section"
             >
-              <h2 className="section-title">Featured Repositories</h2>
-              <p className="section-subtitle">
-                A selection of web platforms, deep learning applications, and edge telemetry projects built using cutting-edge frameworks.
-              </p>
-
-              <Skiper34
+              <ProjectDeck
                 projects={projects}
                 theme={theme}
                 techLogos={techLogos}
