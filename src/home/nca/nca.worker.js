@@ -4,7 +4,7 @@
 // life mask = 3x3x3 max-pool(alpha) > 0.1 before AND after the update.
 // Only cells inside the pre-alive region are computed: all others are zeroed by the mask anyway.
 
-let C, HID, GX, GY, GZ, N, W1, B1, W2, state, next, seedPos;
+let C, HID, GX, GY, GZ, N, W1, B1, W2, state, next, seedPos, shapeName = '', stepCount = 0;
 let preAlive, postAlive, aliveRaw, activity;
 let running = false;
 let timer = 0;
@@ -62,6 +62,7 @@ const perc = new Float32Array(64 * 4);
 const hid = new Float32Array(256);
 
 function step() {
+  stepCount++;
   dilateAlpha(state, preAlive);
   next.fill(0);
   const P = 4 * C;
@@ -148,10 +149,11 @@ function emit() {
       }
     }
   }
-  self.postMessage({ type: 'frame', cells: out, count: n }, [out.buffer]);
+  self.postMessage({ type: 'frame', cells: out, count: n, step: stepCount, shape: shapeName }, [out.buffer]);
 }
 
 function reseed() {
+  stepCount = 0;
   state.fill(0);
   activity.fill(0);
   const [sx, sy, sz] = seedPos;
@@ -183,30 +185,36 @@ function loop() {
   timer = setTimeout(loop, Math.max(0, 55 - spent)); // ~18 steps/s, never hogs the worker
 }
 
+async function loadModel(base) {
+  const [meta, buf] = await Promise.all([
+    fetch(base + 'meta.json').then((r) => r.json()),
+    fetch(base + 'weights.bin').then((r) => r.arrayBuffer()),
+  ]);
+  ({ C, HID } = meta);
+  [GX, GY, GZ] = meta.grid;
+  seedPos = meta.seed;
+  shapeName = meta.shape || '';
+  N = GX * GY * GZ;
+  const f = new Float32Array(buf);
+  const P = 4 * C;
+  W1 = f.subarray(0, HID * P);
+  B1 = f.subarray(HID * P, HID * P + HID);
+  W2 = f.subarray(HID * P + HID, HID * P + HID + C * HID);
+  state = new Float32Array(N * C);
+  next = new Float32Array(N * C);
+  preAlive = new Uint8Array(N);
+  postAlive = new Uint8Array(N);
+  aliveRaw = new Uint8Array(N);
+  activity = new Float32Array(N);
+  reseed();
+  self.postMessage({ type: 'ready', grid: meta.grid, targetCount: meta.targetCount, shape: shapeName, label: meta.label, weights: f.length });
+}
+
 self.onmessage = async (e) => {
   const m = e.data;
-  if (m.type === 'init') {
-    const [meta, buf] = await Promise.all([
-      fetch(m.base + 'meta.json').then((r) => r.json()),
-      fetch(m.base + 'weights.bin').then((r) => r.arrayBuffer()),
-    ]);
-    ({ C, HID } = meta);
-    [GX, GY, GZ] = meta.grid;
-    seedPos = meta.seed;
-    N = GX * GY * GZ;
-    const f = new Float32Array(buf);
-    const P = 4 * C;
-    W1 = f.subarray(0, HID * P);
-    B1 = f.subarray(HID * P, HID * P + HID);
-    W2 = f.subarray(HID * P + HID, HID * P + HID + C * HID);
-    state = new Float32Array(N * C);
-    next = new Float32Array(N * C);
-    preAlive = new Uint8Array(N);
-    postAlive = new Uint8Array(N);
-    aliveRaw = new Uint8Array(N);
-    activity = new Float32Array(N);
-    reseed();
-    self.postMessage({ type: 'ready', grid: meta.grid, targetCount: meta.targetCount });
+  if (m.type === 'init' || m.type === 'load') {
+    // 'load' swaps in another trained model (the old one keeps stepping until the new one is ready)
+    try { await loadModel(m.base); } catch (err) { self.postMessage({ type: 'error', message: String(err) }); }
   } else if (m.type === 'run') {
     if (!running && m.value) { running = true; loop(); }
     if (!m.value) { running = false; clearTimeout(timer); }

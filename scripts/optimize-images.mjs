@@ -12,17 +12,6 @@ await mkdir(DATA, { recursive: true });
 
 const raw = (f) => path.join(RAW, f);
 
-// Photographic / illustrative images → WebP at full + small width
-const photos = [
-  ['journey-class10.png', 'journey-class10'],
-  ['journey-class12.png', 'journey-class12'],
-  ['og-banner.png', 'journey-btech'],
-];
-for (const [src, name] of photos) {
-  await sharp(raw(src)).resize({ width: 1920, withoutEnlargement: true }).webp({ quality: 80 }).toFile(path.join(OUT, `${name}.webp`));
-  await sharp(raw(src)).resize({ width: 900 }).webp({ quality: 76 }).toFile(path.join(OUT, `${name}-sm.webp`));
-}
-
 // Hero/outro backdrops and pillar visuals are drawn in code (src/home/backdrops, PillarVisuals.jsx).
 
 // Matcaps → trim the white background so the sphere fills the square exactly

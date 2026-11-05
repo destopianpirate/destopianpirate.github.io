@@ -118,7 +118,7 @@ export default function AISandbox() {
           >
             <option>Gemini 2.5 Flash</option>
             <option>Gemini 2.5 Pro</option>
-            <option>Claude 3.5 Sonnet</option>
+            <option>DeepSeek V3</option>
             <option>GPT-4o mini</option>
           </select>
         </div>
