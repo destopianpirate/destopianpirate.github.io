@@ -90,8 +90,8 @@ const OFFSETS = {
   mobile: [[0, 0.7, -3.5], [0, 1.0, -3], [0, 0.2, -3], [0, 0.9, -3.5], [0, -0.7, 0]],
 };
 const OPACITY = {
-  light: [0.95, 0.9, 0.5, 0.75, 0.3],
-  dark: [0.9, 0.85, 0.5, 0.7, 0.3],
+  light: [0.95, 0.9, 0.5, 0.75, 0],
+  dark: [0.9, 0.85, 0.5, 0.7, 0],
 };
 
 // Point size per stage: the brain needs fine dots so its folds stay visible.
@@ -104,7 +104,7 @@ const lerpStage = (table, s) => {
   return Array.isArray(a) ? a.map((v, k) => v + (b[k] - v) * f) : a + (b - a) * f;
 };
 
-export default function ParticleField({ count, theme, isMobile, onReady }) {
+export default function ParticleField({ count, theme, isMobile, onReady, children }) {
   const groupRef = useRef();
   const spinRef = useRef();
   const matRef = useRef();
@@ -183,7 +183,9 @@ export default function ParticleField({ count, theme, isMobile, onReady }) {
     // ScrollTrigger only reports velocity while scrolling; decay it so the cloud calms down at rest.
     scrollStore.velocity *= Math.pow(0.05, dt);
     u.uEnergy.value += (energy - u.uEnergy.value) * Math.min(1, dt * 4);
-    u.uOpacity.value = lerpStage(OPACITY[theme === 'dark' ? 'dark' : 'light'], s);
+    const op = OPACITY[theme === 'dark' ? 'dark' : 'light'];
+    // while the NCA voxel bust owns the hero, the particles only appear as you scroll away
+    u.uOpacity.value = lerpStage(scrollStore.ncaReady ? [0, ...op.slice(1)] : op, s);
 
     const g = groupRef.current;
     if (!g) return;
@@ -222,6 +224,7 @@ export default function ParticleField({ count, theme, isMobile, onReady }) {
           />
         </points>
       </group>
+      {children}
     </group>
   );
 }

@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# NCA training checkpoint (regenerable)
+scripts/nca/*.pt
+__pycache__/
+*.py[cod]

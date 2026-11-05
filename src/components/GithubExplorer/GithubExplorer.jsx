@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getRepos } from '../GithubInsights/githubData';
 import './GithubExplorer.css';
 
 export default function GithubExplorer() {
@@ -9,11 +10,7 @@ export default function GithubExplorer() {
 
   useEffect(() => {
     let active = true;
-    fetch('https://api.github.com/users/destopianpirate/repos?sort=updated&per_page=100')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch');
-        return res.json();
-      })
+    getRepos()
       .then(data => {
         if (active) {
           const sorted = data

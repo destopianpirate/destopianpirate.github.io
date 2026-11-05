@@ -2208,3 +2208,51 @@ footer {
     transform: rotate(-2deg) scaleX(1.05);
   }
 }
+
+/* ===== Footer: endless horizon + sun behind a dull contact card (all tabs) ===== */
+.site-footer {
+  position: relative;
+  z-index: 1;                 /* above the fixed homepage 3D canvas */
+  overflow: hidden;
+  background: var(--bg-color);
+  padding-top: 300px;         /* room for the sun and hills above the card */
+}
+.footer-horizon {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.footer-horizon .h3-backdrop-canvas,
+.footer-horizon canvas { display: block; width: 100%; height: 100%; }
+.footer-inner { position: relative; z-index: 1; }
+
+/* dull card: flat, translucent, muted, lets the terrain show through */
+.site-footer .contact-card-wrapper {
+  background: color-mix(in srgb, var(--bg-color) 62%, transparent);
+  border-color: var(--border-color);
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(6px) saturate(0.6);
+  backdrop-filter: blur(6px) saturate(0.6);
+}
+.site-footer .contact-glow-bg { display: none; }
+.site-footer .contact-title,
+[data-theme='light'] .site-footer .contact-title {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--text-secondary);
+}
+.site-footer .contact-desc { opacity: 0.8; }
+.site-footer .contact-link-card {
+  background: color-mix(in srgb, var(--bg-color) 45%, transparent);
+  border-color: var(--border-color);
+  filter: saturate(0.4);
+  opacity: 0.85;
+  transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+.site-footer .contact-link-card:hover { opacity: 1; filter: none; }
+.site-footer .contact-val { color: var(--text-secondary); }
+
+@media (max-width: 768px) {
+  .site-footer { padding-top: 200px; }
+}

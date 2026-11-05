@@ -2,6 +2,8 @@ import { Suspense, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import ParticleField from './ParticleField';
 import FloatingShapes from './FloatingShapes';
+import NCAVoxels from '../nca/NCAVoxels';
+import LossLandscape from './LossLandscape';
 import { scrollStore } from '../scrollStore';
 
 // Fixed, full-viewport WebGL layer behind the homepage DOM. Lazy-loaded so three.js
@@ -24,9 +26,14 @@ export default function HomeCanvas({ theme, isMobile, onReady }) {
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >
         <fog attach="fog" args={[theme === 'dark' ? '#030303' : '#ffffff', 11, 24]} />
-        <ParticleField count={isMobile ? 7000 : 18000} theme={theme} isMobile={isMobile} onReady={onReady} />
+        <ParticleField count={isMobile ? 7000 : 18000} theme={theme} isMobile={isMobile} onReady={onReady}>
+          <Suspense fallback={null}>
+            <NCAVoxels theme={theme} />
+          </Suspense>
+        </ParticleField>
         <Suspense fallback={null}>
           <FloatingShapes isMobile={isMobile} />
+          <LossLandscape theme={theme} isMobile={isMobile} />
         </Suspense>
       </Canvas>
     </div>

@@ -32,9 +32,11 @@ import { RadarChart, TechStackConfigurator } from './components/RadarChart/Radar
 import AISandbox from './components/AISandbox/AISandbox';
 import IoTSimulator from './components/IoTSimulator/IoTSimulator';
 import TerminalCLI from './components/TerminalCLI/TerminalCLI';
+import WireframeHorizon from './home/backdrops/WireframeHorizon';
 import GithubExplorer from './components/GithubExplorer/GithubExplorer';
 import OscilloscopeDivider from './components/OscilloscopeDivider/OscilloscopeDivider';
 import HomePage from './home/HomePage';
+import { RepoStats, LanguageBreakdown, StreakStats, ActivityGraph } from './components/GithubInsights/GithubInsights';
 import { useLenis, scrollToTop } from './hooks/useLenis';
 import BounceCards from './components/BounceCards/BounceCards';
 import ProjectDeck from './components/ProjectDeck/ProjectDeck';
@@ -789,11 +791,8 @@ function App() {
                     <div className="widget-title">
                       <BarChart2 size={18} /> Repository Statistics
                     </div>
-                    <div className="stat-image-container">
-                      <img
-                        src={`https://github-readme-stats.vercel.app/api?username=destopianpirate&show_icons=true&theme=transparent&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&icon_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&v=2`}
-                        alt="GitHub Profile Statistics"
-                      />
+                    <div className="stat-image-container gh-container">
+                      <RepoStats />
                     </div>
                   </div>
 
@@ -801,11 +800,8 @@ function App() {
                     <div className="widget-title">
                       <PieChart size={18} /> Language Distribution
                     </div>
-                    <div className="stat-image-container">
-                      <img
-                        src={`https://github-readme-stats.vercel.app/api/top-langs/?username=destopianpirate&layout=compact&theme=transparent&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&v=2`}
-                        alt="Top Languages"
-                      />
+                    <div className="stat-image-container gh-container">
+                      <LanguageBreakdown />
                     </div>
                   </div>
                 </div>
@@ -815,11 +811,8 @@ function App() {
                     <div className="widget-title">
                       <Activity size={18} /> Contribution Streaks
                     </div>
-                    <div className="stat-image-container">
-                      <img
-                        src={`https://github-readme-streak-stats.herokuapp.com/?user=destopianpirate&theme=${theme === 'dark' ? 'transparent' : 'light'}&hide_border=true&title_color=${theme === 'dark' ? 'ffffff' : '111111'}&text_color=${theme === 'dark' ? 'cccccc' : '333333'}&sideNums=${theme === 'dark' ? 'ffffff' : '111111'}&sideLabels=${theme === 'dark' ? 'aaaaaa' : '555555'}&ring=${theme === 'dark' ? 'ffffff' : '111111'}&fire=${theme === 'dark' ? 'ffffff' : '111111'}&currStreakNum=${theme === 'dark' ? 'ffffff' : '111111'}&v=2`}
-                        alt="GitHub Streaks Metrics"
-                      />
+                    <div className="stat-image-container gh-container">
+                      <StreakStats />
                     </div>
                   </div>
 
@@ -827,11 +820,8 @@ function App() {
                     <div className="widget-title">
                       <Code size={18} /> Activity Graph
                     </div>
-                    <div className="stat-image-container">
-                      <img
-                        src={`https://github-readme-activity-graph.vercel.app/graph?username=destopianpirate&theme=${theme === 'dark' ? 'transparent' : 'light'}&color=${theme === 'dark' ? 'ffffff' : '111111'}&line=${theme === 'dark' ? 'ffffff' : '111111'}&point=${theme === 'dark' ? 'ffffff' : '111111'}&hide_border=true&v=2`}
-                        alt="Commit Activity Graph"
-                      />
+                    <div className="stat-image-container gh-container">
+                      <ActivityGraph />
                     </div>
                   </div>
                 </div>
@@ -875,8 +865,11 @@ function App() {
 
       <OscilloscopeDivider theme={theme} isMobile={isMobile} skillsData={skillsData} />
 
-      <footer>
-        <div className="container">
+      <footer className="site-footer">
+        <div className="footer-horizon" aria-hidden="true">
+          <WireframeHorizon theme={theme} horizonPx={isMobile ? 150 : 250} />
+        </div>
+        <div className="container footer-inner">
           <section className="footer-contact-section">
             <div className="contact-card-wrapper">
               <div className="contact-glow-bg"></div>

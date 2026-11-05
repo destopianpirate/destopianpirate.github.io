@@ -38,8 +38,7 @@
 }
 
 /* Full-bleed backdrop that escapes the 1100px container */
-.h3-hero-bg,
-.h3-outro-bg {
+.h3-hero-bg {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -528,16 +527,7 @@
   align-items: flex-start;
   padding-top: 18vh;
 }
-.h3-outro-bg::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 40%;
-  background: linear-gradient(to bottom, transparent, var(--bg-color) 92%);
-  pointer-events: none;
-}
+
 .h3-outro-copy { max-width: 760px; }
 .h3-outro-title {
   font-size: clamp(2.4rem, 6vw, 5rem);
@@ -655,4 +645,43 @@
 /* ================= Pillars: deck ================= */
 @media (min-width: 769px) {
   .h3-pillar { position: relative; will-change: transform; }
+}
+
+/* ================= Outro: loss landscape ================= */
+.h3-outro-hint {
+  margin-top: 1.4rem;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+.ll-label, .ll-readout { opacity: 0; }
+.ll-label {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-color);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-hover);
+  background: var(--bg-color);
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+}
+.ll-label.is-hit {
+  background: var(--accent-hot);
+  border-color: var(--accent-hot);
+  color: #fff;
+  transform: scale(1.12);
+}
+.ll-readout {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  background: var(--bg-color);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
 }

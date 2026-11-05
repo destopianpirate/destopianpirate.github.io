@@ -9,7 +9,6 @@ import { scrollStore } from './scrollStore';
 import PillarVisual from './PillarVisuals';
 import JourneyVisual from './JourneyVisuals';
 import NeuralNebula from './backdrops/NeuralNebula';
-import WireframeHorizon from './backdrops/WireframeHorizon';
 import './HomePage.css';
 
 gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin);
@@ -423,9 +422,6 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
 
       {/* 4 · OUTRO */}
       <section className="h3-section h3-outro" data-stage="4">
-        <div className="h3-outro-bg" aria-hidden="true">
-          <WireframeHorizon theme={theme} />
-        </div>
         <div className="h3-outro-copy">
           <h2 className="h3-outro-title">Let's build something <span className="h3-accent-text">intelligent.</span></h2>
           <p className="h3-outro-sub h3-reveal">
@@ -439,6 +435,7 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
               <Github size={16} /> GitHub
             </a>
           </div>
+          <p className="h3-outro-hint h3-reveal">Click the landscape below to drop a ball. It runs real Adam updates until it converges.</p>
         </div>
       </section>
     </div>

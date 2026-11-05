@@ -5,6 +5,7 @@ export const scrollStore = {
   stage: 0,        // 0 hero · 1 bio · 2 journey · 3 pillars · 4 outro (fractional while morphing)
   velocity: 0,     // px/s from ScrollTrigger, used for scroll "energy"
   mouse: { x: 0, y: 0 }, // normalized -1 → 1
+  ncaReady: false, // true once the voxel NCA bust is live (particles then stay hidden on the hero)
 };
 
 export const STAGE_COUNT = 5;
