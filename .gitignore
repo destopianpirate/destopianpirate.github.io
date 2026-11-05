@@ -27,3 +27,6 @@ dist-ssr
 scripts/nca/*.pt
 __pycache__/
 *.py[cod]
+
+# Readme
+README.md
