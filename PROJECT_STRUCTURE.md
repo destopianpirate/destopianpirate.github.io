@@ -66,6 +66,7 @@ graph TD
 
 ### Shared Custom Hooks (`src/hooks/`)
 - **`src/hooks/useLenis.js`**: Hook initializing Lenis smooth scrolling with bidirectional GSAP ScrollTrigger synchronization.
+- **`src/hooks/themeTransition.js`**: Circular expand reveal animation for theme transitions using the View Transitions API.
 
 ### UI Components (`src/components/`)
 - **`src/components/AISandbox/`**: Live AI sandbox component showcasing interactive prompt experiments.

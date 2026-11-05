@@ -38,6 +38,7 @@ import OscilloscopeDivider from './components/OscilloscopeDivider/OscilloscopeDi
 import HomePage from './home/HomePage';
 import { RepoStats, LanguageBreakdown, StreakStats, ActivityGraph } from './components/GithubInsights/GithubInsights';
 import { useLenis, scrollToTop } from './hooks/useLenis';
+import { animateThemeChange } from './hooks/themeTransition';
 import BounceCards from './components/BounceCards/BounceCards';
 import ProjectDeck from './components/ProjectDeck/ProjectDeck';
 import logoLight from './assets/logo_light.png'
@@ -510,12 +511,21 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const toggleTheme = () => {
+  const toggleTheme = (e) => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(nextTheme);
     try {
       localStorage.setItem('theme', nextTheme);
     } catch {}
+    // the reveal expands from the toggle button (the terminal command has no event, so find the button)
+    const btn = e?.currentTarget || document.querySelector('.theme-toggle-pill');
+    const r = btn?.getBoundingClientRect?.();
+    animateThemeChange(
+      () => {
+        setTheme(nextTheme);
+        document.documentElement.setAttribute('data-theme', nextTheme);
+      },
+      r ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : undefined
+    );
   };
 
   const tabContentVariants = {

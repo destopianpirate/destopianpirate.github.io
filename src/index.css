@@ -2256,3 +2256,12 @@ footer {
 @media (max-width: 768px) {
   .site-footer { padding-top: 200px; }
 }
+
+/* Theme switch: the new theme is revealed by an expanding circle (see src/hooks/themeTransition.js) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
