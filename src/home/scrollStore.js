@@ -15,3 +15,8 @@ export const scrollStore = {
 };
 
 export const STAGE_COUNT = 5;
+
+// Commands from the page UI to the 3D scene. Kept as functions so components never write to the store directly.
+export const requestNcaShape = (id) => { scrollStore.ncaShape = id; };
+export const requestNcaReseed = () => { scrollStore.ncaReseed += 1; };
+export const setHoverPillar = (i) => { scrollStore.hoverPillar = i; };

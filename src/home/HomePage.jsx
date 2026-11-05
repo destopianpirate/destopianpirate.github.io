@@ -3,9 +3,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
-import { Mail, Github, Linkedin, ArrowRight } from 'lucide-react';
+import { Mail, Github, Linkedin, ArrowRight, RefreshCw } from 'lucide-react';
 import AttentionText from '../components/AttentionText/AttentionText';
-import { scrollStore } from './scrollStore';
+import { scrollStore, requestNcaShape, requestNcaReseed, setHoverPillar } from './scrollStore';
 import PillarVisual from './PillarVisuals';
 import JourneyVisual from './JourneyVisuals';
 import NeuralNebula from './backdrops/NeuralNebula';
@@ -19,6 +19,14 @@ const REPLAY = 'play none restart reset';
 
 const HomeCanvas = lazy(() => import('./three/HomeCanvas'));
 
+// Models the hero can regrow as. Each is a separate tiny network trained by scripts/nca/train_nca.py.
+const NCA_SHAPES = [
+  { id: 'bust', label: 'You' },
+  { id: 'initials', label: 'AS' },
+  { id: 'brain', label: 'Brain' },
+  { id: 'chip', label: 'Chip' },
+];
+
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -28,6 +36,11 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
   const introTl = useRef(null);
   const [reduced] = useState(prefersReducedMotion);
   const [canvasReady, setCanvasReady] = useState(false);
+  const [ncaShape, setNcaShape] = useState('bust');
+  const [available, setAvailable] = useState(['bust']);
+  const statsRef = useRef(null);
+  const hudRef = useRef(null);
+  const lorenzRef = useRef(null);
   const onCanvasReady = useCallback(() => setCanvasReady(true), []);
 
   // ---------- Scroll choreography ----------
@@ -79,6 +92,7 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
         .fromTo('.h3-bang', { scale: 0, rotate: -40 }, { scale: 1, rotate: 0, duration: 0.9, ease: 'back.out(3)' }, '-=0.7')
         .from(heroSub.words, { yPercent: 100, opacity: 0, duration: 0.9, stagger: 0.025 }, '-=0.9')
         .fromTo('.h3-hero .about-socials > *', { y: 24, scale: 0.85, autoAlpha: 0 }, { y: 0, scale: 1, autoAlpha: 1, duration: 0.9, stagger: 0.08, ease: 'back.out(1.8)', clearProps: 'transform,opacity,visibility' }, '-=0.75')
+        .fromTo('.h3-hud > *', { y: -12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.9, stagger: 0.08, clearProps: 'transform,opacity,visibility' }, '-=1.1')
         .from('.h3-hero-bg', { scale: 1.12, autoAlpha: 0, duration: 2, ease: 'power2.out' }, 0);
 
       // replay the hero intro whenever you scroll back up to it
@@ -90,7 +104,7 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
       });
 
       // ---- Hero scroll-out ----
-      gsap.to('.h3-hero-copy', {
+      gsap.to('.h3-hero-copy, .h3-hud', {
         yPercent: -18, autoAlpha: 0.15, ease: 'none',
         scrollTrigger: { trigger: '.h3-hero', start: 'top top', end: 'bottom 20%', scrub: true },
       });
@@ -163,6 +177,12 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
           scaleY: 1, ease: 'none',
           scrollTrigger: { trigger: '.h3-journey-list', start: 'top 70%', end: 'bottom 70%', scrub: true },
         });
+        ScrollTrigger.create({
+          trigger: '.h3-journey',
+          start: 'top 80%',
+          end: 'bottom 30%',
+          onUpdate: (self) => { scrollStore.journeyProgress = self.progress; },
+        });
         milestones.forEach((m) => {
           buildMilestone(m, { trigger: m, start: 'top 75%' });
           ScrollTrigger.create({ trigger: m, start: 'top 55%', toggleClass: { targets: m.querySelector('.h3-milestone-dot'), className: 'is-active' } });
@@ -187,6 +207,7 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               fill.style.transform = `scaleX(${self.progress})`;
+              scrollStore.journeyProgress = self.progress;
               const active = Math.min(ticks.length - 1, Math.round(self.progress * (ticks.length - 1)));
               ticks.forEach((t, k) => t.classList.toggle('is-active', k <= active));
             },
@@ -280,12 +301,57 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
       ctx.revert();
       scrollStore.stage = 0;
       scrollStore.progress = 0;
+      scrollStore.journeyProgress = 0;
+      scrollStore.hoverPillar = -1;
     };
   }, [reduced, isMobile]);
 
   useEffect(() => {
     if (introReady) introTl.current?.play();
   }, [introReady, isMobile]);
+
+  // Which trained models exist? (a missing file just means that chip stays disabled)
+  useEffect(() => {
+    let on = true;
+    Promise.all(
+      NCA_SHAPES.map(({ id }) =>
+        fetch(`/home/nca/${id}/meta.json`).then((r) => r.json()).then(() => id).catch(() => null)
+      )
+    ).then((ids) => on && setAvailable(ids.filter(Boolean)));
+    return () => { on = false; };
+  }, []);
+
+  // Live readouts (~10 fps): plain DOM text from the shared store, so nothing re-renders.
+  useEffect(() => {
+    let raf;
+    let last = 0;
+    const tick = (t) => {
+      raf = requestAnimationFrame(tick);
+      if (t - last < 100) return;
+      last = t;
+      const st = scrollStore.ncaStats;
+      const info = scrollStore.ncaInfo;
+      if (statsRef.current && st && info) {
+        const ratio = info.target ? st.alive / info.target : 1;
+        statsRef.current.textContent =
+          `step ${String(st.step).padStart(3, '0')} · ${st.alive.toLocaleString('en-US')} / ${info.target.toLocaleString('en-US')} cells · ${(info.params || 0).toLocaleString('en-US')} weights`;
+        if (hudRef.current) hudRef.current.dataset.state = ratio > 0.93 ? 'stable' : 'growing';
+      }
+      const lh = scrollStore.lorenzHead;
+      if (lorenzRef.current && lh) {
+        lorenzRef.current.textContent =
+          `Lorenz system · \u03c3=10 \u03c1=28 \u03b2=8/3 · t = ${lh.t.toFixed(1)} · (x, y, z) = (${lh.x.toFixed(1)}, ${lh.y.toFixed(1)}, ${lh.z.toFixed(1)})`;
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  const pickShape = (id) => {
+    requestNcaShape(id);
+    setNcaShape(id);
+  };
+  const regrow = () => requestNcaReseed();
 
   // Pointer-driven tilt for pillar cards (CSS variables, no re-render)
   const onPillarMove = (e) => {
@@ -334,6 +400,36 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
             </a>
           </div>
         </div>
+
+        {!reduced && (
+          <div className="h3-hud" ref={hudRef} data-state="growing">
+            <div className="h3-hud-head">
+              <span className="h3-hud-dot" />
+              <b>Live model</b>
+              <em>3D neural cellular automaton, running in your browser</em>
+            </div>
+            <div className="h3-hud-row">
+              <span className="h3-hud-label">Regrow as</span>
+              {NCA_SHAPES.map(({ id, label }) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={`h3-chip ${ncaShape === id ? 'is-active' : ''}`}
+                  disabled={!available.includes(id)}
+                  onClick={() => pickShape(id)}
+                  title={available.includes(id) ? `Regrow as ${label}` : 'This model is still training'}
+                >
+                  {label}
+                </button>
+              ))}
+              <button type="button" className="h3-chip h3-chip-icon" onClick={regrow} aria-label="Regrow from a single cell" title="Regrow from a single cell">
+                <RefreshCw size={13} />
+              </button>
+            </div>
+            <div className="h3-hud-stats" ref={statsRef}>loading model…</div>
+            <div className="h3-hud-hint">Slash the cursor through it to cut it. It regrows.</div>
+          </div>
+        )}
       </section>
 
       {/* 1 · BIO */}
@@ -387,6 +483,7 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
               <span className="h3-hprogress-tick" key={item.title}>{item.title.replace(/\s*\(.*\)$/, '')}</span>
             ))}
           </div>
+          <p className="h3-lorenz" ref={lorenzRef}>Lorenz system · scroll to ride the attractor</p>
         </div>
       </section>
 
@@ -401,8 +498,8 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
               className="h3-pillar"
               key={pillar.title}
               onPointerMove={onPillarMove}
-              onPointerEnter={() => { scrollStore.hoverPillar = idx; }}
-              onPointerLeave={(e) => { onPillarLeave(e); scrollStore.hoverPillar = -1; }}
+              onPointerEnter={() => setHoverPillar(idx)}
+              onPointerLeave={(e) => { onPillarLeave(e); setHoverPillar(-1); }}
             >
               <div className="h3-pillar-inner">
                 <div className="h3-pillar-visual"><PillarVisual index={idx} /></div>
