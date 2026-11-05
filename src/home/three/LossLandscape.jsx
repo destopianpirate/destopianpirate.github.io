@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Html, useTexture } from '@react-three/drei';
+import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { scrollStore } from '../scrollStore';
 
@@ -9,10 +9,10 @@ import { scrollStore } from '../scrollStore';
 // drops a new ball there. When it converges, the valley it settled in lights up.
 
 const VALLEYS = [
-  { x: -4.6, z: 1.2, d: 1.55, s: 1.5, label: 'Research' },
-  { x: -0.6, z: -1.6, d: 1.9, s: 1.7, label: 'AI products' },
-  { x: 3.6, z: 0.9, d: 1.7, s: 1.6, label: 'Full-stack builds' },
-  { x: 0.9, z: 2.6, d: 1.1, s: 1.2, label: 'Open source' },
+  { x: -4.6, z: 1.2, d: 1.55, s: 1.5 },
+  { x: -0.6, z: -1.6, d: 1.9, s: 1.7 },
+  { x: 3.6, z: 0.9, d: 1.7, s: 1.6 },
+  { x: 0.9, z: 2.6, d: 1.1, s: 1.2 },
 ];
 const SX = 18, SZ = 10, RES = 90;
 
@@ -37,8 +37,6 @@ export default function LossLandscape({ theme, isMobile }) {
   const groupRef = useRef();
   const ballRef = useRef();
   const trailRef = useRef();
-  const readoutRef = useRef();
-  const labelRefs = useRef([]);
   const fadeRef = useRef(0);
   const ember = useTexture('/home/matcap-ember.webp');
   const { camera, gl } = useThree();
@@ -49,7 +47,6 @@ export default function LossLandscape({ theme, isMobile }) {
 
   const drop = (x, z) => {
     Object.assign(opt.current, { x, z, m: [0, 0], v: [0, 0], t: 0, still: 0, done: false, wait: 0, trail: [] });
-    labelRefs.current.forEach((el) => el?.classList.remove('is-hit'));
   };
 
   // surface mesh (occluder) + grid lines tinted by height
@@ -120,9 +117,6 @@ export default function LossLandscape({ theme, isMobile }) {
     fadeRef.current += (target - fadeRef.current) * Math.min(1, delta * 4);
     const fade = fadeRef.current;
     g.visible = fade > 0.01;
-    // drei <Html> overlays ignore group visibility, so fade them explicitly (before any early return)
-    labelRefs.current.forEach((el) => { if (el) el.style.opacity = fade; });
-    if (readoutRef.current) readoutRef.current.style.opacity = fade;
     if (!g.visible) return;
     g.traverse((o) => { if (o.material && 'opacity' in o.material && o.userData.fade) o.material.opacity = o.userData.fade * fade; });
     g.position.y = (isMobile ? -2.1 : -2.3) - (1 - fade) * 1.2;
@@ -152,12 +146,7 @@ export default function LossLandscape({ theme, isMobile }) {
         if (o.trail.length === 0 || o.t % 2 === 0) o.trail.push(o.x, f(o.x, o.z) + 0.06, o.z);
         if (o.trail.length > 600 * 3) o.trail.splice(0, 3);
       }
-      if (o.still > 50) {
-        o.done = true;
-        let best = -1, bd = Infinity;
-        VALLEYS.forEach((v, i) => { const d = Math.hypot(o.x - v.x, o.z - v.z); if (d < bd) { bd = d; best = i; } });
-        if (best >= 0 && bd < VALLEYS[best].s * 1.4) labelRefs.current[best]?.classList.add('is-hit');
-      }
+      if (o.still > 50) o.done = true;
     }
     const y = f(o.x, o.z);
     ballRef.current.position.set(o.x, y + 0.16, o.z);
@@ -165,9 +154,6 @@ export default function LossLandscape({ theme, isMobile }) {
     tg.attributes.position.array.set(o.trail);
     tg.attributes.position.needsUpdate = true;
     tg.setDrawRange(0, o.trail.length / 3);
-    if (readoutRef.current) {
-      readoutRef.current.textContent = o.done ? `converged · loss ${(y - Y_MIN).toFixed(3)}` : `step ${o.t} · loss ${(y - Y_MIN).toFixed(3)}`;
-    }
   });
 
   return (
@@ -184,15 +170,7 @@ export default function LossLandscape({ theme, isMobile }) {
       <mesh ref={ballRef} userData={{ fade: 1 }}>
         <sphereGeometry args={[0.16, 32, 32]} />
         <meshMatcapMaterial matcap={ember} transparent opacity={0} />
-        <Html center position={[0, 0.5, 0]} zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
-          <span ref={readoutRef} className="ll-readout" />
-        </Html>
       </mesh>
-      {VALLEYS.map((v, i) => (
-        <Html key={v.label} center position={[v.x, f(v.x, v.z) - 0.2, v.z]} zIndexRange={[4, 0]} style={{ pointerEvents: 'none' }}>
-          <span ref={(el) => (labelRefs.current[i] = el)} className="ll-label">{v.label}</span>
-        </Html>
-      ))}
     </group>
   );
 }

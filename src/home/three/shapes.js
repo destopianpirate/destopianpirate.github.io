@@ -149,32 +149,6 @@ export function terrain(count) {
 }
 
 /**
- * Lorenz strange attractor (σ=10, ρ=28, β=8/3): the chaotic "butterfly".
- * Points are sampled along one long trajectory, so density follows the dynamics.
- */
-export function lorenz(count) {
-  const out = new Float32Array(count * 3);
-  let x = 0.1, y = 0, z = 0;
-  const dt = 0.005, s = 10, r = 28, b = 8 / 3;
-  for (let i = 0; i < 2000; i++) { // settle onto the attractor
-    const dx = s * (y - x), dy = x * (r - z) - y, dz = x * y - b * z;
-    x += dx * dt; y += dy * dt; z += dz * dt;
-  }
-  const stride = 3;
-  for (let n = 0; n < count; n++) {
-    for (let k = 0; k < stride; k++) {
-      const dx = s * (y - x), dy = x * (r - z) - y, dz = x * y - b * z;
-      x += dx * dt; y += dy * dt; z += dz * dt;
-    }
-    const j = 0.018;
-    out[n * 3] = x * 0.1 + gauss() * j;
-    out[n * 3 + 1] = (z - 25) * 0.1 + gauss() * j;
-    out[n * 3 + 2] = y * 0.1 + gauss() * j;
-  }
-  return out;
-}
-
-/**
  * Klein bottle ("bottle" immersion): a closed surface with no inside or outside.
  * Area-weighted rejection sampling keeps the particle density even across the surface.
  */
@@ -308,6 +282,31 @@ export function browserWindows(count) {
       x = -W / 2 + 0.25 + Math.random() * (W - 0.5); y = [0.3, -0.05, -0.4, -0.75][(Math.random() * 4) | 0] + jit(0.01);
     }
     out[i * 3] = cx + x; out[i * 3 + 1] = cy + y; out[i * 3 + 2] = cz + gauss() * 0.01;
+  }
+  return out;
+}
+
+/**
+ * Lorenz attractor: the chaotic "butterfly". Sampled along one long trajectory, so the density follows the
+ * dynamics. Used as a plain dotted structure behind the Academic Journey.
+ */
+export function lorenz(count) {
+  const out = new Float32Array(count * 3);
+  let x = 0.1, y = 0, z = 0;
+  const dt = 0.005, s = 10, r = 28, b = 8 / 3;
+  for (let i = 0; i < 2000; i++) { // settle onto the attractor
+    const dx = s * (y - x), dy = x * (r - z) - y, dz = x * y - b * z;
+    x += dx * dt; y += dy * dt; z += dz * dt;
+  }
+  for (let n = 0; n < count; n++) {
+    for (let k = 0; k < 3; k++) {
+      const dx = s * (y - x), dy = x * (r - z) - y, dz = x * y - b * z;
+      x += dx * dt; y += dy * dt; z += dz * dt;
+    }
+    const j = 0.018;
+    out[n * 3] = x * 0.1 + gauss() * j;
+    out[n * 3 + 1] = (z - 25) * 0.1 + gauss() * j;
+    out[n * 3 + 2] = y * 0.1 + gauss() * j;
   }
   return out;
 }

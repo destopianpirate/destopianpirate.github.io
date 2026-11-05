@@ -6,21 +6,16 @@ import { scrollStore } from '../scrollStore';
 
 // Renders the live 3D Neural Cellular Automaton (computed in nca.worker.js) as instanced voxels.
 // A fast "slash" of the pointer through the shape cuts a hole; the trained network regrows it.
-// The hero chips can swap in other trained models (initials, brain, chip) through scrollStore.
 
-// World size of one cell per model, so every shape ends up about the same size on screen.
-const VOXEL_BY_SHAPE = { bust: 4.6 / 34, initials: 3.7 / 40, brain: 4.0 / 36, chip: 3.5 / 30 };
+const VOXEL = 4.6 / 34;   // world size of one cell: the 34-cell-tall bust ends up about 4.6 units tall
 const MAX_CELLS = 6000;
-const modelBase = (shape) => `/home/nca/${shape}/`;
+const MODEL_BASE = '/home/nca/bust/';
 
-export default function NCAVoxels({ theme }) {
+export default function NCAVoxels({ theme, isMobile }) {
   const meshRef = useRef();
   const groupRef = useRef();
   const workerRef = useRef(null);
   const gridRef = useRef(null);
-  const voxelRef = useRef(VOXEL_BY_SHAPE.bust);
-  const currentShape = useRef('bust');
-  const reseedSeen = useRef(0);
   const dataRef = useRef({ cells: null, count: 0, dirty: false });
   const fadeRef = useRef(0);
   const matcap = useTexture('/home/matcap-porcelain.webp');
@@ -43,30 +38,18 @@ export default function NCAVoxels({ theme }) {
       const m = e.data;
       if (m.type === 'ready') {
         gridRef.current = m.grid;
-        voxelRef.current = VOXEL_BY_SHAPE[m.shape] ?? VOXEL_BY_SHAPE.bust;
         scrollStore.ncaReady = true;
-        scrollStore.ncaInfo = { shape: m.shape, label: m.label, target: m.targetCount, params: m.weights, grid: m.grid };
         w.postMessage({ type: 'run', value: true });
       } else if (m.type === 'frame') {
         dataRef.current = { cells: m.cells, count: m.count, dirty: true };
-        scrollStore.ncaStats = { step: m.step, alive: m.count };
       } else if (m.type === 'error') {
-        // a model that failed to load: fall back to the first one rather than leaving an empty hero
-        if (currentShape.current !== 'bust') {
-          currentShape.current = 'bust';
-          scrollStore.ncaShape = 'bust';
-          w.postMessage({ type: 'load', base: modelBase('bust') });
-        } else {
-          scrollStore.ncaReady = false;
-        }
+        scrollStore.ncaReady = false; // the particle bust takes over
       }
     };
     w.onerror = () => { scrollStore.ncaReady = false; };
-    w.postMessage({ type: 'init', base: modelBase('bust') });
+    w.postMessage({ type: 'init', base: MODEL_BASE });
     return () => {
       scrollStore.ncaReady = false;
-      scrollStore.ncaStats = null;
-      scrollStore.ncaInfo = null;
       w.terminate();
     };
   }, []);
@@ -83,7 +66,6 @@ export default function NCAVoxels({ theme }) {
       const grid = gridRef.current;
       const g = groupRef.current;
       if (!grid || !g || scrollStore.stage > 0.35) return;
-      const VOXEL = voxelRef.current;
       const now = performance.now();
       const speed = last ? Math.hypot(e.clientX - last.x, e.clientY - last.y) / Math.max(1, now - last.t) : 0;
       last = { x: e.clientX, y: e.clientY, t: now };
@@ -141,23 +123,12 @@ export default function NCAVoxels({ theme }) {
     const grid = gridRef.current;
     if (!mesh || !grid) return;
 
-    // commands from the hero chips (plain mutable store, no React state)
-    const want = scrollStore.ncaShape;
-    if (want && want !== currentShape.current && VOXEL_BY_SHAPE[want]) {
-      currentShape.current = want;
-      workerRef.current?.postMessage({ type: 'load', base: modelBase(want) });
-    }
-    if (scrollStore.ncaReseed !== reseedSeen.current) {
-      reseedSeen.current = scrollStore.ncaReseed;
-      workerRef.current?.postMessage({ type: 'reseed' });
-    }
-
     const target = Math.max(0, 1 - scrollStore.stage / 0.45);
     fadeRef.current += (target - fadeRef.current) * Math.min(1, delta * 6);
     const f = fadeRef.current;
     mesh.material.opacity = f;
     mesh.visible = f > 0.01;
-    groupRef.current.scale.setScalar(0.9 + f * 0.1);
+    groupRef.current.scale.setScalar((0.9 + f * 0.1) * (isMobile ? 0.5 : 1));
 
     const shouldRun = scrollStore.stage < 0.6;
     if (shouldRun !== runningRef.current) {
@@ -169,7 +140,6 @@ export default function NCAVoxels({ theme }) {
     if (!d.dirty || !d.cells) return;
     d.dirty = false;
     const [GX, GY, GZ] = grid;
-    const VOXEL = voxelRef.current;
     ink.set(dark ? '#f2f2f4' : '#17171a');
     paper.set(dark ? '#55555c' : '#b9b9c0');
     hot.set(dark ? '#FF4D2E' : '#E8401F');
@@ -191,7 +161,7 @@ export default function NCAVoxels({ theme }) {
   });
 
   return (
-    <group ref={groupRef} position={[0.45, -0.1, 0]}>
+    <group ref={groupRef} position={isMobile ? [0, 1.55, 0] : [0.45, -0.1, 0]}>
       <instancedMesh ref={meshRef} args={[geometry, material, MAX_CELLS]} frustumCulled={false} />
     </group>
   );

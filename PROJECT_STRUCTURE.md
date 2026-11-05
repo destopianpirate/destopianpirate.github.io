@@ -51,7 +51,7 @@ graph TD
 - **`src/home/HomePage.css`**: Styles for the pinned horizontal timeline, marker highlights, responsive breakpoints, and typography.
 - **`src/home/JourneyVisuals.jsx`**: Interactive milestone preview cards and responsive visual assets for academic milestones.
 - **`src/home/JourneyVisuals.css`**: Layout styles, media wrappers, and responsive styling for journey milestones.
-- **`src/home/PillarVisuals.jsx`**: Visual presentation cards representing dual focus areas (Artificial Intelligence and Full-Stack Web Development).
+- **`src/home/PillarVisuals.jsx`**: Flat technical-drawing illustrations for the three discipline cards (neural network, server rack, browser wireframe).
 - **`src/home/scrollStore.js`**: Centralized reactive state store sharing scroll progression, stage transitions, and pointer coordinates between DOM and Canvas layers.
 - **`src/home/three/HomeCanvas.jsx`**: React Three Fiber Canvas container managing WebGL rendering, camera parameters, and lights.
 - **`src/home/three/FloatingShapes.jsx`**: Three.js floating procedural meshes with custom matcap materials responding to scroll stages.

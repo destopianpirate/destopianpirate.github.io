@@ -19,7 +19,8 @@ export default function HomeCanvas({ theme, isMobile, onReady }) {
   }, []);
 
   return (
-    <div className="home3d-canvas" aria-hidden="true">
+    <div className="home3d-layer" aria-hidden="true">
+    <div className="home3d-canvas">
       <Canvas
         dpr={[1, isMobile ? 1.25 : 1.6]}
         camera={{ position: [0, 0, 10], fov: 35, near: 0.1, far: 60 }}
@@ -28,7 +29,7 @@ export default function HomeCanvas({ theme, isMobile, onReady }) {
         <fog attach="fog" args={[theme === 'dark' ? '#030303' : '#ffffff', 11, 24]} />
         <ParticleField count={isMobile ? 7000 : 18000} theme={theme} isMobile={isMobile} onReady={onReady}>
           <Suspense fallback={null}>
-            <NCAVoxels theme={theme} />
+            <NCAVoxels theme={theme} isMobile={isMobile} />
           </Suspense>
         </ParticleField>
         <Suspense fallback={null}>
@@ -36,6 +37,7 @@ export default function HomeCanvas({ theme, isMobile, onReady }) {
           <LossLandscape theme={theme} isMobile={isMobile} />
         </Suspense>
       </Canvas>
+    </div>
     </div>
   );
 }

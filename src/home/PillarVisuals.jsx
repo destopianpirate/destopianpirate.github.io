@@ -1,4 +1,5 @@
-// Coded (no images) illustrations for the three focus pillars.
+// Coded (no images) illustrations for the three discipline cards.
+// All three are flat technical drawings on dotted paper: ink outlines, one orange-red accent that moves.
 
 const LAYERS = [3, 5, 5, 2];
 const LAYER_X = [34, 96, 158, 216];
@@ -43,60 +44,70 @@ export function NeuralGraph() {
   );
 }
 
-export function ServerStack() {
+/* Systems: a rack elevation. Three units with vent grilles, drive bays and LEDs; a packet runs along each. */
+const RACK_Y = [14, 56, 98];
+
+export function ServerRack() {
   return (
-    <div className="h3-stack-wrap" aria-hidden="true">
-      <div className="h3-stack">
-        {[0, 1, 2].map((i) => (
-          <div className="h3-stack-slab" key={i} style={{ '--i': i }}>
-            <span className="h3-stack-led" />
-            <span className="h3-stack-vents" />
-            <span className="h3-stack-packet" style={{ animationDelay: `${i * 0.6}s` }} />
-          </div>
-        ))}
-      </div>
-    </div>
+    <svg className="dv" viewBox="0 0 250 150" aria-hidden="true">
+      <line className="dv-rail" x1="38" y1="8" x2="38" y2="138" />
+      <line className="dv-rail" x1="212" y1="8" x2="212" y2="138" />
+      <line className="dv-rail" x1="26" y1="142" x2="224" y2="142" />
+      {RACK_Y.map((y, i) => (
+        <g key={y}>
+          <rect className="dv-box" x="46" y={y} width="158" height="34" rx="2" />
+          {[0, 1, 2, 3, 4, 5, 6].map((k) => (
+            <line key={k} className="dv-fine" x1={58 + k * 6} y1={y + 9} x2={58 + k * 6} y2={y + 25} />
+          ))}
+          {[0, 1, 2].map((k) => (
+            <rect key={k} className="dv-fine" x={108 + k * 24} y={y + 10} width="18" height="14" rx="1.5" />
+          ))}
+          <circle className={`dv-led ${i === 2 ? 'is-hot' : ''}`} cx="186" cy={y + 17} r="2.4" />
+          <circle className="dv-led-off" cx="194" cy={y + 17} r="2.4" />
+          {[42, 208].map((x) => [8, 26].map((dy) => <circle key={`${x}-${dy}`} className="dv-screw" cx={x} cy={y + dy} r="1.4" />))}
+          <line className="dv-packet" x1="50" y1={y + 30} x2="200" y2={y + 30} style={{ animationDelay: `${i * 0.7}s` }} />
+        </g>
+      ))}
+    </svg>
   );
 }
 
-export function BrowserStack() {
+/* Web: two browser windows in wireframe, with a self-drawing chart, bars that grow and a pulsing button. */
+const BARS = [10, 18, 13, 24, 16, 20, 12];
+
+export function BrowserWireframe() {
   return (
-    <div className="h3-wins-wrap" aria-hidden="true">
-      <div className="h3-wins">
-        {[2, 1].map((i) => (
-          <div className="h3-win is-back" key={i} style={{ '--i': i }}>
-            <div className="h3-win-bar"><i className="is-hot" /><i /><i /></div>
-            <div className="h3-win-body">
-              <span className="h3-sk" style={{ width: '55%' }} />
-              <span className="h3-sk" style={{ width: '80%' }} />
-              <span className="h3-sk" style={{ width: '40%' }} />
-              <span className="h3-sk" style={{ width: '68%' }} />
-            </div>
-          </div>
-        ))}
-        <div className="h3-win is-front" style={{ '--i': 0 }}>
-          <div className="h3-win-bar"><i className="is-hot" /><i /><i /><span className="h3-win-url" /></div>
-          <div className="h3-win-body h3-win-grid">
-            <div className="h3-win-side"><b /><b /><b /><b /></div>
-            <div className="h3-win-chart">
-              <svg viewBox="0 0 100 40" preserveAspectRatio="none">
-                <path className="h3-area" d="M0 32 C 12 30, 18 14, 30 18 S 50 34, 62 22 S 84 6, 100 12 L 100 40 L 0 40 Z" />
-                <path className="h3-curve" d="M0 32 C 12 30, 18 14, 30 18 S 50 34, 62 22 S 84 6, 100 12" />
-              </svg>
-            </div>
-            <div className="h3-win-donut"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="13" /><circle className="h3-donut-val" cx="18" cy="18" r="13" /></svg></div>
-            <div className="h3-win-bars">{[0, 1, 2, 3, 4].map((b) => <span key={b} style={{ animationDelay: `${b * 0.15}s` }} />)}</div>
-            <div className="h3-win-list"><span /><span /><span /></div>
-            <div className="h3-win-cta"><span /></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <svg className="dv" viewBox="0 0 250 150" aria-hidden="true">
+      <g className="dv-back">
+        <rect className="dv-box" x="30" y="10" width="150" height="104" rx="2" />
+        <line className="dv-fine" x1="30" y1="22" x2="180" y2="22" />
+        <line className="dv-fine" x1="42" y1="40" x2="112" y2="40" />
+        <line className="dv-fine" x1="42" y1="52" x2="140" y2="52" />
+        <line className="dv-fine" x1="42" y1="64" x2="98" y2="64" />
+      </g>
+      <rect className="dv-box" x="58" y="28" width="164" height="112" rx="2" />
+      <line className="dv-fine" x1="58" y1="42" x2="222" y2="42" />
+      <circle className="dv-dot is-hot" cx="67" cy="35" r="2.2" />
+      <circle className="dv-dot" cx="75" cy="35" r="2.2" />
+      <circle className="dv-dot" cx="83" cy="35" r="2.2" />
+      <rect className="dv-fine" x="96" y="32" width="100" height="6" rx="3" />
+      <line className="dv-fine" x1="82" y1="42" x2="82" y2="140" />
+      {[0, 1, 2, 3].map((k) => (
+        <rect key={k} className={k === 0 ? 'dv-solid' : 'dv-fine'} x="65" y={50 + k * 14} width="10" height="8" rx="1" />
+      ))}
+      <path className="dv-area" d="M92 94 C108 90 112 68 128 72 S150 96 166 82 S196 58 214 62 L214 100 L92 100 Z" />
+      <path className="dv-curve" pathLength="1" d="M92 94 C108 90 112 68 128 72 S150 96 166 82 S196 58 214 62" />
+      <line className="dv-fine" x1="92" y1="100" x2="214" y2="100" />
+      {BARS.map((h, k) => (
+        <rect key={k} className="dv-bar" x={92 + k * 13} y={132 - h} width="8" height={h} style={{ animationDelay: `${k * 0.18}s` }} />
+      ))}
+      <rect className="dv-cta" x="180" y="118" width="34" height="14" rx="2" />
+    </svg>
   );
 }
 
 export default function PillarVisual({ index }) {
   if (index === 0) return <NeuralGraph />;
-  if (index === 1) return <ServerStack />;
-  return <BrowserStack />;
+  if (index === 1) return <ServerRack />;
+  return <BrowserWireframe />;
 }
