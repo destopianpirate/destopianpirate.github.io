@@ -397,7 +397,13 @@ export default function HomePage({ theme, isMobile, introReady, bioPillars, time
         </header>
         <div className="h3-pillars-grid">
           {bioPillars.map((pillar, idx) => (
-            <article className="h3-pillar" key={pillar.title} onPointerMove={onPillarMove} onPointerLeave={onPillarLeave}>
+            <article
+              className="h3-pillar"
+              key={pillar.title}
+              onPointerMove={onPillarMove}
+              onPointerEnter={() => { scrollStore.hoverPillar = idx; }}
+              onPointerLeave={(e) => { onPillarLeave(e); scrollStore.hoverPillar = -1; }}
+            >
               <div className="h3-pillar-inner">
                 <div className="h3-pillar-visual"><PillarVisual index={idx} /></div>
                 <div className="pillar-card-header">

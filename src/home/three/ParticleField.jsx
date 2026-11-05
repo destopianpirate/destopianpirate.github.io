@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { scrollStore } from '../scrollStore';
-import { portraitBust, brain, lorenz, kleinBottle, terrain } from './shapes';
+import { portraitBust, brain, lorenz, kleinBottle, terrain, neuralNet, serverRack, browserWindows } from './shapes';
 
 const vertexShader = /* glsl */ `
   uniform float uTime;
@@ -14,17 +14,34 @@ const vertexShader = /* glsl */ `
   attribute vec3 aP2;
   attribute vec3 aP3;
   attribute vec3 aP4;
+  attribute vec3 aH0;
+  attribute vec3 aH1;
+  attribute vec3 aH2;
+  uniform vec3 uHW;
+  uniform float uHead;     // 0..1: where the "ride" currently is along the Lorenz trajectory
+  uniform float uHeadAmt;  // 0..1: how strongly the ride is active (1 while the attractor is on screen)
+  attribute float aIdx;    // 0..1: this particle's position along the trajectory
   attribute float aRand;
   attribute float aAccent;
   varying float vRand;
   varying float vAccent;
   varying float vDepth;
 
+  // Stage 3: the Klein bottle, which morphs into a discipline-specific shape while its card is hovered.
+  // Each particle follows its own delay (aRand) so the change ripples through the cloud.
+  vec3 stage3() {
+    float d = aRand * 0.4;
+    float w0 = smoothstep(d, d + 0.6, uHW.x);
+    float w1 = smoothstep(d, d + 0.6, uHW.y);
+    float w2 = smoothstep(d, d + 0.6, uHW.z);
+    return aP3 + (aH0 - aP3) * w0 + (aH1 - aP3) * w1 + (aH2 - aP3) * w2;
+  }
+
   vec3 pick(float i) {
     if (i < 0.5) return position;
     if (i < 1.5) return aP1;
     if (i < 2.5) return aP2;
-    if (i < 3.5) return aP3;
+    if (i < 3.5) return stage3();
     return aP4;
   }
 
@@ -54,12 +71,17 @@ const vertexShader = /* glsl */ `
     float w4 = smoothstep(3.0, 4.0, s);
     p.y += sin(p.x * 0.7 + uTime * 0.9) * cos(p.z * 0.5 + uTime * 0.6) * 0.22 * w4;
 
+    // Lorenz ride: particles just behind the head glow orange-red and swell, leaving a comet trail.
+    float behind = uHead - aIdx;
+    float trail = (behind > 0.0 && behind < 0.1) ? 1.0 - behind / 0.1 : 0.0;
+    float glow = trail * trail * uHeadAmt;
+
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = uSize * (0.55 + aRand * 0.9) * (1.0 + aAccent * 0.6) * uPixelRatio / -mv.z;
+    gl_PointSize = uSize * (0.55 + aRand * 0.9) * (1.0 + aAccent * 0.6) * (1.0 + glow * 1.6) * uPixelRatio / -mv.z;
 
     vRand = aRand;
-    vAccent = aAccent;
+    vAccent = max(aAccent, glow);
     vDepth = clamp((-mv.z - 6.0) / 10.0, 0.0, 1.0);
   }
 `;
@@ -108,6 +130,11 @@ export default function ParticleField({ count, theme, isMobile, onReady, childre
   const groupRef = useRef();
   const spinRef = useRef();
   const matRef = useRef();
+  const lorenzRef = useRef(null);
+  const headRef = useRef(0);
+  const headLocal = useMemo(() => new THREE.Vector3(), []);
+  const headWorld = useMemo(() => new THREE.Vector3(), []);
+  const lookAt = useMemo(() => new THREE.Vector3(), []);
   const stageRef = useRef(0);
   const [geometry, setGeometry] = useState(null);
   const { gl } = useThree();
@@ -121,9 +148,17 @@ export default function ParticleField({ count, theme, isMobile, onReady, childre
       const g = new THREE.BufferGeometry();
       g.setAttribute('position', new THREE.BufferAttribute(p0, 3));
       g.setAttribute('aP1', new THREE.BufferAttribute(p1, 3));
-      g.setAttribute('aP2', new THREE.BufferAttribute(lorenz(count), 3));
+      const lz = lorenz(count);
+      lorenzRef.current = lz;
+      g.setAttribute('aP2', new THREE.BufferAttribute(lz, 3));
+      const idx = new Float32Array(count);
+      for (let i = 0; i < count; i++) idx[i] = i / (count - 1);
+      g.setAttribute('aIdx', new THREE.BufferAttribute(idx, 1));
       g.setAttribute('aP3', new THREE.BufferAttribute(kleinBottle(count), 3));
       g.setAttribute('aP4', new THREE.BufferAttribute(terrain(count), 3));
+      g.setAttribute('aH0', new THREE.BufferAttribute(neuralNet(count), 3));
+      g.setAttribute('aH1', new THREE.BufferAttribute(serverRack(count), 3));
+      g.setAttribute('aH2', new THREE.BufferAttribute(browserWindows(count), 3));
       const r = new Float32Array(count);
       const acc = new Float32Array(count);
       for (let i = 0; i < count; i++) {
@@ -154,6 +189,9 @@ export default function ParticleField({ count, theme, isMobile, onReady, childre
       uOpacity: { value: 1 },
       uBase: { value: new THREE.Color('#1a1a1a') },
       uAccent: { value: new THREE.Color('#E8401F') },
+      uHW: { value: new THREE.Vector3() },
+      uHead: { value: 0 },
+      uHeadAmt: { value: 0 },
     }),
     []
   );
@@ -187,6 +225,21 @@ export default function ParticleField({ count, theme, isMobile, onReady, childre
     // while the NCA voxel bust owns the hero, the particles only appear as you scroll away
     u.uOpacity.value = lerpStage(scrollStore.ncaReady ? [0, ...op.slice(1)] : op, s);
 
+    // hovered discipline card -> target weights (smoothed, so the morph eases in and out)
+    const hv = scrollStore.hoverPillar;
+    const hw = u.uHW.value;
+    const k = Math.min(1, dt * 3.4);
+    hw.x += ((hv === 0 ? 1 : 0) - hw.x) * k;
+    hw.y += ((hv === 1 ? 1 : 0) - hw.y) * k;
+    hw.z += ((hv === 2 ? 1 : 0) - hw.z) * k;
+
+    // Lorenz ride: the head follows the Journey scroll; the camera drifts after it while stage 2 is on screen.
+    const ride = Math.max(0, 1 - Math.abs(s - 2) * 1.5);
+    headRef.current += (scrollStore.journeyProgress - headRef.current) * Math.min(1, dt * 4);
+    const head = 0.05 + headRef.current * 0.9;
+    u.uHead.value = head;
+    u.uHeadAmt.value = ride;
+
     const g = groupRef.current;
     if (!g) return;
     const [x, y, z] = lerpStage(isMobile ? OFFSETS.mobile : OFFSETS.desktop, s);
@@ -196,6 +249,25 @@ export default function ParticleField({ count, theme, isMobile, onReady, childre
     const targetRy = mouse.x * 0.35 + Math.sin(t * 0.25) * 0.12;
     g.rotation.y += (targetRy - g.rotation.y) * Math.min(1, dt * 2.5);
     g.rotation.x += (-mouse.y * 0.15 - g.rotation.x) * Math.min(1, dt * 2.5);
+
+    const lz = lorenzRef.current;
+    const cam = state.camera;
+    if (lz && spinRef.current) {
+      const n = lz.length / 3;
+      const c = Math.min(n - 14, Math.max(14, Math.floor(head * n)));
+      let hx = 0, hy = 0, hz = 0;
+      for (let k = -12; k <= 12; k++) { hx += lz[(c + k) * 3]; hy += lz[(c + k) * 3 + 1]; hz += lz[(c + k) * 3 + 2]; }
+      headLocal.set(hx / 25, hy / 25, hz / 25);
+      // raw Lorenz coordinates for the on-page readout (inverse of the scaling used to build the shape)
+      scrollStore.lorenzHead = { t: head * 270, x: headLocal.x * 10, y: headLocal.z * 10, z: headLocal.y * 10 + 25 };
+      spinRef.current.localToWorld(headWorld.copy(headLocal));
+    }
+    const kc = Math.min(1, dt * 2.4);
+    cam.position.x += ((headWorld.x * 0.3 * ride) - cam.position.x) * kc;
+    cam.position.y += ((headWorld.y * 0.26 * ride) - cam.position.y) * kc;
+    cam.position.z += ((10 - 1.6 * ride) - cam.position.z) * kc;
+    lookAt.set(headWorld.x * 0.45 * ride, headWorld.y * 0.45 * ride, 0);
+    cam.lookAt(lookAt);
 
     // The Lorenz attractor (2) and Klein bottle (3) turn slowly to show their 3D structure;
     // the weight fades this out for the other stages.

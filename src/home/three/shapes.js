@@ -211,3 +211,103 @@ export function kleinBottle(count) {
   }
   return out;
 }
+
+/* ------------------------------------------------------------------------------------------
+ * "Three disciplines" hover shapes. Each is the same size as the Klein bottle (about 4 x 4 units,
+ * centred on the origin) so the particle cloud can morph in place when a card is hovered.
+ * ------------------------------------------------------------------------------------------ */
+
+const pick = (arr) => arr[(Math.random() * arr.length) | 0];
+const jit = (s) => (Math.random() - 0.5) * s;
+
+/** AI: a fully connected feed-forward network, five layers, with bright neurons. */
+export function neuralNet(count) {
+  const layers = [3, 5, 6, 5, 3];
+  const xs = [-2.0, -1.0, 0, 1.0, 2.0];
+  const nodes = layers.map((n, li) =>
+    Array.from({ length: n }, (_, i) => [xs[li], (n === 1 ? 0 : (i / (n - 1) - 0.5) * 3.3), jit(1.1)])
+  );
+  const out = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    let x, y, z;
+    if (Math.random() < 0.2) {                       // neurons: small glowing blobs
+      const n = pick(pick(nodes));
+      x = n[0] + gauss() * 0.07; y = n[1] + gauss() * 0.07; z = n[2] + gauss() * 0.07;
+    } else {                                         // synapses: points along random layer-to-layer edges
+      const l = (Math.random() * (layers.length - 1)) | 0;
+      const a = pick(nodes[l]), b = pick(nodes[l + 1]);
+      const t = Math.random();
+      x = a[0] + (b[0] - a[0]) * t + gauss() * 0.01;
+      y = a[1] + (b[1] - a[1]) * t + gauss() * 0.01;
+      z = a[2] + (b[2] - a[2]) * t + gauss() * 0.01;
+    }
+    out[i * 3] = x; out[i * 3 + 1] = y; out[i * 3 + 2] = z;
+  }
+  return out;
+}
+
+/** Systems: a rack of five servers: wire-frame slabs, vented front panels and status LEDs. */
+export function serverRack(count) {
+  const W = 1.75, H = 0.27, D = 0.8;
+  const ys = [-1.9, -0.95, 0, 0.95, 1.9].map((v) => v * 0.98);
+  const corners = [];
+  for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) corners.push([sx * W, sy * H, sz * D]);
+  const edges = [];
+  corners.forEach((a, i) => corners.forEach((b, j) => {
+    if (j > i && (a[0] !== b[0]) + (a[1] !== b[1]) + (a[2] !== b[2]) === 1) edges.push([a, b]);
+  }));
+  const out = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    const cy = pick(ys);
+    const r = Math.random();
+    let x, y, z;
+    if (r < 0.5) {                                   // box edges
+      const [a, b] = pick(edges);
+      const t = Math.random();
+      x = a[0] + (b[0] - a[0]) * t; y = a[1] + (b[1] - a[1]) * t; z = a[2] + (b[2] - a[2]) * t;
+    } else if (r < 0.88) {                           // vents: vertical slits on the front face
+      const slit = (Math.random() * 14) | 0;
+      x = -1.35 + slit * 0.17 + jit(0.012); y = jit(H * 1.5); z = D;
+    } else {                                         // LEDs at the right of the front face
+      const led = (Math.random() * 3) | 0;
+      x = 1.45 + led * 0.11 + gauss() * 0.012; y = gauss() * 0.012; z = D + 0.01;
+    }
+    out[i * 3] = x; out[i * 3 + 1] = cy + y; out[i * 3 + 2] = z;
+  }
+  return out;
+}
+
+/** Web: three layered browser windows, with a title bar and a mini dashboard on the front one. */
+export function browserWindows(count) {
+  const W = 3.0, H = 2.2;
+  const wins = [[-0.55, 0.45, -0.7], [0, 0, 0], [0.55, -0.45, 0.7]];
+  const out = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    const wi = (Math.random() * 3) | 0;
+    const [cx, cy, cz] = wins[wi];
+    const front = wi === 2;
+    const r = Math.random();
+    let x, y;
+    if (r < 0.42) {                                  // outline
+      const side = (Math.random() * 4) | 0, t = Math.random();
+      x = side < 2 ? (side ? W / 2 : -W / 2) : (t - 0.5) * W;
+      y = side < 2 ? (t - 0.5) * H : (side === 2 ? H / 2 : -H / 2);
+    } else if (r < 0.54) {                           // title bar rule + window dots
+      if (Math.random() < 0.25) { x = -W / 2 + 0.22 + ((Math.random() * 3) | 0) * 0.17 + gauss() * 0.012; y = H / 2 - 0.18 + gauss() * 0.012; }
+      else { x = (Math.random() - 0.5) * W; y = H / 2 - 0.36; }
+    } else if (front && r < 0.8) {                   // front window: bar chart + sparkline
+      if (Math.random() < 0.6) {
+        const bar = (Math.random() * 5) | 0;
+        const hgt = [0.5, 0.9, 0.65, 1.2, 0.8][bar];
+        x = 0.25 + bar * 0.38 + jit(0.14); y = -H / 2 + 0.25 + Math.random() * hgt;
+        if (Math.random() < 0.6) x = 0.25 + bar * 0.38 + (Math.random() < 0.5 ? -0.07 : 0.07);   // bar outlines
+      } else {
+        x = -1.35 + Math.random() * 1.3; y = 0.15 + Math.sin((x + 1.35) * 4) * 0.25 + (x + 1.35) * 0.25;
+      }
+    } else {                                         // back windows: faint content lines
+      x = -W / 2 + 0.25 + Math.random() * (W - 0.5); y = [0.3, -0.05, -0.4, -0.75][(Math.random() * 4) | 0] + jit(0.01);
+    }
+    out[i * 3] = cx + x; out[i * 3 + 1] = cy + y; out[i * 3 + 2] = cz + gauss() * 0.01;
+  }
+  return out;
+}
