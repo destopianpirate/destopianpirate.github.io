@@ -1,0 +1,108 @@
+/* ================= story extras: parallax, particles, interaction, your photo ================= */
+
+/* mouse parallax by depth: uses the `translate` property so GSAP's transforms stay untouched */
+.story .layer, .story .actor { translate: calc(var(--mx, 0) * var(--d, 0) * 1px) calc(var(--my, 0) * var(--d, 0) * 0.6px); }
+.pro-moon, .sun { translate: calc(var(--mx, 0) * var(--d, 0) * 1px) calc(var(--my, 0) * var(--d, 0) * 0.6px); }
+.bt-sun, .ep-sun { translate: calc(-50% + var(--mx, 0) * var(--d, 0) * 1px) calc(var(--my, 0) * var(--d, 0) * 0.6px); }
+.wd-key { translate: calc(var(--mx, 0) * var(--d, 0) * 1px) calc(-46% + var(--my, 0) * var(--d, 0) * 0.6px); }
+.pro-stars { --d: 4; } .pro-moon { --d: 8; } .pro-far { --d: 12; } .pro-mid { --d: 20; } .pro-cliff, .pro-ninja { --d: 34; }
+.sun { --d: 6; } .org-far { --d: 10; } .org-mid { --d: 18; } .org-river { --d: 24; } .org-village { --d: 32; } .org-ninja { --d: 38; }
+.dojo { --d: 10; } .trn-ninja { --d: 24; }
+.tech-far { --d: 12; } .master .actor { --d: 22; }
+.bt-sun { --d: 10; } .bt-ground { --d: 26; } .oni, .hero-ninja { --d: 30; }
+.scr-bg { --d: 14; } .sm-far { --d: 12; } .sm-shrine { --d: 24; } .sm-ninja { --d: 34; }
+.ep-ridge { --d: 18; } .ep-ninja { --d: 32; } .ep-stars { --d: 6; } .ep-sun { --d: 8; } .wd-key { --d: -10; }
+
+/* particles */
+.fx { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; }
+.fx i { position: absolute; left: var(--x); display: block; scale: var(--s); animation-duration: var(--d); animation-delay: var(--delay); animation-iteration-count: infinite; animation-timing-function: linear; }
+.fx--petals i { top: -5%; width: 14px; height: 10px; background: var(--sakura); border-radius: 80% 10% 80% 10%; border: 1.5px solid rgba(13, 13, 15, 0.35); animation-name: petalfall; }
+@keyframes petalfall { to { transform: translate(var(--drift), 112vh) rotate(720deg); } }
+.fx--embers i { bottom: -4%; width: 5px; height: 5px; border-radius: 50%; background: #ff5a3c; box-shadow: 0 0 10px 3px rgba(255, 60, 40, 0.7); animation-name: emberrise; }
+@keyframes emberrise { 0% { transform: translate(0, 0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(var(--drift), -105vh); opacity: 0; } }
+.fx--motes i { top: calc(var(--x) * 0.9); width: 4px; height: 4px; border-radius: 50%; background: rgba(255, 236, 200, 0.85); box-shadow: 0 0 8px rgba(255, 236, 200, 0.8); animation-name: motefloat; animation-direction: alternate; animation-timing-function: ease-in-out; }
+@keyframes motefloat { from { transform: translate(0, 0); opacity: 0.2; } to { transform: translate(var(--drift), -60px); opacity: 1; } }
+.fx--fireflies { z-index: 3; }
+.fx--fireflies i { top: calc(30% + var(--x) * 0.6); width: 6px; height: 6px; border-radius: 50%; background: #ffd27a; box-shadow: 0 0 14px 4px rgba(255, 200, 100, 0.8); animation-name: firefly; animation-direction: alternate; animation-timing-function: ease-in-out; }
+@keyframes firefly { 0% { transform: translate(0, 0); opacity: 0; } 50% { opacity: 1; } 100% { transform: translate(var(--drift), -80px); opacity: 0.2; } }
+
+/* click-to-strike */
+.story .stage { cursor: crosshair; }
+.cut { position: absolute; z-index: 45; pointer-events: none; width: 0; height: 0; }
+.cut-line { position: absolute; left: -130px; top: -4px; width: 260px; height: 8px; border-radius: 50%; background: #fff; transform-origin: 50% 50%; rotate: var(--a);
+  box-shadow: 0 0 0 3px var(--red), 0 0 30px 8px rgba(227, 18, 44, 0.7); }
+.cut-kanji { position: absolute; left: 24px; top: -70px; font-family: var(--f-brush); font-size: 54px; color: var(--red); -webkit-text-stroke: 2px var(--ink); paint-order: stroke fill; text-shadow: 3px 3px 0 var(--ink); }
+.cut-drop { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; border-radius: 50%; background: var(--ink); border: 2px solid var(--red); }
+
+/* katana scroll meter: the blade draws out of the sheath as you scroll */
+.kmeter { position: fixed; right: 14px; top: 50%; translate: 0 -50%; z-index: 70; display: flex; flex-direction: column; align-items: center; pointer-events: none; height: 62vh; }
+.kmeter-hilt { width: 10px; height: 46px; border-radius: 4px; border: 2px solid var(--ink); background: repeating-linear-gradient(135deg, #0d0d0f 0 4px, #fbf8f1 4px 7px); }
+.kmeter-tsuba { width: 24px; height: 8px; border-radius: 50%; background: var(--red); border: 2px solid var(--ink); margin: 2px 0; }
+.kmeter-sheath { position: relative; flex: 1; width: 10px; border-radius: 0 0 6px 6px; background: rgba(13, 13, 15, 0.82); border: 2px solid var(--ink); }
+.kmeter-blade { position: absolute; left: 1px; right: 1px; top: 0; bottom: 0; transform-origin: 50% 0; background: linear-gradient(90deg, #fff 0 55%, #c9c4b8 55% 100%); box-shadow: 0 0 10px rgba(227, 18, 44, 0.8); border-radius: 0 0 4px 4px; }
+.kmeter-sheath i { position: absolute; left: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ink); transition: background 0.3s, scale 0.3s; }
+.kmeter-sheath i.is-on { background: var(--red); scale: 1.25; }
+
+/* chapter select */
+.hud { cursor: pointer; pointer-events: auto; padding: 0; border: 0; background: none; text-align: left; }
+.hud .hud-txt { display: flex; }
+.hud:hover .hud-kanji, .hud.is-open .hud-kanji { background: var(--ink); color: var(--red); }
+.chmenu { position: fixed; left: 18px; bottom: 76px; z-index: 72; width: min(300px, calc(100vw - 36px)); max-height: calc(100vh - 180px); overflow: auto; background: var(--paper); color: var(--ink); border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--red);
+  padding: 12px; clip-path: inset(100% 0 0 0); transition: clip-path 0.5s var(--ease-snap); }
+.chmenu.is-open { clip-path: inset(0 0 0 0); }
+.chmenu-head { color: var(--red); display: block; padding: 2px 6px 8px; border-bottom: 2px solid var(--ink); margin-bottom: 6px; }
+.chmenu ol { list-style: none; margin: 0; padding: 0; }
+.chmenu button { width: 100%; display: grid; grid-template-columns: 34px 26px 1fr; align-items: center; gap: 8px; padding: 7px 6px; font-weight: 800; font-size: 15px; text-align: left; transition: background 0.2s, transform 0.25s var(--ease-out); }
+.chmenu button em { font-style: normal; font-family: var(--f-brush); font-size: 22px; color: var(--red); }
+.chmenu button span { font-family: var(--f-mono); font-size: 11px; color: var(--mute); }
+.chmenu button:hover { background: var(--paper-2); transform: translateX(6px); }
+.chmenu button.is-on { background: var(--ink); color: var(--paper); }
+.chmenu button.is-on span { color: var(--mute-light); }
+.chmenu.is-open li { animation: chin 0.45s var(--ease-out) both; animation-delay: calc(var(--i) * 0.03s); }
+@keyframes chin { from { opacity: 0; transform: translateX(-20px); } }
+
+.pro-tip { display: block; margin-top: 12px; color: var(--mute-light); font-size: 10px; }
+
+/* your photo: wanted poster (character intro) + polaroid (epilogue) */
+.wanted { position: absolute; z-index: 6; margin: 0; right: calc(var(--gutter) + min(84vh, 900px) * 0.75 - 60px); bottom: 6%; width: clamp(170px, 15vw, 230px); padding: 12px 12px 14px; background: #efe3c6;
+  border: 3px solid var(--ink); box-shadow: 8px 8px 0 rgba(13, 13, 15, 0.7); visibility: hidden; transform-origin: 50% 0; text-align: center; }
+.wanted-kunai { position: absolute; left: 50%; top: -58px; width: 26px; translate: -50% 0; rotate: 14deg; z-index: 2; }
+.wanted-head { display: block; font-family: var(--f-display); font-size: 18px; letter-spacing: 0.06em; border-bottom: 3px double var(--ink); padding-bottom: 6px; margin-bottom: 8px; }
+.wanted-photo { position: relative; aspect-ratio: 1; border: 3px solid var(--ink); overflow: hidden; background: #fff; }
+.wanted-photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.6) brightness(1.08); }
+.wanted-tone { position: absolute; inset: 0; mix-blend-mode: multiply; background: radial-gradient(rgba(13, 13, 15, 0.6) 1px, transparent 1.5px) 0 0 / 4px 4px, linear-gradient(180deg, transparent 50%, rgba(227, 18, 44, 0.55)); }
+.wanted figcaption { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; }
+.wanted figcaption b { font-family: var(--f-display); font-weight: 400; font-size: 17px; }
+.wanted figcaption span { font-size: 12px; font-weight: 800; }
+.wanted figcaption em { font-style: normal; font-family: var(--f-mono); font-size: 10px; color: var(--red); text-transform: uppercase; letter-spacing: 0.06em; }
+.polaroid { position: absolute; right: 40px; top: -150px; width: 150px; margin: 0; padding: 10px 10px 34px; background: #fff; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45); rotate: 8deg; visibility: hidden; }
+.polaroid img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.polaroid figcaption { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font-family: var(--f-brush); font-size: 14px; color: var(--ink); white-space: nowrap; }
+.polaroid::before { content: ''; position: absolute; left: 50%; top: -12px; width: 70px; height: 24px; translate: -50% 0; rotate: -4deg; background: rgba(227, 18, 44, 0.75); }
+
+@media (max-width: 900px) {
+  .kmeter { right: 6px; height: 44vh; }
+  .wanted { right: auto; left: 16px; bottom: auto; top: 14%; width: 140px; }
+  .polaroid { width: 110px; top: -120px; padding-bottom: 26px; }
+  .hud .hud-txt { display: none; }
+  .story .layer, .story .actor { translate: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx { display: none; }
+}
+
+/* your portrait on the moon */
+.moonp { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; cursor: none; }
+.moonp-ink { mix-blend-mode: multiply; }
+.moonp-photo { filter: grayscale(1) contrast(1.7) brightness(1.05); }
+.moonp-seal { visibility: visible; }
+.pro-moon-hint { position: absolute; z-index: 3; left: calc(66% + min(29vh, 35vw) - 20px); top: calc(10% + min(58vh, 70vw) - 10px); color: var(--mute-light); font-size: 10px; pointer-events: none; }
+@media (max-width: 900px) { .pro-moon-hint { display: none; } }
+
+@media (max-width: 560px) {
+  .pro-title { font-size: 13vw; }
+  .pro-title .ln { white-space: normal; }
+  .pro-ninja { left: 86%; bottom: 1%; width: 24vh; }
+  .pro-tip { display: none; }
+  .pro-copy { right: 16px; }
+}

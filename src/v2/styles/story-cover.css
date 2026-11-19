@@ -1,0 +1,87 @@
+/* ================= opening magazine cover ================= */
+.cover-art { position: absolute; z-index: 6; right: calc(var(--gutter) + 30px); top: 54%; translate: 0 -50%; height: min(78vh, 760px); aspect-ratio: 560 / 700; perspective: 1400px; }
+.cover-3d { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.cover-page { position: absolute; inset: -14px; background: var(--paper); border: 4px solid var(--ink); box-shadow: 14px 14px 0 var(--red); transform: translateZ(-30px); }
+.cpanel { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(6px 8px 0 rgba(13, 13, 15, 0.35)); }
+.cpanel--ink { transform: translateZ(10px); }
+.cpanel--duo { transform: translateZ(40px); }
+.cpanel--raw { transform: translateZ(70px); }
+.cpanel--line { transform: translateZ(25px); }
+.cover-badge { position: absolute; left: -46px; top: -40px; width: 110px; aspect-ratio: 1; border-radius: 50%; background: var(--red); color: #fff; border: 4px solid var(--ink); display: grid; place-content: center; text-align: center; rotate: -14deg; box-shadow: 5px 5px 0 var(--ink); transform: translateZ(110px); }
+.cover-badge b { font-family: var(--f-brush); font-weight: 400; font-size: 30px; line-height: 1; }
+.cover-badge span { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; }
+.cover-sfx { position: absolute; right: -40px; top: 34%; font-size: clamp(54px, 6vw, 96px); transform: translateZ(120px) rotate(12deg); }
+.story .bubble.cover-bubble { position: absolute; visibility: visible; left: -70px; bottom: 16%; transform: translateZ(140px) rotate(-6deg); font-size: 17px; }
+.cover-bubble::after { left: auto; right: 22%; }
+.cover-strip { position: absolute; left: -14px; right: -14px; bottom: -48px; padding: 8px 14px; background: var(--ink); color: var(--paper); text-align: right; transform: translateZ(60px); }
+.cover-flash { position: absolute; inset: 0; z-index: 30; background: #fff; opacity: 0; pointer-events: none; }
+
+/* masthead on the left */
+.pro-weekly { display: inline-block; background: var(--red); color: #fff; font-family: var(--f-brush); font-weight: 400; font-size: 15px; letter-spacing: 0.1em; padding: 2px 8px; margin-right: 8px; }
+.pro-copy { max-width: min(640px, 46vw); bottom: 9%; }
+.pro-title { font-size: clamp(42px, 5.4vw, 96px); }
+.pro-teasers { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.pro-teasers li { font-weight: 800; font-size: clamp(14px, 1.2vw, 17px); color: var(--paper); }
+.pro-teasers b { color: var(--red); margin-right: 6px; }
+.pro-buy { display: flex; align-items: flex-end; gap: 14px; margin-top: 18px; }
+.cv-barcode { width: 120px; background: var(--paper); padding: 6px 8px 2px; border: 2px solid var(--ink); }
+.pro-buy .mono { color: var(--mute-light); font-size: 10px; line-height: 1.5; }
+.pro-sub { margin-top: 0 !important; }
+.pro-moon { left: 64%; }
+
+/* ================= journey: sky, map, stations, ticket ================= */
+.jr-sky { position: absolute; inset: 0; z-index: -1; background: #ffd6c8; }
+.jr-stars { z-index: -1; opacity: 0; }
+.jr-map { position: absolute; z-index: 12; right: calc(var(--gutter) + 26px); top: clamp(96px, 14vh, 140px); width: min(360px, 32vw); margin: 0; padding: 12px 14px 14px; background: #f3e9d3; border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--red); visibility: hidden; rotate: 2deg; }
+.jr-map figcaption { color: var(--red); margin-bottom: 6px; }
+.jr-map svg { width: 100%; height: auto; display: block; overflow: visible; }
+.jr-grid { stroke: rgba(13, 13, 15, 0.12); stroke-width: 1; }
+.jr-compass circle { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+.jr-compass path { fill: var(--red); stroke: var(--ink); stroke-width: 1; }
+.jr-compass text { font-family: var(--f-mono); font-size: 9px; font-weight: 800; fill: var(--ink); }
+.jr-route-ghost { fill: none; stroke: rgba(13, 13, 15, 0.3); stroke-width: 2; stroke-dasharray: 3 5; }
+.jr-route { fill: none; stroke: var(--red); stroke-width: 4; stroke-linecap: round; }
+.jr-stop circle { fill: var(--paper); stroke: var(--ink); stroke-width: 2.5; transition: fill 0.3s; }
+.jr-stop.is-on circle { fill: var(--red); }
+.jr-stop text { font-family: var(--f-display); font-size: 12px; fill: var(--ink); }
+.jr-dot { fill: var(--ink); stroke: #fff; stroke-width: 2; filter: drop-shadow(0 0 4px rgba(227, 18, 44, 0.9)); }
+.jr-odo { display: flex; align-items: center; gap: 10px; margin-top: 8px; padding-top: 8px; border-top: 2px dashed rgba(13, 13, 15, 0.3); }
+.jr-km { font-family: var(--f-display); font-weight: 400; font-size: 38px; line-height: 1; color: var(--red); font-variant-numeric: tabular-nums; min-width: 3.4ch; }
+.jr-odo span { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.4; }
+
+.jr-post { position: absolute; z-index: 8; left: 50%; bottom: 0; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+.jr-post-board { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 18px 12px; background: #c9965a; border: 4px solid var(--ink); box-shadow: 6px 6px 0 rgba(13, 13, 15, 0.6); color: var(--ink); white-space: nowrap; }
+.jr-post-board::before { content: ''; position: absolute; inset: 5px; border: 2px solid rgba(13, 13, 15, 0.35); pointer-events: none; }
+.jr-post-board b { font-family: var(--f-brush); font-weight: 400; font-size: clamp(22px, 2.4vw, 34px); line-height: 1.1; }
+.jr-post-board span { font-family: var(--f-display); font-size: clamp(16px, 1.6vw, 22px); }
+.jr-post-board em { font-style: normal; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; background: var(--ink); color: var(--paper); padding: 2px 8px; margin-top: 4px; }
+.jr-post i { width: 18px; height: 24vh; background: repeating-linear-gradient(180deg, #8a5d2f 0 18px, #6e4824 18px 22px); border: 3px solid var(--ink); border-top: 0; }
+.jr-post-0 { translate: 0 0; }
+
+.jr-ticket { position: absolute; z-index: 14; left: 50%; top: clamp(110px, 18vh, 170px); translate: -50% 0; display: flex; width: min(620px, calc(100vw - 32px)); background: #fff8e8; border: 3px solid var(--ink); box-shadow: 10px 10px 0 var(--ink); visibility: hidden; color: var(--ink); }
+.jr-ticket-main { flex: 1; padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 8px; background: repeating-linear-gradient(135deg, transparent 0 10px, rgba(227, 18, 44, 0.05) 10px 20px); }
+.jr-ticket-main > .mono { color: var(--red); }
+.jr-ticket-route { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.jr-ticket-route b { font-family: var(--f-display); font-weight: 400; font-size: clamp(20px, 2.4vw, 32px); }
+.jr-ticket-route i { font-style: normal; color: var(--red); font-size: 28px; }
+.jr-ticket-meta { display: flex; gap: 14px; flex-wrap: wrap; color: var(--mute); font-size: 10px; }
+.jr-ticket-stub { position: relative; width: 110px; border-left: 3px dashed var(--ink); display: grid; place-items: center; }
+.jr-ticket-stub .mono { writing-mode: vertical-rl; font-size: 10px; color: var(--mute); }
+.jr-punch { position: absolute; top: 14px; left: 50%; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; background: #2a1f3a; box-shadow: inset 0 0 0 3px var(--ink); }
+.jr-stamp { position: absolute; right: 96px; top: -26px; width: 104px; aspect-ratio: 1; border-radius: 50%; border: 5px solid var(--red); color: var(--red); display: grid; place-content: center; text-align: center; font-family: var(--f-brush); font-size: 30px; line-height: 1; background: rgba(255, 248, 232, 0.6); visibility: hidden; }
+.jr-stamp small { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.16em; }
+
+@media (max-width: 900px) {
+  .cover-art { right: auto; left: 50%; margin-left: -17.6vh; translate: none; top: 92px; height: 44vh; }
+  .cover-badge { width: 76px; left: -20px; top: -24px; }
+  .cover-badge b { font-size: 20px; }
+  .story .bubble.cover-bubble { left: -10px; font-size: 13px; padding: 10px 12px; }
+  .cover-sfx { right: -10px; font-size: 44px; }
+  .pro-copy { max-width: none; right: 16px; bottom: 4%; }
+  .pro-teasers, .pro-buy { display: none; }
+  .jr-map { width: 230px; right: 12px; top: 84px; padding: 8px; }
+  .jr-km { font-size: 26px; }
+  .jr-ticket-stub { width: 70px; }
+  .jr-stamp { right: 50px; width: 80px; font-size: 22px; }
+  .jr-post i { height: 18vh; }
+}

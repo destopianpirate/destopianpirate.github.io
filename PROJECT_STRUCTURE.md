@@ -83,3 +83,21 @@ graph TD
 - **`src/components/ProjectDeck/`**: Smooth stacked card deck interface for exploring featured engineering projects.
 - **`src/components/RadarChart/`**: Skills matrix visualization rendered as a polygon radar chart.
 - **`src/components/TerminalCLI/`**: Interactive simulated command-line shell with custom commands and portfolio navigation.
+
+---
+
+## Portfolio v2 (`/home2/`, `/projects2/`, `/skills2/`, `/github2/`, `/blog2/`)
+
+A second, manga-styled portfolio that lives alongside the original site (which is untouched at `/`).
+Each route is its own static folder (`home2/index.html`, ...) registered as a Vite multi-page input in
+`vite.config.js`, so it works on GitHub Pages without a SPA fallback. Every folder boots the same bundle,
+`src/v2/main.jsx`, which picks the page from the URL. Blog posts are served at `/blog2/?post=<slug>`.
+
+- **`src/v2/data/portfolio.js`**: All v2 content (profile, bio, timeline, projects, skills, tech logos), ported from `src/App.jsx`.
+- **`src/v2/core/`**: `store.js` (scroll/pointer state shared with WebGL), `smooth.js` (Lenis on the GSAP ticker, scroll lock), `reveal.js` (declarative `data-anim` scroll animations), `intro.js` (loader/transition signals + page navigation), `useGithubSummary.js` (live GitHub data, reusing the v1 cached data layer).
+- **`src/v2/components/`**: `Shell` (nav, opening loader, page-transition curtain, custom cursor, velocity speed lines, footer), `PageHero`, `Radar`, `Cover` (generative blog art), `Hanko`, `ProjectLogo`, `GithubLive`.
+- **`src/v2/three/Scene3D.jsx`**: Cel-shaded R3F scene (toon ramp + ink outlines): torii-gate corridor, sakura petals, shards and a neural core; the camera flies through it with page scroll.
+- **`src/v2/story/`**: the scroll story's art kit. `Rig.jsx` + `pose.js` (jointed SVG ninja / samurai / oni characters, poses and run/walk cycles), `Scenery.jsx` + `world.js` (procedural ink mountains, village, dojo, bamboo, weapons).
+- **`src/v2/pages/`**: `Home2` (an 8-chapter scroll story: each `.scene` is a tall section with a sticky stage whose scrubbed GSAP timeline drives characters, parallax layers, captions and transitions), `Projects2` (filter + detail sheet), `Skills2`, `Github2`, `Blog2` (index + post reader).
+- **`src/v2/blog/`**: `posts/*.md` (front matter: title, date, tags, excerpt, motif, kanji) and `posts.js` (loader + tiny Markdown renderer). Add a post by dropping a new `.md` file in `posts/`.
+- **`src/v2/styles/`**: `base.css` (design tokens + shared components), `story.css`, `pages.css`, `blog.css`.
