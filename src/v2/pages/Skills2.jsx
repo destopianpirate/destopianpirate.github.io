@@ -4,6 +4,7 @@ import { Code, Cpu, Database, Globe, Server, Terminal } from 'lucide-react';
 import { CORE_FOCUS, PROJECTS, RADAR_AXES, SKILLS, SKILL_COUNT, TECH_LOGOS } from '../data/portfolio';
 import { useReveal } from '../core/reveal';
 import PageHero from '../components/PageHero';
+import { ArsenalArt } from '../components/HeroArt';
 import Radar from '../components/Radar';
 import { TLink } from '../components/Shell';
 import '../styles/pages.css';
@@ -34,7 +35,10 @@ export default function Skills2() {
 
   return (
     <div className="page skills2" ref={root}>
-      <PageHero ep="VOL.02 · ARSENAL" jp="武器庫 — Skill tree" kanji="技" title="The full" accent="arsenal.">
+      <PageHero ep="VOL.02 · ARSENAL" jp="武器庫 — Skill tree" kanji="技" title="The full" accent="arsenal." pose="raise" glow center
+        art={<ArsenalArt />} vert="武器庫 ── 磨かれた技 ── 第二巻"
+        tape={['PYTHON', 'PYTORCH', 'REACT', 'TYPESCRIPT', '武器庫', 'NODE.JS', 'DOCKER', 'COMPUTER VISION', '技']}
+        stats={[[SKILL_COUNT, 'Tools'], [SKILLS.length, 'Disciplines'], [`${Math.max(...SKILLS.flatMap((c) => c.items.map((s) => s.level)))}%`, 'Top mastery']]}>
         <p className="lead">{SKILL_COUNT} tools across {SKILLS.length} disciplines. Compare any project's focus against my overall profile below.</p>
       </PageHero>
 

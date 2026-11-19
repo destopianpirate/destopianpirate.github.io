@@ -2,8 +2,9 @@ import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 're
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
 import { ArrowRight, ArrowUpRight, Briefcase, Github, Home, Linkedin, Mail } from 'lucide-react';
-import { FEATURED, ME, PILLARS, PROJECTS, SKILLS, SKILL_COUNT, TECH_LOGOS } from '../data/portfolio';
+import { BOSSES, FEATURED, ME, PILLARS, PROJECTS, SKILLS, SKILL_COUNT, TECH_LOGOS } from '../data/portfolio';
 import { onIntroDone } from '../core/intro';
 import { store } from '../core/store';
 import { TLink } from '../components/Shell';
@@ -25,8 +26,21 @@ import '../styles/story.css';
 import '../styles/story-extras.css';
 import '../styles/story-cover.css';
 import '../styles/story-gates.css';
+import '../styles/story-battle.css';
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin);
+
+const ROLES = ['AI engineer in training', 'Full-stack developer', 'B.Tech AI · IIT Gandhinagar', 'JEE Advanced qualifier', 'Builder of useful things'];
+const TAPE = ['AI ENGINEER', '人工知能', 'FULL-STACK', 'IIT GANDHINAGAR', 'JEE ADVANCED', 'OPEN TO COLLAB', '開発者'];
+
+function Tape({ className, reverse }) {
+  const row = TAPE.map((t, i) => <span key={i} className={/[぀-鿿]/.test(t) ? 'tape-jp' : undefined}>{t}<b>✦</b></span>);
+  return (
+    <div className={`tape ${className}`}>
+      <div className={`tape-run ${reverse ? 'tape-run--rev' : ''}`}>{row}{row}</div>
+    </div>
+  );
+}
 
 const Scene3D = lazy(() => import('../three/Scene3D'));
 
@@ -41,6 +55,10 @@ const PROBLEMS = {
   famshield: 'Families with no real-time view of each other’s safety.',
 };
 
+const SFX = ['ズバッ', 'ザンッ', 'スパッ', 'ドンッ', 'バキッ', 'ズドン', 'シュバッ'];
+const DUEL = 2.0;
+const topStats = (p) => Object.entries(p.radar || {}).sort((a, b) => b[1] - a[1]).slice(0, 3);
+
 const WEAPON_FOR = ['katana', 'kunai', 'shuriken', 'kama', 'bow', 'naginata'];
 
 const CHAPTERS = [
@@ -53,7 +71,7 @@ const PROFILE = [
   ['称号', 'Title', 'The Wandering Engineer'],
   ['流派', 'School', `${ME.degree} · ${ME.school}`],
   ['出身', 'Origin', ME.home],
-  ['武器', 'Weapons', 'Python · PyTorch · React · TypeScript · Rust'],
+  ['武器', 'Weapons', 'Python · PyTorch · React · TypeScript · Docker'],
   ['奥義', 'Special', 'Turning neural networks into products people use'],
 ];
 
@@ -161,7 +179,15 @@ export default function Home2() {
           .from('.cover-bubble', { scale: 0, rotate: -12, duration: 0.45, ease: 'back.out(2.4)' }, 1.75)
           .from('.cover-strip', { xPercent: -100, autoAlpha: 0, duration: 0.6 }, 1.6)
           .from('.pro-teasers li', { x: -30, autoAlpha: 0, stagger: 0.08, duration: 0.5 }, 1.3)
-          .from('.cv-barcode rect', { scaleY: 0, transformOrigin: '50% 100%', stagger: 0.004, duration: 0.3 }, 1.6);
+          .from('.cv-barcode rect', { scaleY: 0, transformOrigin: '50% 100%', stagger: 0.004, duration: 0.3 }, 1.6)
+          .from('.cover-lines', { autoAlpha: 0, scale: 0.5, duration: 1.2 }, 1.32)
+          .fromTo('.cover-enso path', { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.3, ease: 'power2.inOut' }, 1.1)
+          .from('.cover-splat > *', { scale: 0, transformOrigin: '50% 50%', stagger: 0.025, duration: 0.45, ease: 'back.out(3)' }, 1.34)
+          .from('.tape', { xPercent: (i) => (i ? 110 : -110), duration: 1.1, ease: 'power3.out' }, 1.5)
+          .from('.pro-vert', { autoAlpha: 0, y: -40, duration: 1 }, 1.0)
+          .from('.cover-note', { autoAlpha: 0, x: -20, duration: 0.5 }, 2.0)
+          .fromTo('.cover-note path', { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.6, ease: 'power2.out' }, 2.1)
+          .from('.pro-caret', { autoAlpha: 0, duration: 0.2 }, 1.2);
         unsub = onIntroDone(() => intro.play());
 
         tl.to('.pro-copy', { y: vh(-30), autoAlpha: 0, duration: 1 }, 0)
@@ -173,7 +199,11 @@ export default function Home2() {
         [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([dx, dy], i) => {
           tl.to(`.cpanel--${['ink', 'duo', 'raw', 'line'][i]}`, { x: vw(dx * 34), y: vh(dy * 40), rotate: dx * dy * 24, autoAlpha: 0, duration: 0.9, ease: 'power2.in' }, 0.05 + i * 0.05);
         });
-        tl.to(['.cover-page', '.cover-badge', '.cover-sfx', '.cover-bubble', '.cover-strip'], { autoAlpha: 0, scale: 0.8, duration: 0.5 }, 0.1);
+        tl.to(['.cover-page', '.cover-badge', '.cover-sfx', '.cover-bubble', '.cover-strip', '.cover-note'], { autoAlpha: 0, scale: 0.8, duration: 0.5 }, 0.1)
+          .to(['.cover-lines', '.cover-enso', '.cover-splat'], { autoAlpha: 0, scale: 1.4, duration: 0.6 }, 0.05)
+          .to('.tape--ink', { yPercent: 200, autoAlpha: 0, duration: 0.6 }, 0)
+          .to('.tape--red', { yPercent: 260, autoAlpha: 0, duration: 0.6 }, 0.05)
+          .to('.pro-vert', { autoAlpha: 0, y: vh(-10), duration: 0.5 }, 0);
         show(tl, '.pro-cap', 0.8);
         pose(tl, n, 'crouch', 1.1, 0.35);
         pose(tl, n, 'leap', 1.5, 0.25, {}, 'power3.out');
@@ -495,34 +525,57 @@ export default function Home2() {
         pose(tl, n, 'guard', R + 1.1, 0.25);
         const D0 = R + 1.5;
         show(tl, '.bt-count', D0 - 0.2);
+        show(tl, '.bt-tally', D0 - 0.2, 0.3, { y: 40 });
         const countEl = $('.bt-count b');
+        const ANG = [0, 14, -12, 20, -18, 8, -6];
         FEATURED.forEach((p, i) => {
-          const b = D0 + i * 1.6;
+          const b = D0 + i * DUEL;
           const d = `.duel-${i}`;
           const pair = [$(`${d} .oni-top`), $(`${d} .oni-bot`)];
           tl.call(() => { countEl.textContent = String(i + 1).padStart(2, '0'); }, null, b + 0.01);
-          tl.fromTo(pair, { x: vw(70), y: 0, rotate: 0, autoAlpha: 1 }, { x: vw(28), duration: 0.35, ease: 'power2.out' }, b);
-          show(tl, `${d} .problem`, b + 0.25, 0.3, { scale: 0.5, rotate: 6 });
-          pose(tl, n, 'raise', b + 0.6, 0.2);
-          pose(tl, n, 'slash', b + 0.85, 0.08, {}, 'power4.in');
-          tl.to(n.wrap, { x: vw(40), duration: 0.08, ease: 'power4.in' }, b + 0.85);
-          flash(tl, '.sc-battle .flash', b + 0.93);
-          slash(tl, '.sc-battle .slashfx', b + 0.92);
-          hide(tl, `${d} .problem`, b + 0.94, 0.1);
-          tl.to(pair[0], { y: vh(-14), x: vw(36), rotate: -18, autoAlpha: 0, duration: 0.45, ease: 'power2.out' }, b + 0.98)
-            .to(pair[1], { y: vh(8), x: vw(22), rotate: 10, autoAlpha: 0, duration: 0.45, ease: 'power2.out' }, b + 0.98);
-          pose(tl, n, 'followThrough', b + 0.95, 0.15);
-          show(tl, `${d} .win`, b + 1.0, 0.25, { scale: 0.6, rotate: -4 });
-          tl.set(n.P, { dir: -1 }, b + 1.15);
-          tl.to(n.wrap, { x: vw(-30), duration: 0.3 }, b + 1.15);
-          runFor(tl, n, b + 1.15, 0.3, 2, 0);
-          tl.set(n.P, { dir: 1 }, b + 1.46);
-          pose(tl, n, 'guard', b + 1.46, 0.1);
-          tl.to(`${d} .win`, { autoAlpha: 0, scale: 0.9, y: -30, duration: 0.15 }, b + 1.45);
+          // fighting-game VS splash: two ink bars slam in, the boss is named
+          tl.fromTo(`${d} .vs-bar--a`, { xPercent: -110 }, { xPercent: 0, duration: 0.14, ease: 'power4.out' }, b)
+            .fromTo(`${d} .vs-bar--b`, { xPercent: 110 }, { xPercent: 0, duration: 0.14, ease: 'power4.out' }, b + 0.04)
+            .fromTo(`${d} .vs-mark`, { scale: 3.4, autoAlpha: 0, rotate: -20 }, { scale: 1, autoAlpha: 1, rotate: -8, duration: 0.12, ease: 'power4.in' }, b + 0.14)
+            .to(`${d} .vs`, { keyframes: { x: [0, -10, 8, -4, 0] }, duration: 0.12 }, b + 0.26)
+            .to(`${d} .vs-bar--a`, { xPercent: -110, duration: 0.14, ease: 'power3.in' }, b + 0.48)
+            .to(`${d} .vs-bar--b`, { xPercent: 110, duration: 0.14, ease: 'power3.in' }, b + 0.48)
+            .to(`${d} .vs-mark`, { scale: 0.4, autoAlpha: 0, duration: 0.12 }, b + 0.48);
+          tl.fromTo(pair, { x: vw(70), y: 0, rotate: 0, autoAlpha: 1 }, { x: vw(28), duration: 0.35, ease: 'power2.out' }, b + 0.3);
+          // the problem, pinned up as a paper card
+          tl.fromTo(`${d} .problem`, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.01 }, b + 0.55)
+            .fromTo(`${d} .ph`, { scale: 0.5, rotate: 6, x: 0, y: 0, autoAlpha: 0 }, { scale: 1, rotate: 0, autoAlpha: 1, duration: 0.25, ease: 'back.out(1.8)' }, b + 0.55);
+          pose(tl, n, 'raise', b + 0.85, 0.2);
+          pose(tl, n, 'slash', b + 1.1, 0.08, {}, 'power4.in');
+          tl.to(n.wrap, { x: vw(40), duration: 0.08, ease: 'power4.in' }, b + 1.1);
+          tl.set('.sc-battle .slashfx', { rotation: ANG[i % ANG.length] }, b + 1.1);
+          flash(tl, '.sc-battle .flash', b + 1.18);
+          slash(tl, '.sc-battle .slashfx', b + 1.17);
+          // ...and the problem is cut clean in two
+          tl.to(`${d} .ph--a`, { x: -70, y: -90, rotate: -12, autoAlpha: 0, duration: 0.4, ease: 'power2.out' }, b + 1.19)
+            .to(`${d} .ph--b`, { x: 80, y: 70, rotate: 9, autoAlpha: 0, duration: 0.4, ease: 'power2.out' }, b + 1.19)
+            .fromTo(`${d} .duel-sfx`, { scale: 2.6, autoAlpha: 0, rotate: -16 }, { scale: 1, autoAlpha: 1, rotate: -6, duration: 0.1, ease: 'power4.in' }, b + 1.18)
+            .to(`${d} .duel-sfx`, { autoAlpha: 0, scale: 1.3, duration: 0.25 }, b + 1.45);
+          tl.to(pair[0], { y: vh(-14), x: vw(36), rotate: -18, autoAlpha: 0, duration: 0.45, ease: 'power2.out' }, b + 1.23)
+            .to(pair[1], { y: vh(8), x: vw(22), rotate: 10, autoAlpha: 0, duration: 0.45, ease: 'power2.out' }, b + 1.23);
+          pose(tl, n, 'followThrough', b + 1.2, 0.15);
+          // the win card, its power stats and a 撃破 stamp
+          show(tl, `${d} .win`, b + 1.3, 0.25, { scale: 0.6, rotate: -4 });
+          tl.fromTo(`${d} .ws-bar i`, { scaleX: 0 }, { scaleX: 1, duration: 0.3, stagger: 0.06, ease: 'power2.out' }, b + 1.45)
+            .fromTo(`${d} .win-stamp`, { scale: 2.8, autoAlpha: 0, rotate: -30 }, { scale: 1, autoAlpha: 1, rotate: -12, duration: 0.1, ease: 'power4.in' }, b + 1.55)
+            .fromTo(`.tally-${i} b`, { scale: 2.6, autoAlpha: 0, rotate: -40 }, { scale: 1, autoAlpha: 1, rotate: 0, duration: 0.12, ease: 'power4.in' }, b + 1.6)
+            .fromTo(`.tally-${i} i`, { scaleX: 0 }, { scaleX: 1, duration: 0.08 }, b + 1.72);
+          tl.set(n.P, { dir: -1 }, b + 1.4);
+          tl.to(n.wrap, { x: vw(-30), duration: 0.3 }, b + 1.4);
+          runFor(tl, n, b + 1.4, 0.3, 2, 0);
+          tl.set(n.P, { dir: 1 }, b + 1.71);
+          pose(tl, n, 'guard', b + 1.71, 0.1);
+          tl.to(`${d} .win`, { autoAlpha: 0, scale: 0.9, y: -30, duration: 0.15 }, b + DUEL - 0.15);
         });
-        const end = D0 + FEATURED.length * 1.6;
+        const end = D0 + FEATURED.length * DUEL;
         hide(tl, '.bt-count', end);
         show(tl, '.bt-all', end, 0.35, { scale: 0.7 });
+        tl.to('.bt-tally', { y: vh(-8), scale: 1.15, duration: 0.35 }, end);
         pose(tl, n, 'point', end, 0.3);
         tl.to('.sc-battle .cv-end', { autoAlpha: 1, duration: 0.3 }, end + 0.7);
       }
@@ -612,6 +665,18 @@ export default function Home2() {
 
   useEffect(() => () => { store.journey = 0; }, []);
 
+  useEffect(() => {
+    const el = root.current?.querySelector('.pro-role');
+    if (!el) return undefined;
+    let i = 0;
+    const id = setInterval(() => {
+      if (window.scrollY > window.innerHeight * 1.5 || document.hidden) return;
+      i = (i + 1) % ROLES.length;
+      gsap.to(el, { duration: 0.9, scrambleText: { text: ROLES[i], chars: 'アイウエオカキクケコ01', speed: 0.6 }, ease: 'none' });
+    }, 2800);
+    return () => clearInterval(id);
+  }, []);
+
   // mouse parallax: layers and characters drift by depth (CSS `translate`, so GSAP transforms stay free)
   useEffect(() => {
     const el = root.current;
@@ -683,13 +748,18 @@ export default function Home2() {
           <Layer className="pro-cliff"><path d={`M ${W * 0.56} ${H + 40} L ${W * 0.6} 740 Q ${W * 0.66} 700 ${W * 0.78} 712 L ${W + 40} 700 L ${W + 40} ${H + 40} Z`} fill="#050506" /></Layer>
           <Actor className="pro-ninja" pose="lookUp" glow />
           <span className="pro-brush" aria-hidden="true">道</span>
+          <span className="pro-vert" aria-hidden="true">人工知能の道を行く者 ── 第二巻</span>
+          <div className="pro-tapes" aria-hidden="true">
+            <Tape className="tape--ink" reverse />
+            <Tape className="tape--red" />
+          </div>
           <Particles kind="motes" count={30} seed={3} />
           <CoverHero name={ME.name} />
           <div className="cover-flash" />
           <div className="pro-copy">
             <span className="pro-kicker mono"><b className="pro-weekly">週刊</b> The Weekly Ink · Vol. 02</span>
-            <h1 className="pro-title" aria-label="The Way of the Code"><span className="ln">THE WAY</span><span className="ln">OF THE <em>CODE</em></span></h1>
-            <p className="pro-sub">The story of {ME.name}, so far. AI engineer in training at {ME.school}.</p>
+            <h1 className="pro-title" aria-label="The Way of the Code"><span className="ln">THE WAY</span><span className="ln"><span className="pro-out">OF THE</span> <em className="pro-glitch">CODE</em><i className="pro-caret" aria-hidden="true" /></span></h1>
+            <p className="pro-sub">The story of {ME.name}, so far. <span className="pro-role-wrap"><span className="pro-role-tag mono">現在</span><span className="pro-role">{ROLES[0]}</span></span></p>
             <ul className="pro-teasers">
               <li><b>★</b> {PROJECTS.length} projects inside, battle-tested</li>
               <li><b>★</b> Exclusive: life at IIT Gandhinagar</li>
@@ -896,7 +966,7 @@ export default function Home2() {
       </section>
 
       {/* ====== 5 · BATTLES ====== */}
-      <section className="scene sc-battle" style={{ '--len': 2.6 + FEATURED.length * 1.6 + 0.9 }} aria-label="Chapter five, battles: projects">
+      <section className="scene sc-battle" style={{ '--len': 2.6 + FEATURED.length * DUEL + 0.9 }} aria-label="Chapter five, battles: projects">
         <div className="stage ink-stage">
           <div className="bt-sun" />
           <Layer className="bt-ground"><Bamboo seed={6} count={7} fill="#121216" /><Ridge seed={131} base={800} peaks={3} height={60} spread={300} fill="#050506" /></Layer>
@@ -906,13 +976,25 @@ export default function Home2() {
             <div className={`duel duel-${i}`} key={p.slug}>
               <Actor variant="oni" className="oni oni-top" glow />
               <Actor variant="oni" className="oni oni-bot" glow />
-              <div className="problem"><span>The problem</span>{PROBLEMS[p.slug]}</div>
+              <div className="vs" aria-hidden="true">
+                <div className="vs-bar vs-bar--a"><span className="mono">Player 1</span><b>{ME.name.split(' ')[0].toUpperCase()}</b><em>解放 · battle form</em></div>
+                <div className="vs-bar vs-bar--b"><span className="mono">Boss {String(i + 1).padStart(2, '0')}</span><b className="vs-jp">{BOSSES[p.slug]?.[0]}</b><em>{BOSSES[p.slug]?.[1]}</em></div>
+                <span className="vs-mark">VS</span>
+              </div>
+              <div className="problem">
+                <div className="ph ph--a"><span>The problem · {BOSSES[p.slug]?.[1]}</span>{PROBLEMS[p.slug]}</div>
+                <div className="ph ph--b" aria-hidden="true"><span>The problem · {BOSSES[p.slug]?.[1]}</span>{PROBLEMS[p.slug]}</div>
+              </div>
+              <span className="duel-sfx sfx" aria-hidden="true">{SFX[i % SFX.length]}</span>
               <article className="win">
-                <div className="win-art"><ProjectLogo project={p} /><span className="win-ko">斬</span></div>
+                <div className="win-art"><ProjectLogo project={p} /><span className="win-ko">斬</span><span className="win-stamp"><b>撃破</b><small>{BOSSES[p.slug]?.[1]} · defeated</small></span></div>
                 <div className="win-body">
                   <span className="mono">Battle {String(i + 1).padStart(2, '0')} · Won with</span>
                   <h3>{p.title}</h3>
                   <p>{p.desc}</p>
+                  <ul className="win-stats" aria-label="Focus profile">
+                    {topStats(p).map(([k, v]) => <li key={k}><span className="mono">{k}</span><span className="ws-bar"><i style={{ width: `${v}%` }} /></span><b>{v}</b></li>)}
+                  </ul>
                   <ul className="pc-stack">{p.stack.map((s) => <li key={s}>{TECH_LOGOS[s] && <img src={TECH_LOGOS[s]} alt="" loading="lazy" />}{s}</li>)}</ul>
                   <div className="win-links">
                     {p.liveUrl && <a href={p.liveUrl} target="_blank" rel="noreferrer" className="btn btn--red btn--sm">Live <ArrowUpRight size={14} /></a>}
@@ -930,6 +1012,9 @@ export default function Home2() {
           <div className="slashfx slashfx--wide" />
           <ChapterCard no="第五章 · Chapter 5" jp="戦" title="Battles" />
           <div className="cap cap--tl bt-cap"><span>Projects</span>Every project started as a problem worth fighting.</div>
+          <ol className="bt-tally" aria-label="Problems defeated">
+            {FEATURED.map((p, i) => <li key={p.slug} className={`tally-${i}`} title={`${BOSSES[p.slug]?.[1]} · ${p.title}`}><b>{BOSSES[p.slug]?.[0][0]}</b><i /></li>)}
+          </ol>
           <div className="bt-count mono">Battle <b>01</b> / {String(FEATURED.length).padStart(2, '0')}</div>
           <div className="bt-all">
             <span className="mono">{FEATURED.length} battles shown · {PROJECTS.length} fought in total</span>

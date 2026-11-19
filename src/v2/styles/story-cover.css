@@ -1,5 +1,5 @@
 /* ================= opening magazine cover ================= */
-.cover-art { position: absolute; z-index: 6; right: calc(var(--gutter) + 30px); top: 54%; translate: 0 -50%; height: min(78vh, 760px); aspect-ratio: 560 / 700; perspective: 1400px; }
+.cover-art { position: absolute; z-index: 6; right: calc(var(--gutter) + 30px); top: calc(50% + 48px); translate: 0 -50%; height: min(calc(100vh - 230px), 720px); aspect-ratio: 560 / 700; perspective: 1400px; }
 .cover-3d { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
 .cover-page { position: absolute; inset: -14px; background: var(--paper); border: 4px solid var(--ink); box-shadow: 14px 14px 0 var(--red); transform: translateZ(-30px); }
 .cpanel { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(6px 8px 0 rgba(13, 13, 15, 0.35)); }
@@ -7,7 +7,7 @@
 .cpanel--duo { transform: translateZ(40px); }
 .cpanel--raw { transform: translateZ(70px); }
 .cpanel--line { transform: translateZ(25px); }
-.cover-badge { position: absolute; left: -46px; top: -40px; width: 110px; aspect-ratio: 1; border-radius: 50%; background: var(--red); color: #fff; border: 4px solid var(--ink); display: grid; place-content: center; text-align: center; rotate: -14deg; box-shadow: 5px 5px 0 var(--ink); transform: translateZ(110px); }
+.cover-badge { position: absolute; left: -46px; top: -26px; width: 110px; aspect-ratio: 1; border-radius: 50%; background: var(--red); color: #fff; border: 4px solid var(--ink); display: grid; place-content: center; text-align: center; rotate: -14deg; box-shadow: 5px 5px 0 var(--ink); transform: translateZ(110px); }
 .cover-badge b { font-family: var(--f-brush); font-weight: 400; font-size: 30px; line-height: 1; }
 .cover-badge span { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; }
 .cover-sfx { position: absolute; right: -40px; top: 34%; font-size: clamp(54px, 6vw, 96px); transform: translateZ(120px) rotate(12deg); }
@@ -72,8 +72,8 @@
 .jr-stamp small { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.16em; }
 
 @media (max-width: 900px) {
-  .cover-art { right: auto; left: 50%; margin-left: -17.6vh; translate: none; top: 92px; height: 44vh; }
-  .cover-badge { width: 76px; left: -20px; top: -24px; }
+  .cover-art { right: auto; left: 50%; margin-left: -16vh; translate: none; top: 118px; height: 40vh; }
+  .cover-badge { width: 70px; left: -16px; top: -12px; }
   .cover-badge b { font-size: 20px; }
   .story .bubble.cover-bubble { left: -10px; font-size: 13px; padding: 10px 12px; }
   .cover-sfx { right: -10px; font-size: 44px; }
@@ -85,3 +85,72 @@
   .jr-stamp { right: 50px; width: 80px; font-size: 22px; }
   .jr-post i { height: 18vh; }
 }
+
+/* ================= hero extras: speed lines, ensō, splatter, note, tapes, glitch ================= */
+.cover-lines { position: absolute; inset: -55% -60%; z-index: -1; pointer-events: none;
+  background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(246, 243, 236, 0.16) 0deg 0.8deg, transparent 0.8deg 5deg);
+  -webkit-mask: radial-gradient(circle at 50% 50%, transparent 24%, #000 34%, transparent 62%); mask: radial-gradient(circle at 50% 50%, transparent 24%, #000 34%, transparent 62%);
+  animation: speedspin 40s linear infinite; }
+.cover-enso { position: absolute; z-index: -1; left: -18%; top: -5%; width: 136%; height: auto; overflow: visible; pointer-events: none; animation: ensospin 60s linear infinite; }
+.cover-enso path { fill: none; stroke: var(--red); stroke-width: 4.2; stroke-linecap: round; stroke-dasharray: 1; filter: drop-shadow(0 0 10px rgba(227, 18, 44, 0.5)); }
+@keyframes ensospin { to { rotate: 360deg; } }
+.cover-splat { position: absolute; z-index: -1; inset: -10%; width: 120%; height: 120%; overflow: visible; pointer-events: none; }
+.cover-splat > * { fill: var(--paper); }
+.cover-splat .is-red { fill: var(--red); }
+.cover-note { position: absolute; z-index: 20; left: -200px; top: -2%; display: flex; flex-direction: column; align-items: flex-start; rotate: -6deg; pointer-events: none; }
+.cover-note b { font-family: var(--f-brush); font-weight: 400; font-size: 34px; line-height: 1; color: var(--paper); -webkit-text-stroke: 1px var(--red); }
+.cover-note span { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sakura); }
+.cover-note svg { width: 120px; height: 70px; margin: 2px 0 0 40px; overflow: visible; }
+.cover-note path { fill: none; stroke: var(--paper); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; }
+
+.pro-title .pro-out, .pro-title .pro-out .hc { color: transparent; -webkit-text-stroke: 2px var(--paper); }
+.pro-glitch, .pro-glitch .hc { animation: glitch 3.2s steps(1) infinite; }
+@keyframes glitch {
+  0%, 86%, 100% { text-shadow: none; translate: 0 0; }
+  88% { text-shadow: -5px 0 0 #fff, 5px 0 0 #000; translate: 3px 0; }
+  90% { text-shadow: 4px 2px 0 #fff, -4px -2px 0 #000; translate: -4px 1px; }
+  92% { text-shadow: -2px 0 0 #fff; translate: 1px -1px; }
+}
+.pro-caret { display: inline-block; width: 0.42em; height: 0.78em; margin-left: 0.08em; background: var(--red); vertical-align: -0.04em; animation: caret 1s steps(1) infinite; box-shadow: 4px 4px 0 var(--paper); }
+@keyframes caret { 50% { opacity: 0; } }
+.pro-role-wrap { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; color: var(--paper); font-weight: 800; }
+.pro-role-tag { font-size: 10px; background: var(--red); color: #fff; padding: 2px 6px; letter-spacing: 0.1em; }
+.pro-role { border-bottom: 2px solid var(--red); min-width: 10ch; }
+
+.pro-vert { position: absolute; z-index: 6; left: 18px; top: 50%; translate: 0 -50%; writing-mode: vertical-rl; font-family: var(--f-brush); font-size: 15px; letter-spacing: 0.35em; color: var(--red); pointer-events: none; }
+.pro-tapes { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; height: 0; pointer-events: none; }
+.tape { position: absolute; left: -10%; right: -10%; overflow: hidden; border-block: 3px solid var(--ink); }
+.tape--red { bottom: 26px; background: var(--red); color: #fff; rotate: -3deg; }
+.tape--ink { bottom: 10px; background: var(--paper); color: var(--ink); rotate: 2.4deg; }
+.tape-run { display: flex; width: max-content; animation: taperun 38s linear infinite; }
+.tape-run--rev { animation-direction: reverse; animation-duration: 46s; }
+.tape-run span { display: inline-flex; align-items: center; gap: 18px; padding: 7px 0 7px 18px; font-family: var(--f-display), 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 15px; letter-spacing: 0.08em; white-space: nowrap; }
+.tape-run b { font-size: 12px; color: var(--ink); }
+.tape--ink .tape-run b { color: var(--red); }
+@keyframes taperun { to { transform: translateX(-50%); } }
+.sc-prologue .pro-copy { bottom: calc(9% + 54px); }
+
+@media (max-width: 900px) {
+  .cover-note, .pro-vert, .pro-caret { display: none; }
+  .tape-run span { font-size: 12px; padding: 5px 0 5px 12px; gap: 12px; }
+  .sc-prologue .pro-copy { bottom: calc(1% + 64px); }
+  .sc-prologue .pro-hint { display: none; }
+  .cover-lines { inset: -40% -80%; }
+}
+
+@media (max-height: 820px) and (min-width: 901px) { .cover-note { display: none; } }
+
+/* hero copy always lives between the navbar and the tapes, and sheds extras on short windows */
+@media (min-width: 901px) {
+  .sc-prologue .pro-copy { top: 96px; bottom: 78px; display: flex; flex-direction: column; justify-content: center; }
+  .pro-title { font-size: clamp(34px, min(5.4vw, 10.5vh), 96px); margin: min(14px, 1.6vh) 0 min(18px, 2vh) !important; }
+  .pro-teasers { margin-top: min(18px, 2vh); }
+  .pro-buy { margin-top: min(18px, 2vh); }
+  .sc-prologue .pro-hint { margin-top: min(26px, 2.6vh); }
+  .pro-vert { white-space: nowrap; }
+}
+@media (min-width: 901px) and (max-height: 860px) { .pro-tip { display: none; } }
+@media (min-width: 901px) and (max-height: 760px) { .pro-teasers, .pro-vert { display: none; } }
+@media (min-width: 901px) and (max-height: 640px) { .pro-buy, .sc-prologue .pro-hint { display: none; } }
+
+.tape-run span.tape-jp { font-family: var(--f-brush); font-weight: 400; font-size: 18px; letter-spacing: 0.12em; }

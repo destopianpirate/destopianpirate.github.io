@@ -123,6 +123,19 @@ export default function CoverHero({ name }) {
 
   return (
     <div className="cover-art" role="img" aria-label={`Manga-style cover featuring a photo of ${name}, split into four comic panels`}>
+      <div className="cover-lines" aria-hidden="true" />
+      <svg className="cover-enso" viewBox="-6 -6 112 112" aria-hidden="true">
+        <path pathLength="1" d="M78 14 C62 2 30 2 14 22 C-2 42 4 76 30 92 C56 106 90 94 98 64 C102 46 96 30 86 20" />
+      </svg>
+      <svg className="cover-splat" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="94" cy="8" r="7" /><circle cx="86" cy="2" r="2.4" /><circle cx="101" cy="18" r="2" /><circle cx="80" cy="12" r="1.4" />
+        <path d="M92 14 Q93 24 91 30 Q90 33 89 30 Q88 24 90 14 Z" />
+        <circle cx="4" cy="92" r="8" className="is-red" /><circle cx="14" cy="99" r="2.6" className="is-red" /><circle cx="-3" cy="82" r="2" className="is-red" /><circle cx="12" cy="86" r="1.5" className="is-red" />
+      </svg>
+      <div className="cover-note" aria-hidden="true">
+        <b>主人公</b><span>the protagonist</span>
+        <svg viewBox="0 0 120 70"><path pathLength="1" d="M6 8 C40 4 78 14 96 52 M84 46 L97 54 L100 39" /></svg>
+      </div>
       <div className="cover-3d" ref={rig}>
         <div className="cover-page" />
         {COVER_PANELS.map((p) => <Panel key={p.key} p={p} uid={uid} />)}

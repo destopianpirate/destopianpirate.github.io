@@ -59,7 +59,7 @@ A background sweeper walks the warm set and hibernates anything idle past the th
 
 ## The storage bridge
 
-Files have to live somewhere durable. CloudForge's storage daemon, **CFDrive**, is written in Rust and bridges plain HTTP requests to an encrypted remote storage channel. Rust earned its place here for one reason: this daemon sits on the hot path of every file operation, and I wanted predictable memory use with no garbage-collector pauses while streaming large objects.
+Files have to live somewhere durable. CloudForge's storage daemon, **CFDrive**, bridges plain HTTP requests to an encrypted remote storage channel. It sits on the hot path of every file operation, so it streams large objects in chunks instead of buffering whole files in memory, which keeps memory use flat no matter how big the upload is.
 
 ## Guard rails around a multi-tenant system
 

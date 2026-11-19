@@ -9,6 +9,7 @@ import { useReveal } from '../core/reveal';
 import { onIntroDone } from '../core/intro';
 import { reducedMotion } from '../core/store';
 import PageHero from '../components/PageHero';
+import { ScrollArt } from '../components/HeroArt';
 import Cover from '../components/Cover';
 import { TLink } from '../components/Shell';
 import '../styles/pages.css';
@@ -36,7 +37,10 @@ function BlogIndex() {
 
   return (
     <div className="page blog2" ref={root}>
-      <PageHero ep="VOL.02 · INK LOG" jp="書 — Notes from the lab" kanji="書" title="The ink" accent="log.">
+      <PageHero ep="VOL.02 · INK LOG" jp="書 — Notes from the lab" kanji="書" title="The ink" accent="log." pose="bow"
+        art={<ScrollArt posts={POSTS} />} vert="書 ── 研究室からの手紙 ── 第二巻"
+        tape={['INK LOG', '書', 'MACHINE LEARNING', 'SYSTEMS', 'MOTION DESIGN', 'WHAT BROKE', 'NEW CHAPTER']}
+        stats={[[POSTS.length, 'Chapters'], [POSTS.reduce((a, p) => a + p.minutes, 0), 'Minutes of reading'], [ALL_TAGS.length, 'Topics']]}>
         <p className="lead">Writing on machine learning, systems engineering and motion design: what I'm building, and what broke along the way.</p>
       </PageHero>
 

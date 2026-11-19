@@ -3,6 +3,7 @@ import { ArrowUpRight, GitFork, Github, Search, Star } from 'lucide-react';
 import { ME } from '../data/portfolio';
 import { useReveal } from '../core/reveal';
 import PageHero from '../components/PageHero';
+import { CommitsArt } from '../components/HeroArt';
 import { GithubStrip, Heatmap } from '../components/GithubLive';
 import { useGithubSummary } from '../core/useGithubSummary';
 import '../styles/pages.css';
@@ -26,7 +27,10 @@ export default function Github2() {
 
   return (
     <div className="page github2" ref={root}>
-      <PageHero ep="VOL.02 · RECORDS" jp="記録 — Live from GitHub" kanji="記" title="Commit" accent="log.">
+      <PageHero ep="VOL.02 · RECORDS" jp="記録 — Live from GitHub" kanji="記" title="Commit" accent="log." pose="point" glow
+        art={<CommitsArt days={gh.contrib?.days} total={gh.contrib?.source === 'calendar' ? gh.contrib.total : null} />} vert="記録 ── 毎日の修行 ── 第二巻"
+        tape={['COMMIT LOG', '記録', 'OPEN SOURCE', `@${ME.githubHandle}`.toUpperCase(), 'SHIP DAILY', '草', 'PUSH']}
+        stats={[[gh.loading ? '…' : gh.repos.length || '—', 'Public repos'], [gh.loading ? '…' : gh.repos.length ? gh.stars : '—', 'Stars'], [gh.streaks ? `${gh.streaks.longest.len}d` : '—', 'Best streak']]}>
         <p className="lead">Live data from <a className="ulink" href={ME.github} target="_blank" rel="noreferrer">@{ME.githubHandle}</a>, cached for 30 minutes.</p>
       </PageHero>
 

@@ -66,7 +66,7 @@ export const PILLARS = [
     kanji: '構',
     reading: 'kō · structure',
     desc: 'Deploying high-performance containerized software pipelines and automated DevOps workflows.',
-    stats: [['Docker', 82], ['Rust', 78], ['CI/CD', 85]],
+    stats: [['Docker', 82], ['Node.js', 88], ['CI/CD', 85]],
   },
   {
     title: 'Full-Stack Web',
@@ -149,10 +149,10 @@ export const PROJECTS = [
     slug: 'cloudforge',
     title: 'CloudForge',
     category: 'Systems',
-    stack: ['Python', 'FastAPI', 'Docker', 'Rust', 'React', 'SQLite'],
-    desc: 'A high-performance Backend-as-a-Service (BaaS) and cloud infrastructure platform designed for zero-cost unlimited storage and serverless databases. Features a custom Rust MTProto storage bridge, dynamic SQLite database hibernation, and an intuitive developer dashboard.',
+    stack: ['Python', 'FastAPI', 'Docker', 'React', 'SQLite'],
+    desc: 'A high-performance Backend-as-a-Service (BaaS) and cloud infrastructure platform designed for zero-cost unlimited storage and serverless databases. Features a custom MTProto storage bridge, dynamic SQLite database hibernation, and an intuitive developer dashboard.',
     features: [
-      'Custom Rust storage daemon (CFDrive) bridging HTTP requests to encrypted cloud channels',
+      'Custom storage daemon (CFDrive) bridging HTTP requests to encrypted cloud channels',
       'Serverless SQLite database engine with intelligent auto-hibernation and instant warm-up',
       'Full-featured developer dashboard with real-time API metrics, keys, and bucket management',
       'Multi-tenant authentication system with fine-grained RBAC and rate-limiting middleware',
@@ -293,6 +293,17 @@ export const PROJECTS = [
   },
 ];
 
+// every project's problem, as the demon it was
+export const BOSSES = {
+  octrops: ['漏洩鬼', 'The Leak Demon'],
+  manthan: ['沈黙鬼', 'The Silence Demon'],
+  cloudforge: ['浪費鬼', 'The Waste Demon'],
+  acadx: ['混沌鬼', 'The Chaos Demon'],
+  'qs-iitgn': ['無名鬼', 'The Nameless Demon'],
+  assignmentai: ['難問鬼', 'The Riddle Demon'],
+  famshield: ['不安鬼', 'The Dread Demon'],
+};
+
 export const FEATURED = ['octrops', 'manthan', 'cloudforge', 'acadx', 'qs-iitgn', 'assignmentai', 'famshield']
   .map((s) => PROJECTS.find((p) => p.slug === s));
 
@@ -408,7 +419,6 @@ export const TECH_LOGOS = {
   Firebase: 'https://cdn.simpleicons.org/firebase/FFCA28',
   Docker: 'https://cdn.simpleicons.org/docker/2496ED',
   FastAPI: 'https://cdn.simpleicons.org/fastapi/009688',
-  Rust: 'https://cdn.simpleicons.org/rust/000000',
   SQLite: 'https://cdn.simpleicons.org/sqlite/003B57',
   'VS Code API': 'https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/visualstudiocode.svg',
   'Node.js': 'https://cdn.simpleicons.org/nodedotjs/5FA04E',

@@ -102,10 +102,10 @@ const projects = [
   },
   {
     title: "CloudForge",
-    stack: ["Python", "FastAPI", "Docker", "Rust", "React", "SQLite"],
-    desc: "A high-performance Backend-as-a-Service (BaaS) and cloud infrastructure platform designed for zero-cost unlimited storage and serverless databases. Features a custom Rust MTProto storage bridge, dynamic SQLite database hibernation, and an intuitive developer dashboard.",
+    stack: ["Python", "FastAPI", "Docker", "React", "SQLite"],
+    desc: "A high-performance Backend-as-a-Service (BaaS) and cloud infrastructure platform designed for zero-cost unlimited storage and serverless databases. Features a custom MTProto storage bridge, dynamic SQLite database hibernation, and an intuitive developer dashboard.",
     features: [
-      "Custom Rust storage daemon (CFDrive) bridging HTTP requests to encrypted cloud channels",
+      "Custom storage daemon (CFDrive) bridging HTTP requests to encrypted cloud channels",
       "Serverless SQLite database engine with intelligent auto-hibernation and instant warm-up",
       "Full-featured developer dashboard with real-time API metrics, keys, and bucket management",
       "Multi-tenant authentication system with fine-grained RBAC and rate-limiting middleware",
@@ -380,7 +380,6 @@ const techLogos = {
   "Firebase": "https://cdn.simpleicons.org/firebase/FFCA28",
   "Docker": "https://cdn.simpleicons.org/docker/2496ED",
   "FastAPI": "https://cdn.simpleicons.org/fastapi/009688",
-  "Rust": "https://cdn.simpleicons.org/rust/000000",
   "SQLite": "https://cdn.simpleicons.org/sqlite/003B57",
   "VS Code API": "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/visualstudiocode.svg",
   "Node.js": "https://cdn.simpleicons.org/nodedotjs/5FA04E",

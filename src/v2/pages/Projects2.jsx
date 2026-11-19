@@ -2,11 +2,12 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import gsap from 'gsap';
 import { Flip } from 'gsap/Flip';
 import { ArrowUpRight, Github, X } from 'lucide-react';
-import { CORE_FOCUS, PROJECTS, PROJECT_CATEGORIES, TECH_LOGOS, primaryAxis } from '../data/portfolio';
+import { BOSSES, CORE_FOCUS, FEATURED, PROJECTS, PROJECT_CATEGORIES, TECH_LOGOS, primaryAxis } from '../data/portfolio';
 import { useReveal } from '../core/reveal';
 import { reducedMotion } from '../core/store';
 import { setScrollLocked } from '../core/smooth';
 import PageHero from '../components/PageHero';
+import { FilesArt } from '../components/HeroArt';
 import ProjectLogo from '../components/ProjectLogo';
 import Radar from '../components/Radar';
 import '../styles/pages.css';
@@ -104,7 +105,10 @@ export default function Projects2() {
 
   return (
     <div className="page projects2" ref={root}>
-      <PageHero ep="VOL.02 · FILES" jp="作品集 — Case files" kanji="作" title="Every project," accent="on file.">
+      <PageHero ep="VOL.02 · FILES" jp="作品集 — Case files" kanji="作" title="Every project," accent="on file." pose="guard" glow orb="sun"
+        art={<FilesArt />} vert="作品集 ── 戦いの記録 ── 第二巻"
+        tape={['CASE FILES', '作品集', 'AI TOOLING', 'CLOUD', 'WEB PLATFORMS', 'MOBILE', '撃破', 'OPEN A FILE']}
+        stats={[[PROJECTS.length, 'Projects'], [FEATURED.length, 'Bosses defeated'], [PROJECT_CATEGORIES.length - 1, 'Disciplines']]}>
         <p className="lead">{PROJECTS.length} builds across AI tooling, cloud infrastructure, web platforms and mobile. Open a file for the full breakdown.</p>
       </PageHero>
 
@@ -128,8 +132,10 @@ export default function Projects2() {
                     <ProjectLogo project={p} />
                     <span className="pcard-no">{String(i + 1).padStart(2, '0')}</span>
                     <span className="pcard-cat">{p.category}</span>
+                    {BOSSES[p.slug] && <span className="pcard-stamp" aria-hidden="true">撃破</span>}
                   </div>
                   <div className="pcard-body">
+                    {BOSSES[p.slug] && <span className="pcard-boss mono">VS <b>{BOSSES[p.slug][0]}</b> {BOSSES[p.slug][1]}</span>}
                     <h2 className="pcard-title">{p.title}</h2>
                     <p className="pcard-desc">{p.desc}</p>
                     <div className="pcard-foot">
