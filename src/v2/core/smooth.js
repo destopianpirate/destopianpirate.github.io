@@ -34,7 +34,8 @@ export function useSmoothScroll() {
       return () => window.removeEventListener('scroll', syncNative);
     }
 
-    lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 0.95 });
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    lenis = new Lenis({ lerp: 0.085, smoothWheel: true, wheelMultiplier: 0.9, touchMultiplier: 1.2 });
     lenis.on('scroll', (l) => {
       store.progress = l.progress || 0;
       store.velocity = l.velocity || 0;

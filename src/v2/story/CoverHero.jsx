@@ -105,15 +105,20 @@ export default function CoverHero({ name }) {
 
   // the whole cover tilts toward the pointer; panels sit at different depths
   useEffect(() => {
-    let raf, rx = 0, ry = 0;
+    let raf, rx = 0, ry = 0, seen = true;
+    const io = new IntersectionObserver(([e]) => { seen = e.isIntersecting; });
+    if (rig.current) io.observe(rig.current.parentElement);
     const loop = () => {
       raf = requestAnimationFrame(loop);
-      ry += (store.mouse.x * 12 - ry) * 0.07;
-      rx += (store.mouse.y * 9 - rx) * 0.07;
+      if (!seen) return;
+      const dy = store.mouse.x * 12 - ry, dx = store.mouse.y * 9 - rx;
+      if (Math.abs(dx) + Math.abs(dy) < 0.01) return;
+      ry += dy * 0.07;
+      rx += dx * 0.07;
       if (rig.current) rig.current.style.transform = `rotateY(${ry.toFixed(2)}deg) rotateX(${rx.toFixed(2)}deg)`;
     };
     loop();
-    return () => cancelAnimationFrame(raf);
+    return () => { cancelAnimationFrame(raf); io.disconnect(); };
   }, []);
 
   return (

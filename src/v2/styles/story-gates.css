@@ -1,0 +1,77 @@
+/* ================= 千本鳥居 · the thousand gates ================= */
+.gt-stage { background: #ffb27a; color: var(--ink); --gt-k: calc(72vh / 600); }
+.gt-sky { position: absolute; inset: 0; z-index: -2; background: linear-gradient(180deg, var(--gt-top, #ff8a5c) 0%, var(--gt-bot, #ffd9a8) 70%); }
+.gt-sun { position: absolute; z-index: -1; left: 58%; top: 12%; width: min(58vh, 70vw); aspect-ratio: 1; border-radius: 50%; background: var(--red); border: 5px solid var(--ink); overflow: hidden; translate: -50% 0; box-shadow: 0 0 0 18px rgba(227, 18, 44, 0.16), 0 0 0 40px rgba(227, 18, 44, 0.08); }
+.gt-sun i { position: absolute; left: -2%; right: -2%; height: var(--h); top: var(--t); background: var(--gt-bot, #ffd9a8); }
+.gt-far, .gt-mid { z-index: 0; }
+.gt-track { position: absolute; z-index: 3; left: 0; bottom: 6vh; height: 72vh; will-change: transform; }
+.gt-strip { display: block; height: 100%; width: auto; overflow: visible; }
+.gt-path { fill: var(--ink); }
+.gt-step { fill: #2a2a30; }
+.gt-back { fill: #7d0818; stroke: var(--ink); stroke-width: 5; }
+.gt-cap { fill: var(--ink); }
+.gt-band, .gt-pillar, .gt-nuki { fill: var(--red); stroke: var(--ink); stroke-width: 5; stroke-linejoin: round; }
+.gt-nuki { fill: #c20f26; }
+.gt-foot { fill: var(--ink); }
+.gt-ink { font-family: var(--f-brush); font-size: 26px; fill: var(--ink); }
+.gt-no { font-family: var(--f-brush); font-size: 18px; fill: var(--ink); opacity: 0.7; }
+.gt-cord { stroke: var(--ink); stroke-width: 2.5; fill: none; }
+.gt-paper { fill: #2a2228; stroke: var(--ink); stroke-width: 3.5; transition: fill 0.35s; }
+.gt-rib { stroke: rgba(13, 13, 15, 0.55); stroke-width: 2; fill: none; }
+.gt-capb { fill: var(--ink); }
+.gt-halo { fill: #ffe08a; opacity: 0; transform: scale(0.3); transform-box: fill-box; transform-origin: center; transition: opacity 0.4s, transform 0.5s var(--ease-out); }
+.gt-ema-board { transform: scaleY(0); transform-box: fill-box; transform-origin: 50% 0; transition: transform 0.45s cubic-bezier(0.34, 1.7, 0.6, 1); }
+.gt-ema-board path { fill: #f3e9d3; stroke: var(--ink); stroke-width: 3.5; }
+.gt-ema-en { font-family: var(--f-display); font-size: 15px; fill: var(--ink); }
+.gt-ema-sub { font-family: var(--f-mono); font-size: 9.5px; font-weight: 800; fill: var(--red); letter-spacing: 0.04em; }
+.gt-gate .gt-ema .gt-cord { opacity: 0; transition: opacity 0.2s; }
+.gt-gate.is-lit .gt-paper { fill: #ffd76a; }
+.gt-gate.is-lit .gt-halo { opacity: 0.55; transform: scale(1); }
+.gt-gate.is-lit .gt-ema-board { transform: scaleY(1); }
+.gt-gate.is-lit .gt-ema .gt-cord { opacity: 1; }
+.gt-gate.is-lit .gt-ink { fill: #fff6dc; paint-order: stroke; stroke: var(--ink); stroke-width: 4px; }
+
+/* the runner stands on the cap line: track top (22vh) + cap (124 units) */
+.gt-runner, .gt-ghost { left: 36%; bottom: auto; top: calc(23.4vh + 124 * var(--gt-k) - 0.97 * 30vh); width: 30vh; z-index: 6; }
+.gt-runner.is-shadow { --rig-body: #0d0d0f; --rig-back: #0d0d0f; --rig-line: #0d0d0f; --rig-eye: #e3122c; --rig-steel: #0d0d0f; }
+.gt-runner.is-shadow svg { filter: none; }
+.gt-ghost { z-index: 5; --rig-body: rgba(227, 18, 44, 0.12); --rig-back: rgba(227, 18, 44, 0.08); --rig-line: var(--red); --rig-eye: transparent; --rig-pupil: transparent; --rig-steel: transparent; --rig-cloak: var(--red); opacity: 0; }
+.gt-fore { position: absolute; inset: 0; z-index: 9; pointer-events: none; will-change: transform; }
+.gt-fore i { position: absolute; bottom: -4vh; left: var(--x); width: 5vh; height: 110vh; background: var(--ink); border-left: 3px solid #3a0a12; }
+.gt-fore i::after { content: ''; position: absolute; left: -40%; right: -40%; top: 4vh; height: 5vh; background: var(--ink); }
+.gt-speed { z-index: 8; }
+
+.gt-hud { position: absolute; z-index: 12; left: var(--gutter); top: clamp(96px, 14vh, 140px); display: flex; align-items: center; gap: 14px; visibility: hidden; }
+.gt-hud-k { font-family: var(--f-brush); font-weight: 400; font-size: clamp(64px, 7vw, 110px); line-height: 1; color: var(--paper); -webkit-text-stroke: 3px var(--ink); paint-order: stroke fill; text-shadow: 5px 5px 0 var(--red); }
+.gt-hud-box { background: var(--paper); border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); padding: 8px 14px 10px; min-width: 210px; }
+.gt-hud-box .mono { display: block; font-size: 10px; color: var(--red); letter-spacing: 0.14em; }
+.gt-hud-box strong { font-family: var(--f-display); font-weight: 400; font-size: clamp(40px, 4vw, 60px); line-height: 1; font-variant-numeric: tabular-nums; }
+.gt-hud-box em { font-style: normal; font-family: var(--f-mono); font-size: 14px; margin-left: 6px; color: var(--mute); }
+.gt-now { margin: 4px 0 0; display: flex; gap: 8px; align-items: baseline; font-weight: 900; font-size: 15px; white-space: nowrap; }
+.gt-now b { font-family: var(--f-brush); font-weight: 400; color: var(--red); font-size: 20px; }
+.gt-cap { left: auto; right: var(--gutter); top: clamp(110px, 18vh, 170px); max-width: min(380px, calc(100vw - 32px)); }
+.gt-ai { z-index: 14; }
+.gt-ai span { color: var(--paper); }
+.gt-flash { z-index: 13; }
+.gt-cv-start { visibility: visible; opacity: 1; }
+
+@media (max-width: 760px) {
+  .gt-stage { --gt-k: calc(60vh / 600); }
+  .gt-track { height: 60vh; bottom: 8vh; }
+  .gt-runner, .gt-ghost { left: 30%; width: 24vh; top: calc(33.2vh + 124 * var(--gt-k) - 0.97 * 24vh); }
+  .gt-hud-box { min-width: 0; }
+  .gt-now { font-size: 12px; }
+  .gt-cap { top: auto; bottom: 3vh; right: 16px; font-size: 15px; }
+  .gt-hud { top: 74px; left: auto; right: 44px; }
+  .gt-hud-k, .gt-now { display: none; }
+  .gt-hud-box { padding: 4px 10px 6px; box-shadow: 4px 4px 0 var(--ink); }
+  .gt-hud-box strong { font-size: 28px; }
+}
+
+/* exam gates: gold plaque + a red 合格 (passed) stamp that slams on when lit */
+.gt-gate--exam .gt-ema-board path { fill: #ffd76a; }
+.gt-pass circle { fill: rgba(255, 248, 232, 0.85); stroke: var(--red); stroke-width: 3.5; }
+.gt-pass text { font-family: var(--f-brush); font-size: 15px; fill: var(--red); }
+.gt-pass { opacity: 0; transform-box: fill-box; transform-origin: center; scale: 2.4; transition: opacity 0.15s 0.35s, scale 0.25s cubic-bezier(0.5, 0, 0.9, 0.4) 0.35s; }
+.gt-gate.is-lit .gt-pass { opacity: 1; scale: 1; }
+.gt-gate--exam .gt-pillar { stroke-width: 7; }

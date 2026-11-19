@@ -333,7 +333,7 @@ export default function Scene3D({ onReady, progressKey = 'progress', className =
     <div className={`scene3d ${className}`} aria-hidden="true">
       <Canvas
         frameloop={active ? 'always' : 'never'}
-        dpr={[1, mobile ? 1.4 : 1.75]}
+        dpr={[1, mobile ? 1.25 : 1.5]}
         camera={{ fov: 55, position: [0, 0.2, CAM_START], near: 0.1, far: 420 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         onCreated={() => onReady?.()}

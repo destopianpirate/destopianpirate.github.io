@@ -11,11 +11,12 @@
 /* characters */
 .actor { position: absolute; left: 50%; bottom: 8%; width: min(54vh, 74vw); aspect-ratio: 1; z-index: 5; pointer-events: none; transform-origin: 50% 97%; }
 .actor svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.actor, .story .layer { will-change: transform; backface-visibility: hidden; }
 .actor--glow:not(.actor--line) { --rig-body: #050506; --rig-back: #1d1d22; }
-.actor--glow svg { filter: drop-shadow(0 0 1px #ff3b52) drop-shadow(0 0 1px #ff3b52) drop-shadow(0 0 16px rgba(227, 18, 44, 0.55)); }
+.actor--glow svg { filter: drop-shadow(0 0 1.5px #ff3b52) drop-shadow(0 0 14px rgba(227, 18, 44, 0.55)); }
 /* manga line art: white fill, bold ink outline */
 .actor--line { --rig-body: #ffffff; --rig-back: #dcd6cb; --rig-line: #0d0d0f; --rig-eye: #ffffff; --rig-pupil: #0d0d0f; --rig-steel: #ffffff; --rig-cloak: #0d0d0f; }
-.actor--line.actor--glow svg { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.35)) drop-shadow(0 0 18px rgba(227, 18, 44, 0.6)); }
+.actor--line.actor--glow svg { filter: drop-shadow(0 0 16px rgba(227, 18, 44, 0.6)); }
 .rig-aura { filter: blur(3px); mix-blend-mode: screen; animation: auraflick 0.18s steps(2) infinite; }
 @keyframes auraflick { 50% { transform: scaleX(1.35); } }
 .rig-glow { filter: drop-shadow(0 0 4px #ff2741); }

@@ -106,3 +106,7 @@
   .pro-tip { display: none; }
   .pro-copy { right: 16px; }
 }
+
+/* smoothness: freeze ambient CSS loops in scenes far from the viewport */
+.scene:not(.is-near) .stage, .scene:not(.is-near) .stage * { animation-play-state: paused !important; }
+.stage { contain: layout paint style; }

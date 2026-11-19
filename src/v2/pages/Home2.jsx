@@ -15,7 +15,8 @@ import Rig from '../story/Rig';
 import Wanderer from '../story/Wanderer';
 import { ChapterMenu, KatanaMeter, Particles, Polaroid, WantedPoster } from '../story/Extras';
 import CoverHero, { Barcode } from '../story/CoverHero';
-import { LEG1, ROUTE, STOPS } from '../story/journey-data';
+import { FLIPS, GATES, GATE_LEAD, GATE_SP, LEG1, ROUTE, STOPS } from '../story/journey-data';
+import ThousandGates from '../story/ThousandGates';
 import { scrollToY } from '../core/smooth';
 import { BASE, POSES, applyPose } from '../story/pose';
 import { Birds, Bamboo, Clouds, Dojo, Layer, Makiwara, Ridge, River, Shrine, Village, Weapon } from '../story/Scenery';
@@ -23,6 +24,7 @@ import { H, W } from '../story/world';
 import '../styles/story.css';
 import '../styles/story-extras.css';
 import '../styles/story-cover.css';
+import '../styles/story-gates.css';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -42,7 +44,7 @@ const PROBLEMS = {
 const WEAPON_FOR = ['katana', 'kunai', 'shuriken', 'kama', 'bow', 'naginata'];
 
 const CHAPTERS = [
-  ['序', 'Prologue'], ['人', 'The Wanderer'], ['起', 'Origin'], ['修', 'Training'], ['旅', 'The Journey'],
+  ['序', 'Prologue'], ['人', 'The Wanderer'], ['起', 'Origin'], ['修', 'Training'], ['旅', 'The Journey'], ['門', 'Thousand Gates'],
   ['技', 'Techniques'], ['戦', 'Battles'], ['武', 'Arsenal'], ['書', 'Scrolls'], ['頂', 'The Summit'], ['終', 'Epilogue'],
 ];
 
@@ -111,7 +113,7 @@ export default function Home2() {
 
       const mk = (sel) => gsap.timeline({
         defaults: { ease: 'none' },
-        scrollTrigger: { trigger: $(sel), start: 'top top', end: 'bottom bottom', scrub: 0.7, invalidateOnRefresh: true },
+        scrollTrigger: { trigger: $(sel), start: 'top top', end: 'bottom bottom', scrub: 1, invalidateOnRefresh: true },
       });
       const actor = (sel, pose = 'stand', extra = {}) => {
         const wrap = $(sel);
@@ -314,13 +316,14 @@ export default function Home2() {
         const dot = $('.jr-dot');
         const km = $('.jr-km');
         const trip = { f: 0 };
+        const stops = $$('.jr-stop');
         const paint = () => {
           route.style.strokeDashoffset = String(len * (1 - trip.f));
           const pt = route.getPointAtLength(len * trip.f);
           dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y);
           const k = trip.f < leg ? (trip.f / leg) * STOPS[1].km : STOPS[1].km + ((trip.f - leg) / (1 - leg)) * (STOPS[2].km - STOPS[1].km);
           km.textContent = Math.round(k).toLocaleString();
-          $$('.jr-stop').forEach((s, i) => s.classList.toggle('is-on', i === 0 || (i === 1 ? trip.f >= leg : trip.f >= 0.995)));
+          stops.forEach((s, i) => s.classList.toggle('is-on', i === 0 || (i === 1 ? trip.f >= leg : trip.f >= 0.995)));
         };
         route.style.strokeDasharray = String(len);
         paint();
@@ -339,8 +342,108 @@ export default function Home2() {
         tl.fromTo('.jr-speed', { opacity: 0 }, { opacity: 0.85, duration: 1.5 }, 1).to('.jr-speed', { opacity: 0, duration: 0.5 }, 4.8);
         pose(tl, n, 'leap', 5.3, 0.2);
         tl.to(n.wrap, { y: vh(-70), scale: 0.3, duration: 0.5, ease: 'power2.in' }, 5.3);
-        show(tl, '.jr-ai', 5.35, 0.35, { scale: 0.4 });
-        tl.to('.sc-journey .cv-end', { autoAlpha: 1, duration: 0.25 }, 5.95);
+        tl.to('.sc-journey .cv-end', { autoAlpha: 1, duration: 0.25 }, 5.7);
+      }
+
+      /* ============ 3½ · THE THOUSAND GATES (side-view run along the torii caps) ============ */
+      {
+        const tl = mk('.sc-gates');
+        const stage = $('.gt-stage');
+        const track = $('.gt-track');
+        const fore = $('.gt-fore');
+        const gates = $$('.gt-gate');
+        const count = $('.gt-count');
+        const nowJp = $('.gt-now-jp');
+        const nowEn = $('.gt-now-en');
+        const N = GATES.length;
+        const mkRig = (w) => { gsap.set(w, { xPercent: -50 }); return { wrap: w, svg: w.querySelector('svg'), P: { ...BASE, ...POSES.leap, dir: 1 } }; };
+        const run = mkRig($('.gt-runner'));
+        const ghosts = $$('.gt-ghost').map(mkRig);
+        const G = { u: 0, drop: 0, runW: 0, ghost: 0, fin: 0 };
+        const M = { w: 0, h: 0, sp: 0, lead: 0, x: 0 };
+        const TUCK = POSES.crouch;
+        const KEYS = ['torso', 'head', 'aBU', 'aBL', 'aFU', 'aFL', 'lBU', 'lBL', 'lFU', 'lFL'];
+        let lit = -2;
+        const measure = () => {
+          M.w = window.innerWidth; M.h = window.innerHeight;
+          const k = track.offsetHeight / 600;
+          M.sp = GATE_SP * k; M.lead = GATE_LEAD * k; M.x = M.w * (mobile ? 0.3 : 0.36);
+        };
+        // hop height + flip for any position u (in gates) along the caps
+        const hop = (u) => {
+          const uc = Math.max(0, Math.min(N - 1, u));
+          const i0 = Math.floor(uc), fr = uc - i0;
+          const flip = FLIPS.includes(i0) && i0 < N - 1;
+          const arc = Math.sin(Math.PI * fr);
+          return { y: -arc * M.sp * (flip ? 1.05 : 0.14), rot: flip ? fr * 360 : 0, tuck: flip ? arc : 0 };
+        };
+        const drawRig = (a, u, extra) => {
+          const h = hop(u);
+          const Q = { ...a.P, phase: u * Math.PI, runW: a.P.runW * G.runW * (1 - h.tuck), rot: h.rot };
+          if (h.tuck > 0) KEYS.forEach((k) => { Q[k] = a.P[k] + (TUCK[k] - a.P[k]) * h.tuck; });
+          applyPose(a.svg, Q);
+          gsap.set(a.wrap, { x: extra.x, y: h.y + extra.y, scale: extra.s ?? 1 });
+        };
+        const upd = () => {
+          if (M.w !== window.innerWidth || M.h !== window.innerHeight) measure();
+          const u = G.u;
+          const tx = M.x - (M.lead + u * M.sp);
+          track.style.transform = `translate3d(${tx.toFixed(1)}px,0,0)`;
+          fore.style.transform = `translate3d(${(tx * 1.9).toFixed(1)}px,0,0)`;
+          const f = G.fin;
+          drawRig(run, u, { x: f * M.w * 0.22, y: -(1 - G.drop) * M.h * 0.8 - Math.sin(f * Math.PI) * M.h * 0.26 + f * M.h * 0.2, s: 1 - f * 0.62 });
+          run.wrap.classList.toggle('is-shadow', f > 0.55);
+          ghosts.forEach((g, k) => {
+            const lag = 0.3 * (k + 1);
+            g.wrap.style.opacity = (G.ghost * (k ? 0.22 : 0.45)).toFixed(3);
+            drawRig(g, u - lag, { x: -lag * M.sp, y: 0 });
+          });
+          const now = Math.max(0, Math.min(N - 1, Math.floor(u + 0.2)));
+          const on = G.drop >= 1 ? now : -1;
+          if (on !== lit) {
+            lit = on;
+            gates.forEach((g, i) => g.classList.toggle('is-lit', i <= on));
+            const g = GATES[Math.max(0, on)];
+            count.textContent = String(Math.max(0, on) + 1).padStart(2, '0');
+            nowJp.textContent = g.jp;
+            nowEn.textContent = g.en;
+          }
+        };
+        measure();
+        tl.eventCallback('onUpdate', upd);
+        upd();
+
+        tl.fromTo('.gt-cv-start', { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' }, { clipPath: 'polygon(100% 0%, 100% 0%, 100% 100%, 120% 100%)', duration: 0.5, ease: 'power2.inOut' }, 0);
+        // the runner drops out of the sky onto the first cap
+        tl.to(G, { drop: 1, duration: 0.5, ease: 'power2.in' }, 0.1);
+        pose(tl, run, 'land', 0.55, 0.08);
+        pose(tl, run, 'stand', 0.68, 0.2);
+        tl.to([run.P, ...ghosts.map((g) => g.P)], { runW: 1, duration: 0.01 }, 0.6);
+        tl.fromTo(G, { runW: 0 }, { runW: 1, duration: 0.2 }, 0.75);
+        tl.fromTo(G, { ghost: 0 }, { ghost: 1, duration: 0.3 }, 0.9);
+        show(tl, '.sc-gates .chcard', 0.25, 0.35, { x: -60 });
+        hide(tl, '.sc-gates .chcard', 1.0);
+        show(tl, '.gt-hud', 1.05, 0.3, { x: -40 });
+        // the long sprint: one step per cap, front flips over a few gates
+        tl.fromTo(G, { u: 0 }, { u: N - 1, duration: 4.8 }, 0.8);
+        tl.to('.gt-far', { x: vw(-10), duration: 4.8 }, 0.8)
+          .to('.gt-mid', { x: vw(-24), duration: 4.8 }, 0.8)
+          .to('.gt-sun', { y: vh(4), duration: 4.8 }, 0.8)
+          .fromTo(stage, { '--gt-top': '#ff8a5c', '--gt-bot': '#ffd9a8' }, { '--gt-top': '#3b1236', '--gt-bot': '#ff6a3d', duration: 4.8 }, 0.8)
+          .fromTo('.gt-speed', { opacity: 0 }, { opacity: 0.6, duration: 0.8 }, 1.2)
+          .to('.gt-speed', { opacity: 0, duration: 0.4 }, 5.3);
+        show(tl, '.gt-cap1', 1.6); hide(tl, '.gt-cap1', 2.8);
+        show(tl, '.gt-cap2', 3.2); hide(tl, '.gt-cap2', 4.4);
+        // finale: off the last gate, into the sun
+        hide(tl, '.gt-hud', 5.5);
+        tl.to(G, { ghost: 0, duration: 0.3 }, 5.5).to(G, { runW: 0, duration: 0.12 }, 5.55);
+        pose(tl, run, 'crouch', 5.55, 0.1);
+        pose(tl, run, 'leap', 5.68, 0.15);
+        tl.to(G, { fin: 1, duration: 0.75, ease: 'power1.out' }, 5.65);
+        tl.to('.gt-sun', { scale: 2.8, duration: 0.6, ease: 'power2.in' }, 6.0);
+        flash(tl, '.gt-flash', 6.3);
+        show(tl, '.gt-ai', 6.32, 0.35, { scale: 0.4 });
+        tl.to('.sc-gates .cv-end', { autoAlpha: 1, duration: 0.25 }, 7.0);
       }
 
       /* ============ 4 · TECHNIQUES ============ */
@@ -512,16 +615,26 @@ export default function Home2() {
   // mouse parallax: layers and characters drift by depth (CSS `translate`, so GSAP transforms stay free)
   useEffect(() => {
     const el = root.current;
-    let raf, mx = 0, my = 0;
+    const near = new Set();
+    let raf, mx = 0, my = 0, wx = 9, wy = 9;
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      const st = e.target.querySelector('.stage');
+      e.target.classList.toggle('is-near', e.isIntersecting);
+      if (e.isIntersecting) near.add(st); else near.delete(st);
+      wx = 9;
+    }), { rootMargin: '60% 0px' });
+    el.querySelectorAll('.scene').forEach((s) => io.observe(s));
     const loop = () => {
       raf = requestAnimationFrame(loop);
       mx += (store.mouse.x - mx) * 0.06;
       my += (store.mouse.y - my) * 0.06;
-      el.style.setProperty('--mx', mx.toFixed(3));
-      el.style.setProperty('--my', (-my).toFixed(3));
+      if (Math.abs(mx - wx) < 0.002 && Math.abs(my - wy) < 0.002) return;
+      wx = mx; wy = my;
+      const a = mx.toFixed(3), b = (-my).toFixed(3);
+      near.forEach((st) => { st.style.setProperty('--mx', a); st.style.setProperty('--my', b); });
     };
     loop();
-    return () => cancelAnimationFrame(raf);
+    return () => { cancelAnimationFrame(raf); io.disconnect(); };
   }, []);
 
   // click anywhere on a scene to strike: slash line, ink drops and a 斬 stamp
@@ -683,9 +796,8 @@ export default function Home2() {
           <Actor className="jr-ninja" />
           <ChapterCard no="第三章 · Chapter 3" jp="旅" title="The Journey" />
           <div className="cap cap--tl jr-cap1"><span>July 2025</span>A new road opens.</div>
-          <div className="cap cap--tl jr-cap2"><span>{ME.school}</span>The gates of IIT Gandhinagar.</div>
+          <div className="cap cap--tl jr-cap2"><span>JEE Main → JEE Advanced</span>Two exams stood before the gates of IIT Gandhinagar. He cleared both.</div>
           <div className="cap cap--tl jr-cap3"><span>The path</span>{ME.degree}.</div>
-          <div className="jr-ai"><span>人工知能</span><em>Artificial Intelligence</em></div>
           <figure className="jr-map" aria-label="Route map from Prayagraj via Lucknow to Gandhinagar">
             <figcaption className="mono">旅の地図 · The route</figcaption>
             <svg viewBox="0 0 300 220">
@@ -715,12 +827,44 @@ export default function Home2() {
             <div className="jr-ticket-main">
               <span className="mono">乗車券 · One-way ticket · July 2025</span>
               <div className="jr-ticket-route"><b>PRAYAGRAJ</b><i>→</i><b>IIT GANDHINAGAR</b></div>
-              <div className="jr-ticket-meta mono"><span>Class · B.Tech AI</span><span>Seat · 2025</span><span>Return · not planned</span></div>
+              <div className="jr-ticket-meta mono"><span>Via · JEE Main + Advanced</span><span>Class · B.Tech AI</span><span>Seat · 2025</span><span>Return · not planned</span></div>
             </div>
             <div className="jr-ticket-stub"><span className="jr-punch" /><span className="mono">No. 0001</span></div>
             <span className="jr-stamp">入学<small>ADMITTED</small></span>
           </div>
           <div className="jr-split jr-split-a" /><div className="jr-split jr-split-b" />
+          <div className="cv cv-end cv-paper" />
+        </div>
+      </section>
+
+      {/* ====== 3½ · THE THOUSAND GATES ====== */}
+      <section className="scene sc-gates" style={{ '--len': 8 }} aria-label="Interlude, running along the thousand gates">
+        <div className="stage gt-stage">
+          <div className="gt-sky" />
+          <div className="gt-sun">{[[58, 3], [68, 5], [78, 7], [88, 10]].map(([t, h]) => <i key={t} style={{ '--t': `${t}%`, '--h': `${h}%` }} />)}</div>
+          <Layer className="gt-far"><Ridge seed={141} base={700} peaks={6} height={260} spread={200} fill="#c2552f" /></Layer>
+          <Layer className="gt-mid"><Ridge seed={143} base={780} peaks={5} height={200} spread={170} fill="#7a1f1f" /><Clouds seed={9} y={560} count={4} fill="#ffe3c4" opacity={0.5} /></Layer>
+          <Particles kind="petals" count={20} seed={41} />
+          <div className="gt-track"><ThousandGates /></div>
+          <Actor className="gt-ghost" />
+          <Actor className="gt-ghost" />
+          <Actor className="gt-runner" glow />
+          <div className="gt-fore" aria-hidden="true">{Array.from({ length: 12 }, (_, i) => <i key={i} style={{ '--x': `${60 + i * 74}vw` }} />)}</div>
+          <div className="gt-speed speed-burst" />
+          <ChapterCard no="幕間 · Interlude" jp="門" title="The Thousand Gates" />
+          <div className="gt-hud">
+            <b className="gt-hud-k">門</b>
+            <div className="gt-hud-box">
+              <span className="mono">千本鳥居 · Gate</span>
+              <strong className="gt-count">01</strong><em>/ {String(GATES.length).padStart(2, '0')}</em>
+              <p className="gt-now"><b className="gt-now-jp">{GATES[0].jp}</b><span className="gt-now-en">{GATES[0].en}</span></p>
+            </div>
+          </div>
+          <div className="cap gt-cap gt-cap1"><span>Narrator</span>Every skill is a gate. He runs them all.</div>
+          <div className="cap gt-cap gt-cap2"><span>Inscription</span>奉納: each gate, dedicated to one thing learned.</div>
+          <div className="flash gt-flash" />
+          <div className="jr-ai gt-ai"><span>人工知能</span><em>Artificial Intelligence</em></div>
+          <div className="cv gt-cv-start cv-paper" />
           <div className="cv cv-end cv-paper" />
         </div>
       </section>
